@@ -1,6 +1,8 @@
 import { DarkThemeToggle } from "flowbite-react";
-
-export default function App() {
+import React from "react";
+import BarCode from "./BarCode";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+function WelcomePage() {
   const CARDS = [
     {
       title: "Flowbite React Docs",
@@ -131,7 +133,7 @@ export default function App() {
         </div>
       </div>
       <div className="absolute top-4 right-4">
-        <DarkThemeToggle />
+        <DarkThemeToggle className="focus:outline-none" />
       </div>
 
       <div className="relative flex w-full max-w-5xl flex-col items-center justify-center gap-12">
@@ -207,3 +209,17 @@ export default function App() {
     </main>
   );
 }
+
+
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" Component={WelcomePage}/>
+        <Route path="/bar-code" Component={BarCode}/>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+export default App;
