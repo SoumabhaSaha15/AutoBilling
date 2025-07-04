@@ -17,9 +17,11 @@ try {
     .use(cookie_parser())
     .listen(process.env.PORT, () => print(process.env.PORT));
 
-  process.on("unhandledRejection", (reason) => {
+  
+    process.on("unhandledRejection", (reason) => {
     console.log(chalk.red.bold("Unhandled Rejection:"), '\n', reason);
   });
+
   process.on("SIGINT", async () => {
     console.log(chalk.yellow.bold("Server closed. MongoDB disconnected."));
     await CONNECTOR.disconnect();
