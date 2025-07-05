@@ -1,7 +1,11 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    DB_URI: string;
     PORT: number;
-    JWT_KEY:string;
+    DB_URI: string;
+    JWT_KEY: string;
+    CLOUDINARY_ENV_VAR: string;
+    CLOUDINARY_API_KEY: string;
+    CLOUDINARY_CLOUD_NAME: string;
+    CLOUDINARY_API_SECRET: string;
   }
 }
