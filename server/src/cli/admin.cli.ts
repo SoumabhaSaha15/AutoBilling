@@ -2,8 +2,9 @@ import chalk from "chalk";
 import inquirer from "inquirer"
 import fileSelector from "inquirer-file-tree-selection-prompt";
 import { validatorFactory } from "../utility/validation-factory.js";
-import { AdminValidator, type AdminType } from "./../databases/Admin.js";
+import { AdminModel, AdminValidator, type AdminType } from "./../databases/Admin.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 import fs from "fs/promises";
 import cloudinaryConfig from "../configurations/cloudinary.js";
 import dotenv from 'dotenv';
@@ -11,6 +12,9 @@ inquirer.registerPrompt('file', fileSelector);
 const main = async () => {
   dotenv.config();
   cloudinaryConfig();
+  const CONNECTOR = await mongoose.connect(process.env.DB_URI);
+  const DB = CONNECTOR.connection.db;
+
   const data: AdminType = await inquirer.prompt<AdminType>([{
     type: "input",
     name: "name",
@@ -37,19 +41,28 @@ const main = async () => {
     root: './public/images',
     prefix: chalk.bold.red("*📷"),
   }]);
+
   const { public_id } = await cloudinary.uploader.upload(data.profilePicture, {
     folder: process.env.CLOUDINARY_ADMIN_DIR
   });
+
   data.profilePicture = cloudinary.url(public_id, {
-    transformation: [{ fetch_format: 'auto', quality: "auto" }]
+    transformation: [{
+      fetch_format: 'auto',
+      quality: "auto",
+      width: 720,
+      height: 720
+    }]
   });
-  
-  fs.writeFile(
-    './public/data.admin.json',
-    JSON.stringify(AdminValidator.parse(data), null, 2), 
-    { encoding: "utf-8" }
-  ).then(()=>{
-    console.log(chalk.bold.green("done"));
-  })
+
+  let admin = await AdminModel.create(data);
+
+  console.log(admin.toJSON());
+
+  process.on("SIGINT", async () => {
+    console.log(chalk.yellow.bold("Server closed. MongoDB disconnected."));
+    await CONNECTOR.disconnect();
+    process.exit(0);
+  });
 }
-main();
+main().catch(console.error);

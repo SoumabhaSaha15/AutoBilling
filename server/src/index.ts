@@ -1,3 +1,4 @@
+import cloudinaryConfig from "./configurations/cloudinary.js";
 import cookie_parser from "cookie-parser";
 import { print } from "running-at";
 import { connect } from "mongoose";
@@ -5,11 +6,12 @@ import express from "express";
 import dotenv from "dotenv";
 import chalk from "chalk";
 import path from "path";
-
 try {
+  cloudinaryConfig();
   dotenv.config();
   const CONNECTOR = await connect(process.env.DB_URI);
   const DB = CONNECTOR.connection.db;
+
   const APP = express()
     .use(express.static(path.join(import.meta.dirname, "./../public")))
     .use(express.json())
@@ -17,8 +19,7 @@ try {
     .use(cookie_parser())
     .listen(process.env.PORT, () => print(process.env.PORT));
 
-  
-    process.on("unhandledRejection", (reason) => {
+  process.on("unhandledRejection", (reason) => {
     console.log(chalk.red.bold("Unhandled Rejection:"), '\n', reason);
   });
 

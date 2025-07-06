@@ -1,5 +1,6 @@
 import mongoose, { model } from "mongoose";
-import { string, z } from "zod";
+import { z } from "zod";
+import bcrypt from "bcrypt";
 const AdminValidator = z.strictObject({
   name: z.string({ required_error: 'name is required' })
     .min(4, 'name must have 4 or more chars')
@@ -54,5 +55,10 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     }
   }
 }, { timestamps: true });
+
+AdminSchema.pre("save",async function(next){
+  this.password = await bcrypt.hash(this.password, await bcrypt.genSalt(12));
+  next();
+});
 const AdminModel = mongoose.model<AdminType>('admin_model', AdminSchema);
-export { AdminModel, AdminSchema, AdminValidator }
+export { AdminModel, AdminSchema, AdminValidator };
