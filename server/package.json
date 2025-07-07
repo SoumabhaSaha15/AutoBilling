@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon dist/index.js",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/chalk": "^0.4.31",
     "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.3",
     "@types/inquirer": "^9.0.8",
@@ -29,6 +31,7 @@
     "chalk": "^5.4.1",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.6.0",
     "express": "^5.1.0",
     "inquirer": "^9.3.7",
@@ -37,6 +40,7 @@
     "inquirer-file-tree-selection-prompt": "^2.0.5",
     "jsonwebtoken": "^9.0.2",
     "mime-types": "^3.0.1",
+    "mongodb": "^6.17.0",
     "mongoose": "^8.16.1",
     "multer": "^2.0.1",
     "running-at": "^0.3.22",
