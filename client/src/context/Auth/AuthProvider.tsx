@@ -1,5 +1,5 @@
 import { AuthContext, UserDetailsSchema, type UserDetailsType } from "./AuthContext";
-// import { useToast, DefaultOptions } from "../Toast/ToastContext";
+import { useToast } from "../Toast/ToastContext";
 import { useState } from "react";
 import { z } from "zod";
 import axios from "axios"
@@ -15,7 +15,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setUserDetails(parsedData);
       setTimeout(onSuccess, 1000);
     } catch (e) {
-      toast.open('Error login: '+(e as Error).message, true, 2000, DefaultOptions.error);
+      toast.open('Error login: '+(e as Error).message,'alert-error', true, 2000);
       console.error(e);
       setTimeout(onError, 1000);
     }
@@ -31,7 +31,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setUserDetails(null);
       setTimeout(onSuccess, 1000);
     } catch (err) {
-      toast.open('Error logging out: ' + (err as Error).message, true, 2000, DefaultOptions.error);
+      toast.open('Error logging out: ' + (err as Error).message,'alert-error', true, 2000, );
       console.error(err);
       setTimeout(onError, 1000);
     }

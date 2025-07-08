@@ -8,10 +8,15 @@ import { HiMail, HiLockClosed, HiKey } from "react-icons/hi";
 import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
 import { Navbar, NavbarBrand, Button, Label, TextInput, DarkThemeToggle, } from "flowbite-react";
 const AdminLogin: FC = () => {
-  const { register, handleSubmit,formState:{errors,} } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
+  const { register, handleSubmit,formState:{errors} } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const toast = useToast();
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
-    toast.open(data.adminKey,false,2000,'alert-error');
+    try{
+      let response = await base.post('/admin_login',data,{headers:{'Content-Type':"application/json"}});
+      toast.open("login successful.", 'alert-success', true, 2000);
+    }catch(e){
+      toast.open((e as Error)?.message || "", 'alert-error', true, 2000);
+    }
   };
 
   return (
@@ -29,7 +34,10 @@ const AdminLogin: FC = () => {
         <form className="flex max-w-md min-w-md flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="admin-email">Your email</Label>
+              <Label htmlFor="admin-email">
+                Your email
+                {errors.email && (<div className="text-red-500">{errors.email.message}</div>)}
+              </Label>
             </div>
             <TextInput
               id="admin-email"
@@ -43,7 +51,10 @@ const AdminLogin: FC = () => {
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="admin-password">Your password (double click to view)</Label>
+              <Label htmlFor="admin-password">
+                Your password (double click to view)
+                {errors.password && (<div className="text-red-500">{errors.password.message}</div>)}
+              </Label>
             </div>
             <TextInput
               id="admin-password"
@@ -55,8 +66,6 @@ const AdminLogin: FC = () => {
               onDoubleClick={e => {
                 let inputType = e.currentTarget.type;
                 e.currentTarget.type = inputType == "text" ? "password" : "text";
-                console.log(errors);
-                toast.open(errors.password?.message||"",false,0,'alert-error');
               }}
               required
               shadow
@@ -64,7 +73,10 @@ const AdminLogin: FC = () => {
           </div>
           <div>
             <div className="mb-2 block">
-              <Label htmlFor="admin-key">Admin key (double click to view)</Label>
+              <Label htmlFor="admin-key">
+                Admin key (double click to view)
+                {errors.adminKey && (<div className="text-red-500">{errors.adminKey.message}</div>)}
+              </Label>
             </div>
             <TextInput
               id="admin-key"

@@ -10,15 +10,15 @@ export type ToastContextProps = {
    * @param toastOptions ToastOptionsType the options for the toast customization alert-info is the default variant
    * @returns string
    */
-  open: (component: string, autoClose?: boolean, timeout?: number, toastVariant?:ToastVariantType) => string;
+  open: (component: string, toastVariant?:ToastVariantType, autoClose?: boolean, timeout?: number) => string;
   close: (id: string) => void;
 };
 export const ToastContext: Context<ToastContextProps> = createContext<ToastContextProps>({
   open: (
     component: string,
+    toastVariant:ToastVariantType = "alert-info",
     autoClose: boolean = true,
     timeout: number = 1000,
-    toastVariant:ToastVariantType = "alert-info"
   ) => {
     console.log(component, timeout, toastVariant, autoClose);
     return '';
