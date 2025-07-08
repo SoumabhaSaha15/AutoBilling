@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import StatSection from './components/landing/StatSection';
-import HeroSection from './components/landing/HeroSection';
-import HeaderSection from './components/landing/HeaderSection';
-import FooterSection from './components/landing/FooterSection';
-import FeaturesSection from './components/landing/FeatureSection';
-import DashboardPreviewSection from './components/landing/DashboardPreviewSection';
+import StatSection from '../components/landing/StatSection';
+import HeroSection from '../components/landing/HeroSection';
+import HeaderSection from '../components/landing/HeaderSection';
+import FooterSection from '../components/landing/FooterSection';
+import FeaturesSection from '../components/landing/FeatureSection';
+import DashboardPreviewSection from '../components/landing/DashboardPreviewSection';
 const LandingPage: FC = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">

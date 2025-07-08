@@ -1,15 +1,15 @@
 import { AuthContext, UserDetailsSchema, type UserDetailsType } from "./AuthContext";
 import { useToast } from "../Toast/ToastContext";
 import { useState } from "react";
-import { z } from "zod";
-import axios from "axios"
+// import { z } from "zod";
+import base from './../../utility/axios-base';
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userDetails, setUserDetails] = useState<UserDetailsType>(null);
   const toast = useToast();
 
   const login = async (onSuccess: () => void = () => { }, onError: () => void = () => { }) => {
     try {
-      const response = await axios.get(import.meta.env.VITE_USER_PROFILE);
+      const response = await base.get('/admin_login');
       if (response.status != 200) throw new Error(`error in fetching profile status message:${response.statusText}`);
       const parsedData = UserDetailsSchema.parse(response.data);
       setUserDetails(parsedData);
@@ -24,10 +24,10 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const logout = async (onSuccess: () => void = () => { }, onError: () => void = () => { }) => {
     try {
       if (userDetails == null) throw new Error(`No user logged in!!!`);
-      const response = await axios.get(import.meta.env.VITE_GOOGLE_LOGOUT);
-      if (response.status != 200) throw new Error(`Error in logging out status message:${response.statusText}`);
-      const value = z.object({ message: z.string() }).parse(response.data);
-      toast.open(value.message);
+      // const response = await axios.get(import.meta.env.VITE_GOOGLE_LOGOUT);
+      // if (response.status != 200) throw new Error(`Error in logging out status message:${response.statusText}`);
+      // const value = z.object({ message: z.string() }).parse(response.data);
+      // toast.open(value.message);
       setUserDetails(null);
       setTimeout(onSuccess, 1000);
     } catch (err) {
