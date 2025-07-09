@@ -7,7 +7,7 @@ import FeaturesSection from '../components/landing/FeatureSection';
 import DashboardPreviewSection from '../components/landing/DashboardPreviewSection';
 const LandingPage: FC = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900 scroll-smooth transition-all snap-y snap-mandatory">
       <HeaderSection />
       <HeroSection
         children={<DashboardPreviewSection />}

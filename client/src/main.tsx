@@ -1,5 +1,5 @@
 import { initThemeMode } from "flowbite-react";
-import ToastProvider from "./context/Toast/ToastProvider";
+import ToastProvider from "./contexts/Toast/ToastProvider";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";

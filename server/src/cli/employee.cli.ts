@@ -1,13 +1,13 @@
 import chalk from "chalk";
-import figlet from "figlet";
+import dotenv from 'dotenv';
+import mongoose from "mongoose";
 import inquirer from "inquirer"
+import figlet from "figlet";
+import { v2 as cloudinary } from "cloudinary";
+import cloudinaryConfig from "../configurations/cloudinary.js";
 import fileSelector from "inquirer-file-tree-selection-prompt";
 import { validatorFactory } from "../utility/validation-factory.js";
-import { AdminModel, AdminValidator, type AdminType } from "./../databases/Admin.js";
-import { v2 as cloudinary } from "cloudinary";
-import mongoose from "mongoose";
-import cloudinaryConfig from "../configurations/cloudinary.js";
-import dotenv from 'dotenv';
+import { EmployeeModel, EmployeeValidator, type EmployeeType } from "./../databases/Employee.js";
 inquirer.registerPrompt('file', fileSelector);
 const main = async () => {
   dotenv.config();
@@ -18,29 +18,29 @@ const main = async () => {
   console.log(
     chalk.yellow(
       figlet.textSync(
-        'Admin  Portal  CLI.',
+        'Employee  Portal  CLI.',
         { font: "Banner3", whitespaceBreak: true, }
       )
     )
   );
 
-  const data: AdminType = await inquirer.prompt<AdminType>([{
+  const data: EmployeeType = await inquirer.prompt<EmployeeType>([{
     type: "input",
     name: "name",
     message: chalk.bold.blue("Enter name[4-30 char]: "),
-    validate: validatorFactory(AdminValidator.pick({ name: true })),
-    prefix: chalk.bold.red("*👑")
+    validate: validatorFactory(EmployeeValidator.pick({ name: true })),
+    prefix: chalk.bold.red("*👲")
   }, {
     type: "input",
     name: "email",
     message: chalk.bold.blue("Enter email: "),
-    validate: validatorFactory(AdminValidator.pick({ email: true })),
+    validate: validatorFactory(EmployeeValidator.pick({ email: true })),
     prefix: chalk.bold.red("*📧")
   }, {
     type: "password",
     name: "password",
     message: chalk.bold.blue("Enter password[8]: "),
-    validate: validatorFactory(AdminValidator.pick({ password: true })),
+    validate: validatorFactory(EmployeeValidator.pick({ password: true })),
     mask: "*",
     prefix: chalk.bold.red("*🔐"),
   }, {
@@ -52,7 +52,7 @@ const main = async () => {
   }]);
 
   const { public_id } = await cloudinary.uploader.upload(data.profilePicture, {
-    folder: process.env.CLOUDINARY_ADMIN_DIR
+    folder: process.env.CLOUDINARY_EMPLOYEE_DIR
   });
 
   data.profilePicture = cloudinary.url(public_id, {
@@ -64,9 +64,9 @@ const main = async () => {
     }]
   });
 
-  let admin = await AdminModel.create(data);
+  let employee = await EmployeeModel.create(data);
 
-  console.log(admin.toJSON());
+  console.log(employee.toJSON());
 
   process.on("SIGINT", async () => {
     console.log(chalk.yellow.bold("Server closed. MongoDB disconnected."));

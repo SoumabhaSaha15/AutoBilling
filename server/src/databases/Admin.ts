@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 const AdminValidator = z.strictObject({

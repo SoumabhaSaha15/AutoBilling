@@ -1,4 +1,4 @@
-import { UserDetailsSchema } from '../../context/Auth/AuthContext';
+import { UserDetailsSchema } from '../../contexts/Auth/admin/AuthContext';
 import { Card, Avatar } from "flowbite-react";
 import flattener from "./../../utility/zod-error-flattener"
 import { FC } from "react";

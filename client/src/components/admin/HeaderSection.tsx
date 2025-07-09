@@ -1,7 +1,7 @@
 import { Avatar,DarkThemeToggle, Dropdown,DropdownItem,Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 import { FC, useState, useEffect } from "react";
 import AdminCard from './AdminCard';
-import { useAuth } from '../../context/Auth/AuthContext';
+import { useAuth } from '../../contexts/Auth/admin/AuthContext';
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {

@@ -1,8 +1,8 @@
 import { AuthContext, UserDetailsSchema, type UserDetailsType } from "./AuthContext";
-import { useToast } from "../Toast/ToastContext";
+import { useToast } from "../../Toast/ToastContext";
 import { useState } from "react";
 // import { z } from "zod";
-import base from './../../utility/axios-base';
+import base from './../../../utility/axios-base';
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userDetails, setUserDetails] = useState<UserDetailsType>(null);
   const toast = useToast();
@@ -13,11 +13,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       if (response.status != 200) throw new Error(`error in fetching profile status message:${response.statusText}`);
       const parsedData = UserDetailsSchema.parse(response.data);
       setUserDetails(parsedData);
-      setTimeout(onSuccess, 1000);
+      onSuccess();
     } catch (e) {
       toast.open('Error login: '+(e as Error).message,'alert-error', true, 2000);
       console.error(e);
-      setTimeout(onError, 1000);
+      onError();
     }
   };
 

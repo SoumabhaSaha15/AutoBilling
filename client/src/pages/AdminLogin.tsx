@@ -1,37 +1,40 @@
-import { FC } from "react";
-import { Link } from "react-router-dom";
+import { FC, useEffect } from "react";
 import base from './../utility/axios-base';
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "../context/Toast/ToastContext";
+import { useToast } from "../contexts/Toast/ToastContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { HiMail, HiLockClosed, HiKey } from "react-icons/hi";
 import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
-import { Navbar, NavbarBrand, Button, Label, TextInput, DarkThemeToggle, } from "flowbite-react";
+import { Button, Label, TextInput } from "flowbite-react";
 const AdminLogin: FC = () => {
-  const { register, handleSubmit,formState:{errors} } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
+  const navigate = useNavigate();
   const toast = useToast();
+  useEffect(() => {
+    try {
+      base
+        .get('/admin_login')
+        .then((res) => res.status === 200 && navigate('/admin'))
+        .catch(console.error);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [])
+  const { register, handleSubmit, formState: { errors } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
-    try{
-      let response = await base.post('/admin_login',data,{headers:{'Content-Type':"application/json"}});
+    try {
+      let response = await base.post('/admin_login', data, { headers: { 'Content-Type': "application/json" } });
+      if (response.status == 200) navigate('/admin');
       toast.open("login successful.", 'alert-success', true, 2000);
-    }catch(e){
+    } catch (e) {
       toast.open((e as Error)?.message || "", 'alert-error', true, 2000);
     }
   };
 
   return (
-    <div className="min-h-[100dvh] bg-gray-300 dark:bg-gray-900">
-      <Navbar fluid rounded>
-        <NavbarBrand as={Link} href="https://flowbite-react.com">
-          <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Auto Billing</span>
-        </NavbarBrand>
-        <DarkThemeToggle />
-      </Navbar>
-
-      {/* form */}
-      <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
-        <form className="flex max-w-md min-w-md flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
+    <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
+        <form className="flex min-w-sm max-w-md md:w-md sm:w-sm flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
+          <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Login</h3>
           <div>
             <div className="mb-2 block">
               <Label htmlFor="admin-email">
@@ -95,7 +98,6 @@ const AdminLogin: FC = () => {
           </div>
           <Button type="submit">login to admin account</Button>
         </form>
-      </div>
     </div>
   );
 }
