@@ -1,7 +1,7 @@
-import { Avatar,DarkThemeToggle, Dropdown,DropdownItem,Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import { useAuth } from '../../contexts/Auth/admin/AuthContext';
 import { FC, useState, useEffect } from "react";
 import AdminCard from './AdminCard';
-import { useAuth } from '../../contexts/Auth/admin/AuthContext';
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
@@ -10,6 +10,36 @@ const HeaderSection: FC = () => {
     };
   }, []);
   const auth = useAuth();
+  const DIV = (
+  <div className="flex flex-wrap gap-2">
+    <DarkThemeToggle />
+    <Dropdown
+      renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
+      className='rounded-3xl'
+    >
+      <DropdownItem className='rounded-3xl' >
+        <AdminCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
+      </DropdownItem>
+    </Dropdown>
+  </div>
+  );
+  const NAVBAR_COLLAPSE = (
+  <NavbarCollapse>
+    <NavbarLink href="#features" className="text-gray-700 hover:text-blue-600">
+      Features
+    </NavbarLink>
+    <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
+      Pricing
+    </NavbarLink>
+    <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
+      About
+    </NavbarLink>
+    <NavbarLink href="#contact" className="text-gray-700 hover:text-blue-600">
+      Contact
+    </NavbarLink>
+  </NavbarCollapse>
+  );
+
   return (
     <Navbar fluid rounded className="bg-white shadow-sm sticky top-0 z-50">
       <NavbarToggle />
@@ -19,57 +49,11 @@ const HeaderSection: FC = () => {
         </span>
       </NavbarBrand>
       {(width < 768) ? (<>
-        <div className="flex flex-wrap gap-2">
-          <DarkThemeToggle />
-          <Dropdown
-            renderTrigger={()=>(<Avatar img={auth.userDetails?.profilePicture||'./logo.png'} rounded />)}
-            className='rounded-3xl'
-          >
-            <DropdownItem className='rounded-3xl' >
-              <AdminCard name={auth.userDetails?.name||""} email={auth.userDetails?.email||''} profilePicture={auth.userDetails?.profilePicture||''}/>
-            </DropdownItem>
-          </Dropdown>
-        </div>
-        <NavbarCollapse>
-          <NavbarLink href="#features" className="text-gray-700 hover:text-blue-600">
-            Features
-          </NavbarLink>
-          <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
-            Pricing
-          </NavbarLink>
-          <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
-            About
-          </NavbarLink>
-          <NavbarLink href="#contact" className="text-gray-700 hover:text-blue-600">
-            Contact
-          </NavbarLink>
-        </NavbarCollapse>
+        {DIV}
+        {NAVBAR_COLLAPSE}
       </>) : (<>
-        <NavbarCollapse>
-          <NavbarLink href="#features" className="text-gray-700 hover:text-blue-600">
-            Features
-          </NavbarLink>
-          <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
-            Pricing
-          </NavbarLink>
-          <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
-            About
-          </NavbarLink>
-          <NavbarLink href="#contact" className="text-gray-700 hover:text-blue-600">
-            Contact
-          </NavbarLink>
-        </NavbarCollapse>
-        <div className="flex flex-wrap gap-2">
-          <DarkThemeToggle />
-          <Dropdown
-            renderTrigger={()=>(<Avatar img={auth.userDetails?.profilePicture||'./logo.png'} rounded />)}
-            className='rounded-3xl'
-          >
-            <DropdownItem className='rounded-3xl'>
-              <AdminCard name={auth.userDetails?.name||""} email={auth.userDetails?.email||''} profilePicture={auth.userDetails?.profilePicture||''}/>
-            </DropdownItem>
-          </Dropdown>
-        </div>
+        {NAVBAR_COLLAPSE}
+        {DIV}
       </>)}
     </Navbar>
   );

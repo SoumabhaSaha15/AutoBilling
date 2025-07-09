@@ -1,6 +1,6 @@
-import { UserDetailsSchema } from '../../contexts/Auth/admin/AuthContext';
-import { useAuth } from '../../contexts/Auth/admin/AuthContext';
-import flattener from "./../../utility/zod-error-flattener"
+import { UserDetailsSchema } from '../../contexts/Auth/employee/AuthContext';
+import { useAuth } from '../../contexts/Auth/employee/AuthContext';
+import flattener from "../../utility/zod-error-flattener"
 import { Card, Avatar, Button } from "flowbite-react";
 import { useNavigate } from 'react-router-dom';
 import { FC } from "react";
@@ -12,7 +12,7 @@ const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedI
   const navigate = useNavigate();
   return ((success) ?
     (<Card className="max-w-sm rounded-3xl">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center pb-4">
         <Avatar img={data?.profilePicture} size="lg" className="rounded-lg" />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{data?.name}</h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">{data?.email}</span>
@@ -22,7 +22,7 @@ const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedI
         color="red"
         onClick={() => {
           adminAuth.logout(() => {
-            navigate('/login/admin');
+            navigate('/login/employee');
           })
         }}
       >Log Out</Button>

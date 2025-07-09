@@ -3,7 +3,7 @@ import POST from "./POST.js";
 import GET from "./GET.js";
 const router = express.Router();
 router
-  .route('/admin_login')
+  .route('/employee_login')
   .get(
     GET.cookiesNotFound,
     GET.invalidCookies,

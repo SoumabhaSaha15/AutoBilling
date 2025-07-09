@@ -1,6 +1,7 @@
-import { DarkThemeToggle, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import { useAuth } from '../../contexts/Auth/employee/AuthContext';
+import EmployeeCard from './../employee/EmployeeCard';
 import { FC, useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
@@ -8,11 +9,29 @@ const HeaderSection: FC = () => {
       setWidth(window.innerWidth);
     };
   }, []);
+  const auth = useAuth();
 
+
+  const DIV = (
+    <div className="flex flex-wrap gap-2">
+      <DarkThemeToggle />
+      <Dropdown
+        renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
+        className='rounded-3xl'
+      >
+        <DropdownItem className='rounded-3xl' >
+          <EmployeeCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
+        </DropdownItem>
+      </Dropdown>
+    </div>
+  )
   const NAVBAR_COLLAPSE = (
     <NavbarCollapse>
       <NavbarLink href="#features" className="text-gray-700 hover:text-blue-600">
         Features
+      </NavbarLink>
+      <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
+        Pricing
       </NavbarLink>
       <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
         About
@@ -20,19 +39,8 @@ const HeaderSection: FC = () => {
       <NavbarLink href="#contact" className="text-gray-700 hover:text-blue-600">
         Contact
       </NavbarLink>
-      {/* NavbarLink rendered as div because of parent anchor tag having child anchor & lead to hydration error */}
-      <NavbarLink as={'div'}>
-        <Link to="/login/admin" className="text-gray-400 hover:text-blue-600">
-          Admin-Login
-        </Link>
-      </NavbarLink>
-      <NavbarLink as={'div'}>
-        <Link to="/login/employee" className="text-gray-400 hover:text-blue-600">
-          Employee-Login
-        </Link>
-      </NavbarLink>
-    </NavbarCollapse>);
-
+    </NavbarCollapse>
+  )
   return (
     <Navbar fluid rounded className="bg-white shadow-sm sticky top-0 z-50">
       <NavbarToggle />
@@ -42,11 +50,11 @@ const HeaderSection: FC = () => {
         </span>
       </NavbarBrand>
       {(width < 768) ? (<>
-        <DarkThemeToggle />
+        {DIV}
         {NAVBAR_COLLAPSE}
       </>) : (<>
         {NAVBAR_COLLAPSE}
-        <DarkThemeToggle />
+        {DIV}
       </>)}
     </Navbar>
   );

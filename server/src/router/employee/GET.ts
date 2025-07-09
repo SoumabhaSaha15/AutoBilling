@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { AdminModel } from "../../databases/Admin.js";
+import { EmployeeModel } from "../../databases/Employee.js";
 import { Request, Response, NextFunction } from "express";
 const GET = {
   cookiesNotFound: async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ const GET = {
       const result = mongoose.Types.ObjectId.isValid((payload as JwtPayload)["id"]);
       (!result) ? res.status(401).send('Invalid cookies.') : (() => {
         //@ts-ignore
-        req['adminId'] = (payload as JwtPayload)["id"];
+        req['employeeId'] = (payload as JwtPayload)["id"];
         next();
       })();
     } catch (err) {
@@ -27,7 +27,7 @@ const GET = {
   adminNotFound: async (req: Request, res: Response, next: NextFunction) => {
     try {
       //@ts-ignore
-      await AdminModel.exists({ _id: req['adminId'] }) ?
+      await EmployeeModel.exists({ _id: req['employeeId'] }) ?
         next() :
         res.status(404).send('No admin found.');
     } catch (err) {
@@ -37,12 +37,13 @@ const GET = {
   provideAdminData: async (req: Request, res: Response, next: NextFunction) => {
     try {
       //@ts-ignore
-      let admin = await AdminModel.findById(req['adminId']);
-      if (admin) res.status(200).json({
-        id: admin._id.toString(),
-        name: admin.name,
-        email: admin.email,
-        profilePicture: admin.profilePicture
+      let employee = await EmployeeModel.findById(req['employeeId']);
+      //@ts-check
+      if (employee) res.status(200).json({
+        id: employee._id.toString(),
+        name: employee.name,
+        email: employee.email,
+        profilePicture: employee.profilePicture
       });
       else throw new Error('error at provideAdminData', { cause: 'failed to fetch admin' });
     } catch (err) {

@@ -10,7 +10,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const toast = useToast();
   const login = async (onSuccess: () => void = () => { }, onError: () => void = () => { }) => {
     try {
-      const response = await base.get('/admin_login');
+      const response = await base.get('/employee_login');
       if (response.status != 200) throw new Error(`error in fetching profile status message:${response.statusText}`);
       const parsedData = UserDetailsSchema.parse(response.data);
       setUserDetails(parsedData);

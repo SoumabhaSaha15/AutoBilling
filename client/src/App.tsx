@@ -1,34 +1,36 @@
 import React from "react";
-import AdminLogin from "./pages/AdminLogin";
-import LoginHeader from "./layouts/LoginHeader";
-import AuthProvider from "./contexts/Auth/admin/AuthProvider";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import EmployeeLogin from "./pages/EmployeeLogin";
 import NotFound from "./pages/404"
-import LandingPage from './pages/LandingPage'
 import AdminPage from "./pages/AdminPage";
+import AdminLogin from "./pages/AdminLogin";
+import LandingPage from './pages/LandingPage'
+import EmployeePage from "./pages/EmployeePage"
+import LoginHeader from "./layouts/LoginHeader";
 import AdminLayout from "./layouts/AdminLayout";
-import { type ReactNode } from 'react';
-const WrapAdmin = ({ children }: { children: ReactNode }) => {
-  return (
-    <AuthProvider>
-      {children}
-    </AuthProvider>
-  );
-}
-
+import EmployeeLogin from "./pages/EmployeeLogin";
+import EmployeeLayout from "./layouts/EmployeeLayout"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import AdminAuthProvider from "./contexts/Auth/admin/AuthProvider";
+import EmployeeAuthProvider from "./contexts/Auth/employee/AuthProvider"
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" Component={LandingPage} />
+
         <Route path="/login" Component={LoginHeader} >
+          <Route index Component={EmployeeLogin} />
           <Route path="admin" Component={AdminLogin} />
           <Route path="employee" Component={EmployeeLogin} />
         </Route>
-        <Route path="/admin" Component={() => <WrapAdmin children={<AdminLayout />} />} >
-          <Route index Component={() => <WrapAdmin children={<AdminPage />} />} />
+
+        <Route path="/admin" Component={() => <AdminAuthProvider children={<AdminLayout/>}/>} >
+          <Route index Component={AdminPage} />
         </Route>
+
+        <Route path="/employee" Component={() => <EmployeeAuthProvider children={<EmployeeLayout/>} />} >
+          <Route index Component={EmployeePage} />
+        </Route>
+
         <Route path="*" Component={NotFound} /> {/* 404 route */}
       </Routes>
     </BrowserRouter>

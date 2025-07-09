@@ -19,7 +19,7 @@ const AdminLogin: FC = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [])
+  }, []);
   const { register, handleSubmit, formState: { errors } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
     try {

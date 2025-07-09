@@ -16,7 +16,7 @@ const main = async () => {
   const DB = CONNECTOR.connection.db;
 
   console.log(
-    chalk.yellow(
+    chalk.blue(
       figlet.textSync(
         'Admin  Portal  CLI.',
         { font: "Banner3", whitespaceBreak: true, }
