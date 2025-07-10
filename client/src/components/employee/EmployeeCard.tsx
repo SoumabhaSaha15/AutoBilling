@@ -13,7 +13,7 @@ const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedI
   return ((success) ?
     (<Card className="max-w-sm rounded-3xl">
       <div className="flex flex-col items-center pb-4">
-        <Avatar img={data?.profilePicture} size="lg" className="rounded-lg" />
+        <Avatar img={data?.profilePicture} size="xl" rounded />
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{data?.name}</h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">{data?.email}</span>
       </div>

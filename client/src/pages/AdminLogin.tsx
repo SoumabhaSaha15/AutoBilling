@@ -15,9 +15,9 @@ const AdminLogin: FC = () => {
       base
         .get('/admin_login')
         .then((res) => res.status === 200 && navigate('/admin'))
-        .catch(console.error);
+        .catch(console.log);
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }, []);
   const { register, handleSubmit, formState: { errors } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
