@@ -1,6 +1,7 @@
-import adminLogin from "./admin/index.js";
-import employeeLogin from "./employee/index.js"
 import express from "express";
+import adminLogin from "./admin/index.js";
+import product from './product/index.js'
+import employeeLogin from "./employee/index.js";
 const router = express.Router();
 const logoutRouter = express.Router();
 logoutRouter
@@ -16,5 +17,6 @@ logoutRouter
 router
   .use(adminLogin)
   .use(employeeLogin)
+  .use(product)
   .use(logoutRouter);
 export default router;

@@ -12,8 +12,8 @@ import chalk from "chalk";
 import path from "path";
 import cors from "cors";
 try {
-  cloudinaryConfig();
   dotenv.config();
+  cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
   const DB = CONNECTOR.connection.db;
 

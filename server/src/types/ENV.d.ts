@@ -10,6 +10,7 @@ declare namespace NodeJS {
     CLOUDINARY_ADMIN_DIR: string;
     CLOUDINARY_CLOUD_NAME: string;
     CLOUDINARY_API_SECRET: string;
+    CLOUDINARY_PRODUCT_DIR: string;
     CLOUDINARY_EMPLOYEE_DIR: string;
   }
 }

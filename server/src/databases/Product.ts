@@ -65,4 +65,4 @@ const ProductSchema = new mongoose.Schema<ProductType>({
   }
 }, { timestamps: true });
 const ProductModel = mongoose.model<ProductType>('product_model',ProductSchema);
-export default {ProductModel,ProductSchema,ProductValidator};
+export {ProductModel,ProductSchema,ProductValidator};

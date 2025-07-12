@@ -22,4 +22,5 @@ const ProductSchema = z.strictObject({
     .string({ required_error: "product description is required" })
     .min(10).max(200)
 });
+export default ProductSchema;
 export type ProductSchemaType = z.infer<typeof ProductSchema>;

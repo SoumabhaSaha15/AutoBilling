@@ -1,15 +1,16 @@
-import { FC } from "react";
-import ProductSchema, { ProductSchemaType } from "../../validator/product";
+import { FC, FormEvent } from "react";
+import base from './../../utility/axios-base'
+import { AiFillProduct } from "react-icons/ai"
+import { PiTrademarkFill } from "react-icons/pi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
-import { PiTrademarkFill } from "react-icons/pi";
-import { AiFillProduct } from "react-icons/ai"
 import { Button, Label, TextInput, FileInput } from "flowbite-react";
+import ProductSchema, { ProductSchemaType } from "../../validator/product";
 
 
 const AddProduct: FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
   const productSubmit: SubmitHandler<ProductSchemaType> = (data) => {
     const formData = new FormData();
     Object.entries(data)
@@ -18,7 +19,16 @@ const AddProduct: FC = () => {
           value[0] :
           value.toString()
       ));
-    
+    base
+      .post('/products', formData)
+      .then(res => {
+        console.log(res.status);
+        console.log(res.data);
+      })
+      .catch(e => {
+        console.error(e);
+      });
+      reset();
   }
 
   return (
@@ -115,7 +125,6 @@ const AddProduct: FC = () => {
             shadow
           />
         </div>
-
 
         <Button type="submit">add product</Button>
       </form>
