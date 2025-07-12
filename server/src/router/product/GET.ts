@@ -5,7 +5,8 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import multer from "./../../configurations/multer.js"
 import { AdminModel } from '../../databases/Admin.js';
 import { Request, Response, NextFunction } from "express";
-import { ProductModel, ProductValidator } from './../../databases/Product.js';
+import { lazyLoadingQueryValidator } from '../../validators/lazyLodingQuery.js';
+import { ProductModel } from './../../databases/Product.js';
 const GET = {
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -23,11 +24,18 @@ const GET = {
   },
   sendData: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const records = (await ProductModel.find()).map(record => {
+      let { skip, limit } = lazyLoadingQueryValidator.parse(req.query);
+      (skip === undefined) && (skip = 0);
+      (limit === undefined) && (limit = 20);
+      const records = (await ProductModel
+        .find()
+        .skip(skip)
+        .limit(limit)
+      ).map(record => {
         //@ts-ignore
-        const { __v, createdAt, updatedAt, ...data } = record.toJSON();
+        const { __v, createdAt, updatedAt, _id,...data } = record.toJSON();
         //@ts-check
-        return data;
+        return {id:_id.toString(),...data};
       });
       res.status(200).json(records);
     } catch (err) {

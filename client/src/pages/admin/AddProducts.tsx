@@ -1,16 +1,29 @@
-import { FC, FormEvent } from "react";
+import z from "zod";
+import { FC } from "react";
+import flatten from './../../utility/zod-error-flattener'
 import base from './../../utility/axios-base'
 import { AiFillProduct } from "react-icons/ai"
 import { PiTrademarkFill } from "react-icons/pi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useToast } from "../../contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
 import { Button, Label, TextInput, FileInput } from "flowbite-react";
 import ProductSchema, { ProductSchemaType } from "../../validator/product";
 
-
+const productWithID = ProductSchema.omit({ productImage: true }).extend({
+  productImage: z.string().url(),
+  id: z.string({ required_error: "id is required." }).length(24).regex(/^[0-9a-fA-F]{24}$/)
+});
 const AddProduct: FC = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
+  const toast = useToast();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
+
   const productSubmit: SubmitHandler<ProductSchemaType> = (data) => {
     const formData = new FormData();
     Object.entries(data)
@@ -21,14 +34,18 @@ const AddProduct: FC = () => {
       ));
     base
       .post('/products', formData)
-      .then(res => {
-        console.log(res.status);
-        console.log(res.data);
+      .then(({ data, status }) => {
+        if (status !== 200) toast.open(status.toString(), 'alert-success', true, 5000);
+        else {
+          let safeParsed = productWithID.safeParse(data);
+          (safeParsed.success)?
+            toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000):
+            toast.open(flatten(safeParsed.error), 'alert-error', true, 5000);
+        }
       })
-      .catch(e => {
-        console.error(e);
-      });
-      reset();
+      .catch(console.error);
+
+    reset();
   }
 
   return (
@@ -100,7 +117,7 @@ const AddProduct: FC = () => {
           <TextInput
             id="product-description"
             type="text"
-            placeholder="brand name"
+            placeholder="product description"
             icon={HiPencilAlt}
             {...register("productDescription")}
             required
