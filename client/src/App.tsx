@@ -1,6 +1,6 @@
 import React from "react";
 import NotFound from "./pages/404"
-import AdminPage from "./pages/AdminPage";
+import AdminPage from "./pages/admin/AdminPage";
 import AdminLogin from "./pages/AdminLogin";
 import LandingPage from './pages/LandingPage'
 import EmployeePage from "./pages/EmployeePage"
@@ -27,6 +27,7 @@ const App: React.FC = () => {
 
         <Route path="/admin" Component={() => <AdminAuthProvider children={<AdminLayout/>}/>} >
           <Route index Component={AdminPage} />
+          <Route path="dashboard" Component={AdminPage} />
           <Route path="add-product" Component={AddProduct} />
           <Route path="view-products" Component={ViewProducts} />
         </Route>

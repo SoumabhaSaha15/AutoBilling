@@ -1,4 +1,5 @@
 import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import { Link } from "react-router-dom";
 import { useAuth } from '../../contexts/Auth/admin/AuthContext';
 import { FC, useState, useEffect } from "react";
 import AdminCard from './AdminCard';
@@ -11,33 +12,39 @@ const HeaderSection: FC = () => {
   }, []);
   const auth = useAuth();
   const DIV = (
-  <div className="flex flex-wrap gap-2">
-    <DarkThemeToggle />
-    <Dropdown
-      renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
-      className='rounded-3xl'
-    >
-      <DropdownItem className='rounded-3xl' >
-        <AdminCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
-      </DropdownItem>
-    </Dropdown>
-  </div>
+    <div className="flex flex-wrap gap-2">
+      <DarkThemeToggle />
+      <Dropdown
+        renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
+        className='rounded-3xl'
+      >
+        <DropdownItem className='rounded-3xl'>
+          <AdminCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
+        </DropdownItem>
+      </Dropdown>
+    </div>
   );
   const NAVBAR_COLLAPSE = (
-  <NavbarCollapse>
-    <NavbarLink href="/admin/add-product" className="text-gray-700 hover:text-blue-600">
-      add-product
-    </NavbarLink>
-    <NavbarLink href="/admin/view-products" className="text-gray-700 hover:text-blue-600">
-      view-products
-    </NavbarLink>
-    <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
-      dashboard
-    </NavbarLink>
-    <NavbarLink href="#contact" className="text-gray-700 hover:text-blue-600">
-      employee
-    </NavbarLink>
-  </NavbarCollapse>
+    <NavbarCollapse>
+      <NavbarLink as={'div'} >
+        <Link to="/admin/add-product" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
+          add-product
+        </Link>
+      </NavbarLink>
+      <NavbarLink as={'div'} >
+        <Link to="/admin/view-products" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
+          view-products
+        </Link>
+      </NavbarLink>
+      <NavbarLink as={'div'} >
+        <Link to="/admin" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
+          dashboard
+        </Link>
+      </NavbarLink>
+      <NavbarLink href="#contact" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
+        employee
+      </NavbarLink>
+    </NavbarCollapse>
   );
 
   return (

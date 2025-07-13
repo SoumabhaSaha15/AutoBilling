@@ -1,5 +1,0 @@
-import {FC} from "react";
-const AdminPage:FC = () =>{
-  return("Wellcome to admin page.");
-}
-export default AdminPage
