@@ -1,21 +1,17 @@
-import z from "zod";
-import { FC } from "react";
-import flatten from './../../utility/zod-error-flattener'
+import { FC, useState } from "react";
 import base from './../../utility/axios-base'
 import { AiFillProduct } from "react-icons/ai"
 import { PiTrademarkFill } from "react-icons/pi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import flatten from './../../utility/zod-error-flattener';
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
-import { Button, Label, TextInput, FileInput } from "flowbite-react";
-import ProductSchema, { ProductSchemaType } from "../../validator/product";
+import { Button, Label, TextInput, FileInput,Spinner } from "flowbite-react";
+import ProductSchema, { ProductSchemaType,ProductResponseSchema } from "../../validator/product";
 
-const productWithID = ProductSchema.omit({ productImage: true }).extend({
-  productImage: z.string().url(),
-  id: z.string({ required_error: "id is required." }).length(24).regex(/^[0-9a-fA-F]{24}$/)
-});
 const AddProduct: FC = () => {
+  const [isLoading,setIsLoading] = useState<boolean>(false);
   const toast = useToast();
   const {
     register,
@@ -25,6 +21,7 @@ const AddProduct: FC = () => {
   } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
 
   const productSubmit: SubmitHandler<ProductSchemaType> = (data) => {
+    setIsLoading(true);
     const formData = new FormData();
     Object.entries(data)
       .forEach(([key, value]) => formData.set(key,
@@ -34,14 +31,15 @@ const AddProduct: FC = () => {
       ));
     base
       .post('/products', formData)
-      .then(({ data, status }) => {
-        if (status !== 200) toast.open(status.toString(), 'alert-success', true, 5000);
+      .then(({ data, status,statusText }) => {
+        if(status!=200)  toast.open(statusText, 'alert-error', true, 5000);
         else {
-          let safeParsed = productWithID.safeParse(data);
+          let safeParsed = ProductResponseSchema.safeParse(data);
           (safeParsed.success)?
             toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000):
             toast.open(flatten(safeParsed.error), 'alert-error', true, 5000);
         }
+        setIsLoading(false);
       })
       .catch(console.error);
 
@@ -143,7 +141,11 @@ const AddProduct: FC = () => {
           />
         </div>
 
-        <Button type="submit">add product</Button>
+        <Button type="submit" disabled={isLoading} className="disabled:bg-blue-950">{
+        (isLoading)?
+        (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding product"}</>)
+        :("add product")
+        }</Button>
       </form>
     </div>
   )

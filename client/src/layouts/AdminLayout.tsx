@@ -13,7 +13,7 @@ const AdminLayout: FC = () => {
   },[]);
   return (
     <>
-      <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="min-h-screen bg-gray-300 dark:bg-gray-900">
         <HeaderSection />
         <Outlet/>
       </div>

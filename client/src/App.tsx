@@ -9,6 +9,7 @@ import AdminLayout from "./layouts/AdminLayout";
 import EmployeeLogin from "./pages/EmployeeLogin";
 import EmployeeLayout from "./layouts/EmployeeLayout"
 import AddProduct from "./pages/admin/AddProducts";
+import ViewProducts from "./pages/admin/ViewProducts";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminAuthProvider from "./contexts/Auth/admin/AuthProvider";
 import EmployeeAuthProvider from "./contexts/Auth/employee/AuthProvider"
@@ -27,6 +28,7 @@ const App: React.FC = () => {
         <Route path="/admin" Component={() => <AdminAuthProvider children={<AdminLayout/>}/>} >
           <Route index Component={AdminPage} />
           <Route path="add-product" Component={AddProduct} />
+          <Route path="view-products" Component={ViewProducts} />
         </Route>
 
         <Route path="/employee" Component={() => <EmployeeAuthProvider children={<EmployeeLayout/>} />} >

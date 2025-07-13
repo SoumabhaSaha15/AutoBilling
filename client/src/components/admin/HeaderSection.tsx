@@ -26,10 +26,10 @@ const HeaderSection: FC = () => {
   const NAVBAR_COLLAPSE = (
   <NavbarCollapse>
     <NavbarLink href="/admin/add-product" className="text-gray-700 hover:text-blue-600">
-      add products
+      add-product
     </NavbarLink>
-    <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
-      view products
+    <NavbarLink href="/admin/view-products" className="text-gray-700 hover:text-blue-600">
+      view-products
     </NavbarLink>
     <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
       dashboard
