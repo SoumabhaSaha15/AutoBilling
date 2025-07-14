@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import flatten from './../../utility/zod-error-flattener';
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
-import { Button, Label, TextInput, FileInput, Spinner } from "flowbite-react";
+import { Button, Label, TextInput, FileInput, Spinner} from "flowbite-react";
 import ProductSchema, { ProductSchemaType, ProductResponseSchema } from "../../validator/product";
 
 const AddProduct: FC = () => {
@@ -59,7 +59,7 @@ const AddProduct: FC = () => {
 
   return (
     <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
-      <form className="flex min-w-sm max-w-md md:w-md sm:w-sm flex-col gap-4"
+      <form className="flex max-w-md md:w-md sm:w-sm flex-col gap-4"
         name="adminLogin"
         onSubmit={handleSubmit(productSubmit)}
         encType="multipart/form-data"

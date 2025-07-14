@@ -1,5 +1,6 @@
 import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 import { useAuth } from '../../contexts/Auth/employee/AuthContext';
+import {Link} from 'react-router-dom';
 import EmployeeCard from './../employee/EmployeeCard';
 import { FC, useState, useEffect } from "react";
 const HeaderSection: FC = () => {
@@ -27,8 +28,10 @@ const HeaderSection: FC = () => {
   )
   const NAVBAR_COLLAPSE = (
     <NavbarCollapse>
-      <NavbarLink href="#features" className="text-gray-700 hover:text-blue-600">
-        Features
+      <NavbarLink as={'div'} >
+        <Link to="/employee/create-invoice" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
+          invoice
+        </Link>
       </NavbarLink>
       <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
         Pricing

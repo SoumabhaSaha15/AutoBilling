@@ -13,6 +13,7 @@ import ViewProducts from "./pages/admin/ViewProducts";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminAuthProvider from "./contexts/Auth/admin/AuthProvider";
 import EmployeeAuthProvider from "./contexts/Auth/employee/AuthProvider"
+import CreateInvoice from "./pages/employee/CreateInvoice";
 const App: React.FC = () => {
   return (
     <BrowserRouter>
@@ -34,6 +35,7 @@ const App: React.FC = () => {
 
         <Route path="/employee" Component={() => <EmployeeAuthProvider children={<EmployeeLayout/>} />} >
           <Route index Component={EmployeePage} />
+          <Route path="create-invoice" Component={CreateInvoice} />
         </Route>
 
         <Route path="*" Component={NotFound} /> {/* 404 route */}
