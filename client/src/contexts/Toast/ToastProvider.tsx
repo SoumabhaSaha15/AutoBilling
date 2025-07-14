@@ -8,7 +8,7 @@ import { RiErrorWarningFill } from 'react-icons/ri'; // For different toast icon
 
 export default function ToastProvider({ children }: { children: ReactNode; }) {
 
-  const [toasts, setToasts] = useState<{ component: string; id: string }[]>([]);
+  const [toasts, setToasts] = useState<{ component: string; id: string,variant:ToastVariantType }[]>([]);
 
 
   const [toastColor, setToastColor] = useState<ToastVariantType>("alert-info");
@@ -52,7 +52,7 @@ export default function ToastProvider({ children }: { children: ReactNode; }) {
     });
 
     const id = crypto.randomUUID();
-    setToasts((toasts) => [{ id, component }, ...toasts]);
+    setToasts((toasts) => [{ id, component,variant:toastVariant }, ...toasts]);
     if (autoClose) setTimeout(() => close(id), timeout);
     return id;
   };

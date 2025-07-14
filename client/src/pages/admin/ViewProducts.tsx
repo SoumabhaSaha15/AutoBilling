@@ -1,52 +1,10 @@
 import { z } from "zod";
 import base from './../../utility/axios-base';
-import { FC, useEffect, useState,useCallback } from "react";
+import { FC, useEffect, useState, useCallback } from "react";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { ProductResponseSchema } from "../../validator/product";
-import { Card, Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
-
-const ProductArray: z.ZodArray<typeof ProductResponseSchema> = z.array(ProductResponseSchema);
-
-const ProductCard: FC<z.infer<typeof ProductResponseSchema>> = (props) => {
-  return (
-    <Card
-      id={props.id}
-      className="max-w-sm hover:scale-90 hover:shadow-2xl hover:dark:shadow-black hover:shadow-gray-600"
-      children={
-        <>
-          <img
-            src={props.productImage}
-            className="rounded-2xl shadow-lg outline-1 outline-black dark:outline-white"
-            alt={[props.brandName,props.productName].join(" ")}
-            loading="lazy"
-            onError={(e) => { e.currentTarget.src = "./image-broken.svg"; }}
-          />
-          <Accordion collapseAll>
-            <AccordionPanel>
-              <AccordionTitle>{props.brandName + " " + props.productName}</AccordionTitle>
-              <AccordionContent>
-                <p className="mb-2 text-gray-500 dark:text-gray-400">
-                  {props.productDescription}
-                </p>
-              </AccordionContent>
-            </AccordionPanel>
-          </Accordion>
-          <div className="flex items-center justify-between">
-            <span className="text-2xl font-medium text-gray-900 dark:text-white">
-              {"₹"}{props.price}
-            </span>
-            <a
-              href=""
-              className="rounded-lg bg-cyan-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-cyan-800 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800"
-            >
-              {'update'}
-            </a>
-          </div>
-        </>
-      }
-    />
-  )
-};
+import ProductCard from "../../components/admin/ProductCard";
+const ProductArray = z.array(ProductResponseSchema);
 
 const ViewProducts: FC = () => {
   const toast = useToast();
@@ -55,13 +13,8 @@ const ViewProducts: FC = () => {
   const [hasMore, setHasMore] = useState(true); // State to track if there are more products to load
 
   const handleScroll = useCallback(() => {
-    const { clientHeight } = document.documentElement;
-    const { pageYOffset } = window;
-    const { scrollHeight } = document.documentElement;
-
-    // Only fetch if we're at the bottom and there are potentially more items
-    if (clientHeight + pageYOffset >= scrollHeight - 50 && hasMore) { // Added a small buffer (50px)
-      // Use the functional update to get the latest state of lazyParams
+    const { clientHeight } = document.documentElement, { pageYOffset } = window, { scrollHeight } = document.documentElement;
+    if (clientHeight + pageYOffset >= scrollHeight - 50 && hasMore) {// Added a small buffer (50px) Only fetch if we're at the bottom and there are potentially more items
       setLazyParams(prevLazyParams => {
         const newSkip = (prevLazyParams.limit === 20 && prevLazyParams.skip === 0) ? 20 : prevLazyParams.skip + 10;
         const newLimit = 10; // Subsequent calls will always fetch 10
@@ -76,19 +29,14 @@ const ViewProducts: FC = () => {
             }
             try {
               const parsedData = ProductArray.parse(data);
-              if (parsedData.length) {
-                setProducts(prev => prev.concat(parsedData));
-              } else {
+              (parsedData.length) ?
+                setProducts(prev => prev.concat(parsedData)) :
                 setHasMore(false); // No more products to load
-              }
             } catch (e) {
               toast.open('parsing error', 'alert-error', true, 5000);
             }
           })
-          .catch(error => {
-            console.error(error);
-            toast.open('Error fetching products', 'alert-error', true, 5000);
-          });
+          .catch(error => { toast.open((error as Error).message, 'alert-error', true, 5000); });
         return { skip: newSkip, limit: newLimit };
       });
     }

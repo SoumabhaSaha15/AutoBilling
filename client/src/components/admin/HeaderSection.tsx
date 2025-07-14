@@ -9,6 +9,10 @@ const HeaderSection: FC = () => {
     window.onresize = (_) => {
       setWidth(window.innerWidth);
     };
+    return ()=>{
+      console.log('unmounting...');
+      window.onresize = () => {};
+    };
   }, []);
   const auth = useAuth();
   const DIV = (

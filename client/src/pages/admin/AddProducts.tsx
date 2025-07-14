@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import base from './../../utility/axios-base'
 import { AiFillProduct } from "react-icons/ai"
 import { PiTrademarkFill } from "react-icons/pi";
@@ -7,18 +7,30 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import flatten from './../../utility/zod-error-flattener';
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
-import { Button, Label, TextInput, FileInput,Spinner } from "flowbite-react";
-import ProductSchema, { ProductSchemaType,ProductResponseSchema } from "../../validator/product";
+import { Button, Label, TextInput, FileInput, Spinner } from "flowbite-react";
+import ProductSchema, { ProductSchemaType, ProductResponseSchema } from "../../validator/product";
 
 const AddProduct: FC = () => {
-  const [isLoading,setIsLoading] = useState<boolean>(false);
+  const defaultUrl = '/upload-image.svg';
+  const [previewUrl, setPreviewUrl] = useState(defaultUrl);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
   const {
     register,
     handleSubmit,
+    watch,
     reset,
     formState: { errors }
   } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
+  const watchedImage = watch("productImage");
+
+  useEffect(() => {
+    if (watchedImage && watchedImage[0]) {
+      const objectUrl = URL.createObjectURL(watchedImage[0]);
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } else setPreviewUrl(defaultUrl);
+  }, [watchedImage]);
 
   const productSubmit: SubmitHandler<ProductSchemaType> = (data) => {
     setIsLoading(true);
@@ -31,18 +43,17 @@ const AddProduct: FC = () => {
       ));
     base
       .post('/products', formData)
-      .then(({ data, status,statusText }) => {
-        if(status!=200)  toast.open(statusText, 'alert-error', true, 5000);
+      .then(({ data, status, statusText }) => {
+        if (status != 200) toast.open(statusText, 'alert-error', true, 5000);
         else {
           let safeParsed = ProductResponseSchema.safeParse(data);
-          (safeParsed.success)?
-            toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000):
+          (safeParsed.success) ?
+            toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000) :
             toast.open(flatten(safeParsed.error), 'alert-error', true, 5000);
         }
         setIsLoading(false);
       })
       .catch(console.error);
-
     reset();
   }
 
@@ -58,9 +69,13 @@ const AddProduct: FC = () => {
         <div>
           <div className="mb-2 block">
             <Label htmlFor="product-image">
-              Product Image
+              {"Product Image (accepts .jpeg,.png,.webp max-size 1MB)"}
               {errors.productImage && (<div className="text-red-500">{errors.productImage.message}</div>)}
+              <div className="flex flex-col items-center justify-center py-2">
+                <img src={previewUrl} className="my-3 aspect-square w-1/2 rounded-xl bg-gray-50 dark:bg-gray-700" alt="image uploaded" />
+              </div>
             </Label>
+
           </div>
           <FileInput
             id="product-image"
@@ -142,9 +157,9 @@ const AddProduct: FC = () => {
         </div>
 
         <Button type="submit" disabled={isLoading} className="disabled:bg-blue-950">{
-        (isLoading)?
-        (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding product"}</>)
-        :("add product")
+          (isLoading) ?
+            (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding product"}</>)
+            : ("add product")
         }</Button>
       </form>
     </div>
