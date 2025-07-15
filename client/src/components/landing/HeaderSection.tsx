@@ -22,12 +22,12 @@ const HeaderSection: FC = () => {
       </NavbarLink>
       {/* NavbarLink rendered as div because of parent anchor tag having child anchor & lead to hydration error */}
       <NavbarLink as={'div'}>
-        <Link to="/login/admin" className="text-gray-400 hover:text-blue-600">
+        <Link to="/login/admin" className="text-gray-700 dark:text-gray-400 hover:text-blue-600">
           Admin-Login
         </Link>
       </NavbarLink>
       <NavbarLink as={'div'}>
-        <Link to="/login/employee" className="text-gray-400 hover:text-blue-600">
+        <Link to="/login/employee" className="text-gray-700 dark:text-gray-400 hover:text-blue-600">
           Employee-Login
         </Link>
       </NavbarLink>

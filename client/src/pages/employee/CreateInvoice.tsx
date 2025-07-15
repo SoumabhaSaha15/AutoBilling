@@ -1,26 +1,58 @@
-import { useState, FC, useEffect } from "react";
+import z from "zod";
+import { useState, FC } from "react";
 import { FaQrcode } from "react-icons/fa";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, SubmitHandler } from "react-hook-form";
+import flatenner from "./../../utility/zod-error-flattener";
+import { useToast } from "../../contexts/Toast/ToastContext";
+import { useAuth } from "../../contexts/Auth/employee/AuthContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import BarCodeScanner, { BarcodeFormat } from "react-qr-barcode-scanner";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { OrderValidator, OrderType, OrdersType } from "../../validator/order";
+import { OrderValidator, OrderType, OrdersType,OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
 import { TextInput, Label, Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Spinner } from "flowbite-react";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 const remount_key = crypto.randomUUID();
+
 const CreateInvoice: FC = () => {
-  const [data, setData] = useState<null | string>(null);
+  const employeeAuth = useAuth();
+  const toast = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [remountKey, setRemountKey] = useState<string>(remount_key);
   const [stop, setStop] = useState<boolean>(false);
   const [list, setList] = useState<OrdersType>([]);
-  useEffect(() => { if (data) setValue('id', data); }, [data])
+
   const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
-  setValue('id', data || "");
+
+  const submitInVoice = () => {
+    setStop(true);
+    setIsSubmitting(true);
+    try {
+      const invoiceData: InvoiceType = InvoiceValidator.parse({
+        dateTime: (new Date()).toISOString(),
+        employeeEmail: employeeAuth.userDetails?.email || "",
+        orders: list
+      });
+      console.log(invoiceData);
+    } catch (err) {
+      toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
+    }
+    setTimeout(setIsSubmitting,1200,false);
+    setStop(false);
+    setRemountKey(crypto.randomUUID());
+  }
+
   const addProductIds: SubmitHandler<OrderType> = (data) => {
     setIsLoading(true);
-    setList(prev => [...prev, data]);
+    setList((prev) => {
+      try {
+        return OrdersValidator.parse([...prev,data]);
+      } catch (err) {
+        toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
+        return prev;
+      }
+    });
     reset();
-    setData(null);
     setIsLoading(false);
     setStop(false);
     setRemountKey(crypto.randomUUID());
@@ -36,10 +68,10 @@ const CreateInvoice: FC = () => {
           delay={2500}
           formats={[BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX]}
           onUpdate={(_, result) => {
-            (result) ? setData(() => {
+            if (result) {
+              setValue("id", result.getText());
               setStop(true);
-              return result.getText();
-            }) : setData(null);
+            }
           }}
           stopStream={stop}
         />
@@ -76,11 +108,15 @@ const CreateInvoice: FC = () => {
               placeholder="1"
             />
           </div>
-          <Button type="submit" disabled={isLoading}>
-            {(isLoading) ?
-              (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding id"}</>)
-              : ("add product id")}
-          </Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            children={
+              (isLoading) ?
+                (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding id"}</>) :
+                ("add product id")
+            }
+          />
         </form>
       </div>
 
@@ -89,7 +125,7 @@ const CreateInvoice: FC = () => {
         {/* Added flex flex-col here to manage children's height */}
         <div className="overflow-auto rounded-2xl bg-gray-200 dark:bg-gray-900 min-h-full">
           {/* flex-grow allows this div to take up remaining space, min-h-0 prevents overflow issues */}
-          <Table hoverable>
+          <Table hoverable className="">
             <TableHead>
               <TableRow>
                 <TableHeadCell children="Product id" />
@@ -106,9 +142,16 @@ const CreateInvoice: FC = () => {
             </TableBody>
           </Table>
         </div>
-        <Button type="submit" > {/* Added mt-2 for spacing from the table */}
-          Create Invoice
-        </Button>
+        <Button
+          type="submit"
+          onClick={submitInVoice}
+          disabled={isSubmitting}
+          children={
+            (isSubmitting) ?
+              (<><Spinner aria-label="submit" size="md" className="mr-2" />{"createing invoice"}</>) :
+              ("create invoice")
+          }
+        />
       </div>
     </div>
   );

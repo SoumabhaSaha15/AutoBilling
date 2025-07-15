@@ -15,7 +15,13 @@ const InvoiceValidator = z.strictObject({
     .email({ message: "invalid email" }),
   dateTime: z.string({ required_error: "date is required" })
     .datetime({ message: "invalid date time." }),
-  orders: z.array(OrdersValidator).min(1, { message: "at least one order is required" }),
+  orders: z.array(OrdersValidator).min(1, { message: "at least one order is required" }).transform((orders) => {
+    const uniqueOrdersMap = new Map<string, number>();
+    orders.forEach(order => uniqueOrdersMap.set(order.productId, (uniqueOrdersMap.get(order.productId) || 0) + order.quantity));
+    orders = [];
+    uniqueOrdersMap.forEach((quantity, productId) => orders.push({ productId, quantity }));
+    return orders;
+  }),
 });
 
 type InvoiceType = z.infer<typeof InvoiceValidator>;
