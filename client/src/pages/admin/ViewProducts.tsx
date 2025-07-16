@@ -62,7 +62,7 @@ const ViewProducts: FC = () => {
   }, []);
 
   return (
-    <div className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 items-center place-items-center p-2 justify-center">
+    <div className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 items-center place-items-center p-2 justify-center">
       {products.map(data => <ProductCard key={data.id} {...data} />)}
     </div>
   );

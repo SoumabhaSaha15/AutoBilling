@@ -7,7 +7,7 @@ const ProductCard: FC<z.infer<typeof ProductResponseSchema>> = (props) => {
   return (
     <Card
       id={props.id}
-      className="max-w-sm 2xl:max-w-full 2xl:w-full hover:scale-90 hover:shadow-2xl hover:dark:shadow-black hover:shadow-gray-600"
+      className="max-w-sm hover:scale-90 hover:shadow-2xl hover:dark:shadow-black hover:shadow-gray-600"
       children={
         <>
           <img
