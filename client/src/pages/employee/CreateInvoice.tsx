@@ -8,7 +8,7 @@ import { useToast } from "../../contexts/Toast/ToastContext";
 import { useAuth } from "../../contexts/Auth/employee/AuthContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import BarCodeScanner, { BarcodeFormat } from "react-qr-barcode-scanner";
-import { OrderValidator, OrderType, OrdersType,OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
+import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
 import { TextInput, Label, Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Spinner } from "flowbite-react";
 
 const remount_key = crypto.randomUUID();
@@ -37,7 +37,7 @@ const CreateInvoice: FC = () => {
     } catch (err) {
       toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
     }
-    setTimeout(setIsSubmitting,1200,false);
+    setTimeout(setIsSubmitting, 1200, false);
     setStop(false);
     setRemountKey(crypto.randomUUID());
   }
@@ -46,7 +46,7 @@ const CreateInvoice: FC = () => {
     setIsLoading(true);
     setList((prev) => {
       try {
-        return OrdersValidator.parse([...prev,data]);
+        return OrdersValidator.parse([...prev, data]);
       } catch (err) {
         toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
         return prev;
@@ -130,15 +130,19 @@ const CreateInvoice: FC = () => {
               <TableRow>
                 <TableHeadCell children="Product id" />
                 <TableHeadCell children="Quantity" />
+                <TableHeadCell children={<span className="sr-only" children={"Delete"}/>}/>
               </TableRow>
             </TableHead>
             <TableBody className="divide-y rounded-2xl">
-              {list.map(({ id, quantity }) => (
-                <TableRow className=" bg-white dark:border-gray-700 dark:bg-gray-800" key={crypto.randomUUID()}>
-                  <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white" children={id} />
-                  <TableCell children={quantity} />
-                </TableRow>
-              ))}
+              {list.map(
+                ({ id, quantity }) => (
+                  <TableRow className=" bg-white dark:border-gray-700 dark:bg-gray-800" key={crypto.randomUUID()}>
+                    <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white" children={id} />
+                    <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white" children={quantity} />
+                    <TableCell children={<Button children={"Delete"} onClick={() => { setList((prev) => prev.filter(item => (id !== item.id))); }} color="red" />} />
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </div>

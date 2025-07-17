@@ -15,8 +15,6 @@ try {
   dotenv.config();
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
-  const DB = CONNECTOR.connection.db;
-
   const APP = express()
     .use(cors({ origin: process.env.CORS_URL,credentials:true }))
     .use(express.static(path.join(import.meta.dirname, "./../public")))
