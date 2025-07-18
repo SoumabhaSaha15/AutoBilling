@@ -37,10 +37,7 @@ const CreateInvoice: FC = () => {
       const invoiceData: Pick<InvoiceType, 'orders'> = InvoiceValidator.pick({ orders: true }).parse({ orders: list });
       base.post('/invoice', invoiceData).then((response) => {
         const { id } = InvoiceValidator.pick({ id: true }).parse(response.data);
-        base.get(`/invoice/${id}`).then((res) => {
-          setList([]);
-          console.log(res.data)
-        }).catch(console.error);
+        toast.open(id,'alert-success',true,2000);
       }).catch(console.log);
     } catch (err) {
       toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);

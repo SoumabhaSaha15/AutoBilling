@@ -24,5 +24,18 @@ const InvoiceValidator = z.strictObject({
   orders: OrdersValidator
     .transform(orders => orders.map((val) => ({ productId: val.id, quantity: val.quantity })))
 });
+export const InvoiceResponse = InvoiceValidator
+  .omit({ orders: true })
+  .extend({
+    orders: z.array(z.strictObject({
+      productId: ProductResponseSchema.pick({
+        productName: true,
+        brandName: true,
+        price: true
+      }),
+    }).merge(OrderValidator.pick({ quantity: true })))
+  })
+export type InvoiceResponseType = z.infer<typeof InvoiceResponse>
 export type InvoiceType = z.infer<typeof InvoiceValidator>;
+
 export { OrderValidator, OrdersValidator, InvoiceValidator };
