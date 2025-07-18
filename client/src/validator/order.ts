@@ -6,16 +6,17 @@ const OrderValidator = ProductResponseSchema
 const OrdersValidator = z
   .array(OrderValidator)
   .transform((orders) => {
-      const uniqueOrdersMap = new Map<string, number>();
-      orders.forEach(order => uniqueOrdersMap.set(order.id, (uniqueOrdersMap.get(order.id) || 0) + order.quantity));
-      orders = [];
-      uniqueOrdersMap.forEach((quantity, id) => orders.push({ id, quantity }));
-      return orders;
-    })
+    const uniqueOrdersMap = new Map<string, number>();
+    orders.forEach(order => uniqueOrdersMap.set(order.id, (uniqueOrdersMap.get(order.id) || 0) + order.quantity));
+    orders = [];
+    uniqueOrdersMap.forEach((quantity, id) => orders.push({ id, quantity }));
+    return orders;
+  })
   ;
 export type OrderType = z.infer<typeof OrderValidator>;
 export type OrdersType = z.infer<typeof OrdersValidator>;
 const InvoiceValidator = z.strictObject({
+  id: z.string({ required_error: "id is required." }).length(24).regex(/^[0-9a-fA-F]{24}$/),
   employeeEmail: z.string({ required_error: "employee email is required" })
     .email({ message: "invalid email" }),
   dateTime: z.string({ required_error: "date is required" })

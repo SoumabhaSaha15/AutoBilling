@@ -1,45 +1,52 @@
 import z from "zod";
 import { useState, FC } from "react";
 import { FaQrcode } from "react-icons/fa";
+import base from "./../../utility/axios-base"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import flatenner from "./../../utility/zod-error-flattener";
 import { useToast } from "../../contexts/Toast/ToastContext";
-import { useAuth } from "../../contexts/Auth/employee/AuthContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import BarCodeScanner, { BarcodeFormat } from "react-qr-barcode-scanner";
 import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
-import { TextInput, Label, Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Spinner } from "flowbite-react";
-
-const remount_key = crypto.randomUUID();
+import { TextInput, Label, Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Spinner, ButtonGroup } from "flowbite-react";
 
 const CreateInvoice: FC = () => {
-  const employeeAuth = useAuth();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [remountKey, setRemountKey] = useState<string>(remount_key);
+  const [remountKey, setRemountKey] = useState<string>(() => crypto.randomUUID());
   const [stop, setStop] = useState<boolean>(false);
   const [list, setList] = useState<OrdersType>([]);
-
   const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
 
+  const restart = () => {
+    setStop(false);
+    setRemountKey(crypto.randomUUID());
+  };
+  const clear = () => {
+    reset();
+    restart();
+  }
+  const pause = () => setStop(true);
+
   const submitInVoice = () => {
-    setStop(true);
+    pause()
     setIsSubmitting(true);
     try {
-      const invoiceData: InvoiceType = InvoiceValidator.parse({
-        dateTime: (new Date()).toISOString(),
-        employeeEmail: employeeAuth.userDetails?.email || "",
-        orders: list
-      });
-      console.log(invoiceData);
+      const invoiceData: Pick<InvoiceType, 'orders'> = InvoiceValidator.pick({ orders: true }).parse({ orders: list });
+      base.post('/invoice', invoiceData).then((response) => {
+        const { id } = InvoiceValidator.pick({ id: true }).parse(response.data);
+        base.get(`/invoice/${id}`).then((res) => {
+          setList([]);
+          console.log(res.data)
+        }).catch(console.error);
+      }).catch(console.log);
     } catch (err) {
       toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
     }
     setTimeout(setIsSubmitting, 1200, false);
-    setStop(false);
-    setRemountKey(crypto.randomUUID());
+    restart();
   }
 
   const addProductIds: SubmitHandler<OrderType> = (data) => {
@@ -52,10 +59,8 @@ const CreateInvoice: FC = () => {
         return prev;
       }
     });
-    reset();
-    setIsLoading(false);
-    setStop(false);
-    setRemountKey(crypto.randomUUID());
+    clear();
+    setTimeout(setIsLoading, 1200, false);
   }
 
   return (
@@ -75,6 +80,13 @@ const CreateInvoice: FC = () => {
           }}
           stopStream={stop}
         />
+
+        <ButtonGroup>
+          <Button color="alternative" disabled={stop} onClick={pause}>pause</Button>
+          <Button color="alternative" onClick={restart}>restart</Button>
+          <Button color="alternative" onClick={clear}>clear</Button>
+        </ButtonGroup>
+
         <form className="w-[90%] flex flex-col gap-4" onSubmit={handleSubmit(addProductIds)}>
           <div>
             <div className="mb-2 block">
@@ -113,7 +125,7 @@ const CreateInvoice: FC = () => {
             disabled={isLoading}
             children={
               (isLoading) ?
-                (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding id"}</>) :
+                (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"...adding id"}</>) :
                 ("add product id")
             }
           />
@@ -130,7 +142,7 @@ const CreateInvoice: FC = () => {
               <TableRow>
                 <TableHeadCell children="Product id" />
                 <TableHeadCell children="Quantity" />
-                <TableHeadCell children={<span className="sr-only" children={"Delete"}/>}/>
+                <TableHeadCell children={<span className="sr-only" children={"Delete"} />} />
               </TableRow>
             </TableHead>
             <TableBody className="divide-y rounded-2xl">

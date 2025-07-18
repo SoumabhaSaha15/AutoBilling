@@ -36,6 +36,7 @@ const App: React.FC = () => {
         <Route path="/employee" Component={() => <EmployeeAuthProvider children={<EmployeeLayout/>} />} >
           <Route index Component={EmployeePage} />
           <Route path="create-invoice" Component={CreateInvoice} />
+          <Route path="print-invoice/:id" Component={()=><>hello print invoice</>} />
         </Route>
 
         <Route path="*" Component={NotFound} /> {/* 404 route */}
