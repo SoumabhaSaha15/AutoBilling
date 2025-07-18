@@ -9,6 +9,8 @@
 
 ![create invoice](./screenshots/create_invoice.png)
 
+![print invoice](./screenshots/invoice.png)
+
 ![error page](./screenshots/error_page.png)
 
 ![add product](./screenshots/add_product.png)
