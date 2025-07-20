@@ -21,6 +21,7 @@ try {
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use(cookie_parser())
+    .use(router)
     .use(async (err: Error, _: Request, res: Response, __: NextFunction) => {
       //error controller.
       if (err instanceof ZodError) res.status(400).send(zodErrorFlattener(err));
@@ -34,7 +35,6 @@ try {
       }
       res.status(500).send(err.message);
     })
-    .use(router)
     .listen(process.env.PORT, () => print(process.env.PORT));
 
   process.on("unhandledRejection", (reason) => {

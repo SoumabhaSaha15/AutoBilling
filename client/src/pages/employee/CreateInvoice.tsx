@@ -7,7 +7,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import flatenner from "./../../utility/zod-error-flattener";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
-import BarCodeScanner, { BarcodeFormat } from "react-qr-barcode-scanner";
 import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
 import { TextInput, Label, Button, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Spinner, ButtonGroup } from "flowbite-react";
 
@@ -15,14 +14,13 @@ const CreateInvoice: FC = () => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [remountKey, setRemountKey] = useState<string>(() => crypto.randomUUID());
   const [stop, setStop] = useState<boolean>(false);
   const [list, setList] = useState<OrdersType>([]);
-  const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
 
   const restart = () => {
     setStop(false);
-    setRemountKey(crypto.randomUUID());
+    // setRemountKey(crypto.randomUUID());
   };
   const clear = () => {
     reset();
@@ -38,6 +36,7 @@ const CreateInvoice: FC = () => {
       base.post('/invoice', invoiceData).then((response) => {
         const { id } = InvoiceValidator.pick({ id: true }).parse(response.data);
         toast.open(id,'alert-success',true,2000);
+        setList([]);
       }).catch(console.log);
     } catch (err) {
       toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
@@ -63,20 +62,6 @@ const CreateInvoice: FC = () => {
   return (
     <div className="grid overflow-auto h-[calc(100dvh-60px)] bg-gray-400 dark:bg-gray-900 grid-cols-[100%] md:grid-cols-[34.75%_64.75%] gap-[0.5%] p-2 items-start">
       <div className="grid place-items-center min-w-full w-full h-[calc(100dvh-80px)] bg-gray-300 dark:bg-gray-800 rounded-2xl p-4">
-        <BarCodeScanner
-          key={remountKey}
-          width={400}
-          height={400}
-          delay={2500}
-          formats={[BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX]}
-          onUpdate={(_, result) => {
-            if (result) {
-              setValue("id", result.getText());
-              setStop(true);
-            }
-          }}
-          stopStream={stop}
-        />
 
         <ButtonGroup>
           <Button color="alternative" disabled={stop} onClick={pause}>pause</Button>
@@ -96,9 +81,10 @@ const CreateInvoice: FC = () => {
               id="productId"
               icon={FaQrcode}
               type="text"
+              autoFocus
               placeholder="product id"
               {...register('id')}
-              readOnly
+              // readOnly
             />
           </div>
           <div>
