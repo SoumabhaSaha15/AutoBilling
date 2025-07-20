@@ -7,9 +7,11 @@
 
 ![admin login screen](./screenshots/admin_login_screen.png)
 
-![create invoice](./screenshots/create_invoice.png)
+![invoice create](./screenshots/invoice_create.png)
 
-![print invoice](./screenshots/invoice.png)
+![invoice pdf](./screenshots/invoice.png)
+
+![print invoice page](./screenshots/invoice_page.png)
 
 ![error page](./screenshots/error_page.png)
 

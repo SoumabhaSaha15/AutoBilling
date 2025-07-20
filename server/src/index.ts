@@ -33,7 +33,7 @@ try {
           .join(" ");
         res.status(400).send(errorMessage);
       }
-      res.status(500).send(err.message);
+      else res.status(500).send(err.message);
     })
     .listen(process.env.PORT, () => print(process.env.PORT));
 

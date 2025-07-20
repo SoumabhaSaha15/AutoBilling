@@ -1,4 +1,4 @@
-import { FC, Suspense, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import base from './../utility/axios-base';
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,34 +9,43 @@ import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
 import { Button, Label, TextInput, Spinner } from "flowbite-react";
 const AdminLogin: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
   const toast = useToast();
   useEffect(() => {
     try {
       base
         .get('/admin_login')
-        .then((res) => res.status === 200 && navigate('/admin'))
+        .then((res) =>{
+          (res.status === 200)? navigate('/admin'): setIsLoading(false);
+        })
         .catch((_) => setIsLoading(false));
     } catch (e) {
       console.log(e);
     }
+    return () => {
+      setIsSubmitting(false)
+      setIsLoading(true);};
   }, []);
   const { register, handleSubmit, formState: { errors } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
+    setIsSubmitting(true);
     try {
-      let response = await base.post('/admin_login', data, { headers: { 'Content-Type': "application/json" } });
+      let response = await base.post('/admin_login', data);
       if (response.status == 200) navigate('/admin');
+      else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);
     } catch (e) {
+      setIsSubmitting(false);
       toast.open((e as Error)?.message || "", 'alert-error', true, 2000);
     }
   };
 
   return (
     (isLoading) ?
-      (<Suspense>
+      (
         <Spinner aria-label="submit" size="sm" />
-      </Suspense>) : (
+      ) : (
         <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
           <form className="flex min-w-sm max-w-md md:w-md sm:w-sm flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
             <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Login</h3>
@@ -101,7 +110,9 @@ const AdminLogin: FC = () => {
                 shadow
               />
             </div>
-            <Button type="submit">login to admin account</Button>
+            <Button type="submit">
+              {isSubmitting?(<><Spinner aria-label="submit" size="sm" className="mr-2" />"logging in"</>):"login to admin account"}
+            </Button>
           </form>
         </div>)
   );

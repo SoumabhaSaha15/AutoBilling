@@ -1,4 +1,4 @@
-import { LuDownload } from 'react-icons/lu';
+import { LuPrinter } from 'react-icons/lu';
 import { useParams } from "react-router-dom";
 import base from './../../utility/axios-base';
 import { HiCheckCircle } from 'react-icons/hi2';
@@ -8,14 +8,17 @@ import { useToast } from '../../contexts/Toast/ToastContext';
 import { Page, PDFDownloadLink, Document, Text } from '@react-pdf/renderer';
 import { InvoiceResponseType, InvoiceResponse } from "../../validator/order";
 import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell } from 'flowbite-react';
+import  flattenError  from './../../utility/zod-error-flattener';
 const ViewInvoice: FC = () => {
   const toast = useToast();
   const [invoiceData, setInvoiceData] = useState<InvoiceResponseType | null>(null);
   const { id } = useParams();
   useEffect(() => {
     base.get(`/invoice/${id}`).then((res) => {
-      const { data, success } = InvoiceResponse.safeParse(res.data);
-      (success) ? setInvoiceData(data) : toast.open(res.data, 'alert-error', true, 5000);
+      console.log(res.data)
+      const { data, success,error } = InvoiceResponse.safeParse(res.data);
+      console.log(success, data);
+      (success) ? setInvoiceData(data) : toast.open(flattenError(error), 'alert-error', true, 5000);
     }).catch(console.log);
   }, [id]);
 
@@ -52,7 +55,7 @@ const ViewInvoice: FC = () => {
                       color="blue"
                       size="md"
                       className='rounded-3xl'
-                      children={<LuDownload size='1.2rem' />}
+                      children={<LuPrinter size='1.2rem' />}
                     />}
                 />
               </div>

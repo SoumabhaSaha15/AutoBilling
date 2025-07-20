@@ -1,6 +1,6 @@
 import { z } from "zod";
 import mongoose from "mongoose";
-
+import { ProductModel } from "./Product.js";
 const OrdersValidator = z.strictObject({
   productId: z.coerce.string({ required_error: "product id is missing!!!" })
     .refine((v) => mongoose.Types.ObjectId.isValid(v), { message: "invalid object id" }),
@@ -30,7 +30,7 @@ const InvoiceSchema = new mongoose.Schema<InvoiceType>({
   employeeEmail: { type: String, required: true },
   dateTime: { type: String, required: true },
   orders: [{
-    _id:false,
+    _id: false,
     productId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "product_model",
@@ -40,6 +40,14 @@ const InvoiceSchema = new mongoose.Schema<InvoiceType>({
   }]
 }, { timestamps: true });
 
+InvoiceSchema.pre('save', async function (next) {
+  const orders = this.orders;
+  if (!orders || orders.length === 0) return next(new Error("At least one order is required"));
+  for (const order of orders)
+    if (!(await ProductModel.exists({ _id: order.productId })))
+      return next(new Error(`Product with ID ${order.productId} does not exist`));
+  next();
+});
 
 const InvoiceModel = mongoose.model<InvoiceType>('invoice_model', InvoiceSchema);
 
