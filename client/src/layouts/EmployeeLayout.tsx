@@ -1,21 +1,21 @@
-import { FC, useEffect } from "react";
-import { Outlet } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import HeaderSection from "../components/employee/HeaderSection";
+import OutletLoading from "../OutletLoading";
+import { FC, useEffect, Suspense } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/Auth/employee/AuthContext";
+import HeaderSection from "../components/employee/HeaderSection";
 const AdminLayout: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
-  useEffect(()=>{
-    if(auth.userDetails == null){
-      auth.login(()=>{ },()=>{navigate('/login/admin');})
+  useEffect(() => {
+    if (auth.userDetails == null) {
+      auth.login(() => { }, () => { navigate('/login/admin'); })
     }
-  },[]);
+  }, []);
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-gray-900">
         <HeaderSection />
-        <Outlet/>
+        <Suspense fallback={<OutletLoading />} children={<Outlet />} />
       </div>
     </>
   );

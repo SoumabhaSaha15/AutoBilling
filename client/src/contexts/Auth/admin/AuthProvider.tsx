@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { useState } from "react";
+import Loading from "../../../Loading";
+import { useState, Suspense } from "react";
 import base from './../../../utility/axios-base';
 import { useToast } from "../../Toast/ToastContext";
 import { AuthContext, UserDetailsSchema, type UserDetailsType } from "./AuthContext";
@@ -16,7 +17,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setUserDetails(parsedData);
       onSuccess();
     } catch (e) {
-      toast.open('Error login: '+(e as Error).message,'alert-error', true, 2000);
+      toast.open('Error login: ' + (e as Error).message, 'alert-error', true, 2000);
       console.error(e);
       onError();
     }
@@ -28,11 +29,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       const response = await base.get('/logout');
       if (response.status != 200) throw new Error(`Error in logging out status message:${response.statusText}`);
       const value = z.string().parse(response.data);
-      toast.open(value,'alert-success');
+      toast.open(value, 'alert-success');
       setUserDetails(null);
       onSuccess()
     } catch (err) {
-      toast.open('Error logging out: ' + (err as Error).message,'alert-error', true, 2000, );
+      toast.open('Error logging out: ' + (err as Error).message, 'alert-error', true, 2000,);
       console.error(err);
       onError();
     }
@@ -40,7 +41,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   return (
     <AuthContext.Provider value={{ login, logout, userDetails }}>
-      {children}
+      {/* {children} */}
+      <Suspense fallback={<Loading />} children={children} />
     </AuthContext.Provider>
   );
 }

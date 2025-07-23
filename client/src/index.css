@@ -2,6 +2,9 @@
 @plugin "flowbite-react/plugin/tailwindcss";
 @source "../.flowbite-react/class-list.json";
 @custom-variant dark (&:where(.dark, .dark *));
-*{
-  transition:all ease-in-out .25s;
+* {
+  transition-property:
+    color, background-color, border-color, box-shadow, opacity, scale;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
 }

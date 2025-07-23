@@ -30,17 +30,14 @@ const HeaderSection: FC = () => {
     <NavbarCollapse>
       <NavbarLink as={'div'} >
         <Link to="/employee/create-invoice" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
-          invoice
+          create-invoice
         </Link>
       </NavbarLink>
       <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
-        Pricing
+        view-invoices
       </NavbarLink>
       <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">
-        About
-      </NavbarLink>
-      <NavbarLink href="#contact" className="text-gray-700 hover:text-blue-600">
-        Contact
+        view-products
       </NavbarLink>
     </NavbarCollapse>
   )
