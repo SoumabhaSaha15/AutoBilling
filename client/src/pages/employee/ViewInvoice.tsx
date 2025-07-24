@@ -7,18 +7,23 @@ import { FC, useState, useEffect, useMemo } from "react";
 import { useToast } from '../../contexts/Toast/ToastContext';
 import { Page, PDFDownloadLink, Document, Text } from '@react-pdf/renderer';
 import { InvoiceResponseType, InvoiceResponse } from "../../validator/order";
+import OutletLoading from '../../OutletLoading';
 import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell } from 'flowbite-react';
-import  flattenError  from './../../utility/zod-error-flattener';
+import flattenError from './../../utility/zod-error-flattener';
 const ViewInvoice: FC = () => {
   const toast = useToast();
+  const [loading, setLoading] = useState<boolean>(true);
   const [invoiceData, setInvoiceData] = useState<InvoiceResponseType | null>(null);
   const { id } = useParams();
   useEffect(() => {
     base.get(`/invoice/${id}`).then((res) => {
-      console.log(res.data)
-      const { data, success,error } = InvoiceResponse.safeParse(res.data);
-      console.log(success, data);
-      (success) ? setInvoiceData(data) : toast.open(flattenError(error), 'alert-error', true, 5000);
+      const { data, success, error } = InvoiceResponse.safeParse(res.data);
+      (success) ?
+        setLoading((_) => {
+          setInvoiceData(data);
+          return false;
+        }) :
+        toast.open(flattenError(error), 'alert-error', true, 5000);
     }).catch(console.log);
   }, [id]);
 
@@ -33,7 +38,7 @@ const ViewInvoice: FC = () => {
   }, [invoiceData]);
 
   return (
-    (invoiceData !== null) ? (
+    (!loading) ? ((invoiceData !== null) ? (
       <div className="max-w-5xl mx-auto p-6">
         {/* Main Order Card */}
         <Card className="mb-6">
@@ -186,6 +191,7 @@ const ViewInvoice: FC = () => {
         </span>
       </Alert>
     )
-  );
+    )
+      : <OutletLoading />)
 }
 export default ViewInvoice;

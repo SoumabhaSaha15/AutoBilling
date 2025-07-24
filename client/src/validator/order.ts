@@ -21,6 +21,8 @@ const InvoiceValidator = z.strictObject({
     .email({ message: "invalid email" }),
   dateTime: z.string({ required_error: "date is required" })
     .datetime({ message: "invalid date time." }),
+  customerEmail: z.string({ required_error: "customer email is required" })
+    .email({ message: "invalid email" }),
   orders: OrdersValidator
     .transform(orders => orders.map((val) => ({ productId: val.id, quantity: val.quantity })))
 });

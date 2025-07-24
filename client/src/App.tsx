@@ -16,6 +16,7 @@ const App: FC = () => {
 
           <Route path="/login" Component={lazy(() => import("./layouts/LoginHeader"))} >
             <Route index Component={EmployeeLogin} />
+            <Route path="test" Component={lazy(()=>import('./pages/employee/Test'))}/>
             <Route path="admin" Component={lazy(() => import("./pages/AdminLogin"))} />
             <Route path="employee" Component={EmployeeLogin} />
           </Route>
@@ -32,7 +33,6 @@ const App: FC = () => {
             <Route path="create-invoice" Component={lazy(() => import("./pages/employee/CreateInvoice"))} />
             <Route path="print-invoice/:id" Component={lazy(() => import("./pages/employee/ViewInvoice"))} />
           </Route>
-
           <Route path="*" Component={lazy(() => import("./pages/404"))} /> {/* 404 route */}
         </Routes>
       </Suspense>
