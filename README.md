@@ -7,6 +7,8 @@
 
 ![admin login screen](./screenshots/admin_login_screen.png)
 
+![employee page](./screenshots//employee_page.png)
+
 ![invoice create](./screenshots/invoice_create.png)
 
 ![invoice pdf](./screenshots/invoice.png)

@@ -178,6 +178,10 @@ const DownloadInvoice: FC<InvoiceResponseType> = (props: InvoiceResponseType) =>
             <Text style={styles.infoLabel}>Date & Time:</Text>
             <Text style={styles.infoValue}>{(new Date(props.dateTime)).toLocaleString('en-IN')}</Text>
           </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Customer:</Text>
+            <Text style={styles.infoValue}>{props.customerEmail}</Text>
+          </View>
         </View>
         {/* Order Items Table */}
         <View style={styles.table}>

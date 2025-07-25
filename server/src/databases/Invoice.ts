@@ -13,6 +13,8 @@ const OrdersValidator = z.strictObject({
 const InvoiceValidator = z.strictObject({
   employeeEmail: z.string({ required_error: "employee email is required" })
     .email({ message: "invalid email" }),
+  customerEmail: z.string({ required_error: "customer email is required" })
+    .email({ message: "invalid email" }),
   dateTime: z.string({ required_error: "date is required" })
     .datetime({ message: "invalid date time." }),
   orders: z.array(OrdersValidator).min(1, { message: "at least one order is required" }).transform((orders) => {
@@ -28,6 +30,7 @@ type InvoiceType = z.infer<typeof InvoiceValidator>;
 
 const InvoiceSchema = new mongoose.Schema<InvoiceType>({
   employeeEmail: { type: String, required: true },
+  customerEmail: { type: String, required: true },
   dateTime: { type: String, required: true },
   orders: [{
     _id: false,

@@ -33,7 +33,7 @@ const HeaderSection: FC = () => {
           create-invoice
         </Link>
       </NavbarLink>
-      <NavbarLink href="#pricing" className="text-gray-700 hover:text-blue-600">
+      <NavbarLink href="/employee" className="text-gray-700 hover:text-blue-600">
         view-invoices
       </NavbarLink>
       <NavbarLink href="#about" className="text-gray-700 hover:text-blue-600">

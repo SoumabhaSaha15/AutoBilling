@@ -1,22 +1,21 @@
+import { z } from 'zod'
 import { useState, FC } from 'react';
-import {z} from 'zod'
 import { FaQrcode } from "react-icons/fa";
-import { MdOutlineProductionQuantityLimits } from "react-icons/md";
-import { LuTrash2, LuPlus, LuUpload } from 'react-icons/lu';
-import { Card, Button, Label, TextInput, Table, TableBody, TableHead, TableCell, TableRow, TableHeadCell, Modal, ModalBody, ModalHeader, Spinner } from 'flowbite-react';
 import base from "./../../utility/axios-base"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useToast } from "../../contexts/Toast/ToastContext";
-import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
+import { LuTrash2, LuPlus, LuUpload } from 'react-icons/lu';
 import flatenner from "./../../utility/zod-error-flattener";
-// import { string } from 'zod/v4-mini';
+import { useToast } from "../../contexts/Toast/ToastContext";
+import { MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
+import { Card, Button, Label, TextInput, Table, TableBody, TableHead, TableCell, TableRow, TableHeadCell, Modal, ModalBody, ModalHeader, Spinner } from 'flowbite-react';
 
 const CreateInvoice: FC = () => {
   const toast = useToast();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [customerEmail,setCustomerEmail] = useState<string>('')
+  const [customerEmail, setCustomerEmail] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [list, setList] = useState<OrdersType>([]);
   const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
@@ -25,10 +24,17 @@ const CreateInvoice: FC = () => {
   const submitInVoice = () => {
     setIsSubmitting(true);
     try {
-      const invoiceData: Pick<InvoiceType, 'orders'> & Pick<InvoiceType,'customerEmail'>   = InvoiceValidator.pick({ orders: true,customerEmail:true }).parse({ orders: list,customerEmail:customerEmail });
-      console.log(invoiceData);
-      setList([]);
-      setCustomerEmail('');
+      const invoiceData: Pick<InvoiceType, 'orders'> & Pick<InvoiceType, 'customerEmail'> = InvoiceValidator.pick({ orders: true, customerEmail: true }).parse({ orders: list, customerEmail: customerEmail });
+      base.post('/invoice', invoiceData).then((response) => {
+        if (response.status === 200) {
+          const { id } = InvoiceValidator.pick({ id: true }).parse(response.data);
+          toast.open(id, 'alert-success', true, 2000);
+          setList([]);
+          setCustomerEmail('');
+        } else {
+          toast.open(response.data, 'alert-error', true, 2000);
+        }
+      }).catch(console.log);
     } catch (err) {
       toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
     }
@@ -58,7 +64,7 @@ const CreateInvoice: FC = () => {
               id="customerEmail"
               type="email"
               value={customerEmail}
-              onInput={(e)=>{setCustomerEmail(e.currentTarget.value||'')}}
+              onInput={(e) => { setCustomerEmail(e.currentTarget.value || '') }}
               placeholder="customer@example.com"
               required
             />
@@ -70,18 +76,21 @@ const CreateInvoice: FC = () => {
           color="green"
           className='w-[calc(50%-6px)]'
           onClick={submitInVoice}
-        >
-          <LuUpload className="mr-2 h-4 w-4" />
-          Upload Invoice
-        </Button>
+          disabled={isSubmitting || list.length === 0}
+          children={(isSubmitting) ?
+            (<><Spinner aria-label="submit" size="md" className="mr-2" />{"createing invoice"}</>) : (<><LuUpload className="mr-2 h-4 w-4" />
+              Upload Invoice</>)}
+        />
+
         <Button
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            reset();
+            setOpenModal(true);
+          }}
           color="blue"
           className='w-[calc(50%-6px)]'
-        >
-          <LuPlus className="mr-2 h-4 w-4" />
-          Add Item
-        </Button>
+          children={<><LuPlus className="mr-2 h-4 w-4" />'Add Item'</>}
+        />
         <Modal show={openModal} onClose={() => { setOpenModal(false) }} size="md" popup>
           <ModalHeader />
           <ModalBody>
@@ -160,7 +169,7 @@ const CreateInvoice: FC = () => {
                           color="red"
                           size="sm"
                           className='rounded-2xl'
-                          onClick={() => { setList((prev) => prev.filter(it => (item.id !== it.id)));}}
+                          onClick={() => { setList((prev) => prev.filter(it => (item.id !== it.id))); }}
                         >
                           <LuTrash2 className="h-4 w-4" />
                         </Button>

@@ -84,6 +84,14 @@ const ViewInvoice: FC = () => {
                   {invoiceData.employeeEmail}
                 </p>
               </div>
+                            <div>
+                <h3 className="text-sm font-medium  uppercase tracking-wide mb-1">
+                  Customer
+                </h3>
+                <p className="text-lg font-semibold ">
+                  {invoiceData.customerEmail}
+                </p>
+              </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
                   Date & Time
