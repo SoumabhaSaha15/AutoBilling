@@ -18,9 +18,9 @@
 
 ## Database & ODM
 
-> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" width=16/> mongo atlas
+> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original-wordmark.svg" width=16/> mongo atlas [database]
 
-> mongoose.js
+> <img src="https://mongoosejs.com/docs/images/mongoose5_62x30_transparent.png" width=16 /> mongoose.js [ODM]
 
 ## CMS
 
