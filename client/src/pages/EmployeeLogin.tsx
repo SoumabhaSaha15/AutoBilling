@@ -1,5 +1,6 @@
-import { FC, useEffect, useState } from "react";
 import base from './../utility/axios-base';
+import OutletLoading from '../OutletLoading';
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,14 +17,24 @@ const EmployeeLogin: FC = () => {
     try {
       base
         .get('/employee_login')
-        .then((res) => { (res.status === 200) ? navigate('/employee') : setIsLoading(false); })
-        .catch(console.error);
+        .then((res) => { (res.status === 200) ? navigate('/employee') : (()=>{
+          setIsLoading(false);
+          toast.open("No employee logged pls login", 'alert-error', true, 2000);
+        })(); })
+        .catch((e) => {
+          setIsLoading(false);
+          toast.open("Failed to load employee login page", 'alert-error', true, 2000);
+          console.error(e)
+        });
     } catch (e) {
       console.error(e);
+      toast.open("Failed to load employee login page", 'alert-error', true, 2000);
+      setIsLoading(false);
     }
     return () => {
       setIsSubmitting(false);
       setIsLoading(true);
+      console.clear();
     };
   }, []);
   const { register, handleSubmit, formState: { errors } } = useForm<EmployeeSubmitType>({ resolver: zodResolver(EmployeeSubmit) });
@@ -42,7 +53,7 @@ const EmployeeLogin: FC = () => {
 
   return (
     (isLoading) ?
-      (<Spinner aria-label="submit" size="sm" />) :
+      <OutletLoading /> :
       (<div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
         <form className="flex w-sm min-w-sm max-w-mg sm:w-sm md:w-md lg:w-lg flex-col gap-4" onSubmit={handleSubmit(formSubmit)}>
           <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Employee Login</h3>

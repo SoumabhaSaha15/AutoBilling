@@ -3,6 +3,7 @@
 @source "../.flowbite-react/class-list.json";
 @custom-variant dark (&:where(.dark, .dark *));
 * {
+  font-family: 'Roboto', sans-serif;
   transition-property:
     color, background-color, border-color, box-shadow, opacity, scale;
   transition-duration: 0.2s;

@@ -1,5 +1,8 @@
-# AutoBilling
-> **Description:** Generating bills by scanning barcode.
+<h1 style="margin-right:10px;">
+  <img src="./client/public/logo.png" width=28/> AutoBilling
+</h1>
+
+> **Description:** **_Generates invoice by scanning barcode._**
 
 ![dark](./screenshots/dark.png)
 
@@ -9,7 +12,7 @@
 
 ![employee page](./screenshots//employee_page.png)
 
-![invoice create](./screenshots/invoice_create.png)
+![admin page](./screenshots/admin_page.png)
 
 ![invoice pdf](./screenshots/invoice.png)
 

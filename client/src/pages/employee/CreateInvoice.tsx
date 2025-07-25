@@ -122,6 +122,7 @@ const CreateInvoice: FC = () => {
                 <TextInput
                   id="quantity"
                   type="number"
+                  min={1}
                   icon={MdOutlineProductionQuantityLimits}
                   required
                   {...register("quantity")}

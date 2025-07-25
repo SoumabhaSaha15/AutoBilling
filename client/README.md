@@ -1,54 +1,27 @@
-# React + TypeScript + Vite
+# Libraries used in frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Build tool
 
-Currently, two official plugins are available:
+> <img src ="https://vite.dev/logo.svg" width=16 /> vite
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## UI building
 
-## Expanding the ESLint configuration
+> <img src ="https://react.dev/favicon-16x16.png" width=16 /> react
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+> <img src ="https://tailwindcss.com/favicons/favicon-16x16.png?v=4" width=16 /> tailwind
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+> <img src="./public/flowbite-react.svg" width=16 /> flowbite-react
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Data validation and visualization
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+> <img src="https://zod.dev/_next/image?url=%2Flogo%2Flogo-glow.png&w=256&q=100" width=16/> zod
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    "react-x": reactX,
-    "react-dom": reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs["recommended-typescript"].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+> <img src ="https://react-hook-form.com/images/logo/react-hook-form-logo-only.png" width=16 /> react hook form
+
+> <img src ="https://tillitsdone.com/_astro/rechart.matzhxg0_ZCIy1P.svg" width=16 /> recharts
+
+## Routing & API request sender
+
+> <img src ="https://reactrouter.com/favicon-light.png" width=16 /> react-router-dom [routing]
+
+> <img src ="https://axios-http.com/assets/favicon.ico" width=16 /> axios [API communication]

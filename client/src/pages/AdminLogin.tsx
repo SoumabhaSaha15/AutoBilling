@@ -1,6 +1,7 @@
-import { FC, useEffect, useState } from "react";
 import base from './../utility/axios-base';
+import OutletLoading from '../OutletLoading';
 import { useNavigate } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "../contexts/Toast/ToastContext";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -16,16 +17,25 @@ const AdminLogin: FC = () => {
     try {
       base
         .get('/admin_login')
-        .then((res) =>{
-          (res.status === 200)? navigate('/admin'): setIsLoading(false);
+        .then((res) => {
+          (res.status === 200) ? navigate('/admin') : (() => {
+            setIsLoading(false);
+            toast.open("No admin logged in please login.", 'alert-error', true, 2000);
+          })();
         })
-        .catch((_) => setIsLoading(false));
+        .catch((_) => {
+          toast.open("Failed to load admin login page", 'alert-error', true, 2000);
+          setIsLoading(false);
+        });
     } catch (e) {
+      toast.open("Failed to load admin login page", 'alert-error', true, 2000);
       console.log(e);
     }
     return () => {
-      setIsSubmitting(false)
-      setIsLoading(true);};
+      setIsSubmitting(false);
+      setIsLoading(true);
+      console.clear();
+    };
   }, []);
   const { register, handleSubmit, formState: { errors } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
@@ -43,9 +53,8 @@ const AdminLogin: FC = () => {
 
   return (
     (isLoading) ?
-      (
-        <Spinner aria-label="submit" size="sm" />
-      ) : (
+      <OutletLoading />
+      : (
         <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
           <form className="flex min-w-sm max-w-md md:w-md sm:w-sm flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
             <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Login</h3>
@@ -111,7 +120,7 @@ const AdminLogin: FC = () => {
               />
             </div>
             <Button type="submit">
-              {isSubmitting?(<><Spinner aria-label="submit" size="sm" className="mr-2" />"logging in"</>):"login to admin account"}
+              {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to admin account"}
             </Button>
           </form>
         </div>)
