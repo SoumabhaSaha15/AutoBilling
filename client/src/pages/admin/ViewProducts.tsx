@@ -9,7 +9,7 @@ const ProductArray = z.array(ProductResponseSchema);
 const ViewProducts: FC = () => {
   const toast = useToast();
   const [products, setProducts] = useState<z.infer<typeof ProductArray>>([]);
-  const [lazyParams, setLazyParams] = useState<{ skip: number, limit: number }>({ skip: 0, limit: 20 });
+  const [_, setLazyParams] = useState<{ skip: number, limit: number }>({ skip: 0, limit: 20 });
   const [hasMore, setHasMore] = useState(true); // State to track if there are more products to load
 
   const handleScroll = useCallback(() => {
