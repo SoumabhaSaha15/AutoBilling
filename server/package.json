@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon dist/index.js",
-    "build": "tsc",
+    "build": "mkdir public && mkdir public/uploads && tsc",
     "create":"mkdir public && mkdir public/uploads"
   },
   "keywords": [],
