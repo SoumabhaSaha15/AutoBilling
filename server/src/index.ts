@@ -16,14 +16,13 @@ try {
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
   const APP = express()
-    .use(cors({ origin: process.env.CORS_URL,credentials:true }))
+    .use(cors({ origin: process.env.CORS_URL, credentials: true }))
     .use(express.static(path.join(import.meta.dirname, "./../public")))
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use(cookie_parser())
     .use(router)
     .use(async (err: Error, _: Request, res: Response, __: NextFunction) => {
-      //error controller.
       if (err instanceof ZodError) res.status(400).send(zodErrorFlattener(err));
       else if (err instanceof MongoServerError) {
         const { keyValue } = err.errorResponse;
