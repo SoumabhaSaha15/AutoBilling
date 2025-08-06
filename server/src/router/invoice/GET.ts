@@ -6,7 +6,7 @@ const GET = {
   getAllInvoices: async (req: Request, res: Response, next: NextFunction) => {
     try {
       //@ts-ignore
-      const employee = await EmployeeModel.findById(req['employeeId']);
+      const employee = await EmployeeModel.findById(req.clientId);
       //@ts-check
       const invoices = await InvoiceBriefModel.find({employeeEmail:employee?.email}).sort({ dateTime: -1 });
       res.status(200).json(invoices);

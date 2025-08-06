@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import zodErrorFlattener from "./utility/zod-error-flattener.js";
+import allowWithoutAuth from "./configurations/authenticator.js";
 import cloudinaryConfig from "./configurations/cloudinary.js";
 import { MongoServerError } from "mongodb"
 import cookie_parser from "cookie-parser";
@@ -21,6 +22,7 @@ try {
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use(cookie_parser())
+    .use(allowWithoutAuth(['/admin_login','/employee_login']))
     .use(router)
     .use(async (err: Error, _: Request, res: Response, __: NextFunction) => {
       if (err instanceof ZodError) res.status(400).send(zodErrorFlattener(err));

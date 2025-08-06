@@ -20,7 +20,7 @@ const ProductCard: FC<z.infer<typeof ProductResponseSchema>> = (props) => {
           <Accordion collapseAll>
             <AccordionPanel>
               <AccordionTitle>{props.brandName + " " + props.productName}</AccordionTitle>
-              <AccordionContent>
+              <AccordionContent >
                 <p className="mb-2 text-gray-500 dark:text-gray-400">
                   {props.productDescription}
                 </p>

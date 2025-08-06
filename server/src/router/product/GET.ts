@@ -7,14 +7,11 @@ import { ProductModel } from './../../databases/Product.js';
 const GET = {
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.cookies['id']) {
-        let payload: string | JwtPayload = jwt.verify(req.cookies['id'] || '', process.env.JWT_KEY);
-        if ((payload as JwtPayload)['iat']) delete (payload as JwtPayload)['iat'];
-        const adminId = (payload as JwtPayload)["id"];
-        if (!mongoose.Types.ObjectId.isValid(adminId)) throw new Error("Invalid cookie");
-        if (await AdminModel.exists({ _id: adminId })) next();
-        else throw new Error("Not an admin");
-      } else res.status(401).send('admin not logged in.');
+      if(req.clientType === 'admin') next();
+      else {
+        res.status(401).send('admin not logged in.');
+        return;
+      }
     } catch (err) {
       next(err);
     }

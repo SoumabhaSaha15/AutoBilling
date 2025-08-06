@@ -16,8 +16,8 @@ const GET = {
       if ((payload as JwtPayload)['iat']) delete (payload as JwtPayload)['iat'];
       const result = mongoose.Types.ObjectId.isValid((payload as JwtPayload)["id"]);
       (!result) ? res.status(401).send('Invalid cookies.') : (() => {
-        //@ts-ignore
-        req['adminId'] = (payload as JwtPayload)["id"];
+        req.clientId = (payload as JwtPayload)["id"];
+        req.clientType = 'admin';
         next();
       })();
     } catch (err) {
@@ -26,8 +26,7 @@ const GET = {
   },
   adminNotFound: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      //@ts-ignore
-      await AdminModel.exists({ _id: req['adminId'] }) ?
+      await AdminModel.exists({ _id: req.clientId }) ?
         next() :
         res.status(404).send('No admin found.');
     } catch (err) {
@@ -36,8 +35,7 @@ const GET = {
   },
   provideAdminData: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      //@ts-ignore
-      let admin = await AdminModel.findById(req['adminId']);
+      let admin = await AdminModel.findById(req.clientId);
       if (admin) res.status(200).json({
         id: admin._id.toString(),
         name: admin.name,

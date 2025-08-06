@@ -10,17 +10,10 @@ const POST = {
   uploadFile: multer.single('productImage'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.cookies['id']) {
-        let payload: string | JwtPayload = jwt.verify(req.cookies['id'] || '', process.env.JWT_KEY);
-        if ((payload as JwtPayload)['iat']) delete (payload as JwtPayload)['iat'];
-        const adminId = (payload as JwtPayload)["id"];
-        if (!mongoose.Types.ObjectId.isValid(adminId)) throw new Error("Invalid cookie");
-        if (await AdminModel.exists({ _id: adminId })) next();
-        else throw new Error("Not an admin");
-      } else {
+      if (req.clientType !== 'admin') {
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
-        res.status(401).send('Not logged in.');
-      }
+        throw new Error("Not an admin");
+      } else next();
     } catch (err) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
       next(err);
@@ -56,7 +49,7 @@ const POST = {
       //@ts-ignore
       const { _id, __v, createdAt, updatedAt, ...data } = product.toJSON();
       //@ts-check
-      res.status(200).json({...data,id:_id.toString()});
+      res.status(200).json({ ...data, id: _id.toString() });
     } catch (e) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
       next(e);

@@ -6,19 +6,8 @@ import { InvoiceValidator, InvoiceModel, InvoiceType } from '../../databases/Inv
 const POST = {
   notAnEmployee: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.cookies['id']) {
-        let payload: string | JwtPayload = jwt.verify(req.cookies['id'] || '', process.env.JWT_KEY);
-        if ((payload as JwtPayload)['iat']) delete (payload as JwtPayload)['iat'];
-        const adminId = (payload as JwtPayload)["id"];
-        if (!mongoose.Types.ObjectId.isValid(adminId)) throw new Error("Invalid cookie");
-        if (await EmployeeModel.exists({ _id: adminId })) {
-          //@ts-ignore
-          req['employeeId'] = adminId;
-          //@ts-check
-          next();
-        }
-        else throw new Error("Not an employee");
-      } else res.status(401).send('admin not logged in.');
+      if(req.clientType==='employee')next()
+      else res.status(401).send('Not an employee');
     } catch (err) {
       next(err);
     }

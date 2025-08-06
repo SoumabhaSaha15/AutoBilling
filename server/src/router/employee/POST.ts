@@ -48,9 +48,7 @@ const POST = {
         httpOnly: true,
         expires: TenYearsFromNow,
       });
-      let data = req.body;
-      delete data["password"];
-      delete data["hashPassword"];
+      let { password, hashPassword, ...data } = req.body;
       res.status(200).json(data);
     } catch (err) {
       next(err);
