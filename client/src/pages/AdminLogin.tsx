@@ -55,8 +55,8 @@ const AdminLogin: FC = () => {
     (isLoading) ?
       <OutletLoading />
       : (
-        <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
-          <form className="flex min-w-sm max-w-md md:w-md sm:w-sm flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
+        <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center place-items-center">
+          <form className="flex max-w-[95%] md:w-md sm:w-sm flex-col gap-4" name="adminLogin" onSubmit={handleSubmit(formSubmit)}>
             <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Admin Login</h3>
             <div>
               <div className="mb-2 block">
@@ -68,6 +68,7 @@ const AdminLogin: FC = () => {
               <TextInput
                 id="admin-email"
                 type="email"
+                // className='w-[95%] md:w-md sm:w-sm'
                 placeholder="name@flowbite.com"
                 {...register("email")}
                 icon={HiMail}
@@ -86,6 +87,7 @@ const AdminLogin: FC = () => {
                 id="admin-password"
                 type="password"
                 placeholder="********"
+                // className='w-[95%] md:w-md sm:w-sm'
                 icon={HiLockClosed}
                 {...register("password")}
                 autoComplete="one-time-code"
@@ -106,6 +108,7 @@ const AdminLogin: FC = () => {
               </div>
               <TextInput
                 id="admin-key"
+                // className='w-[95%] md:w-md sm:w-sm'
                 placeholder="****-****-****-****"
                 type="password"
                 icon={HiKey}
@@ -119,7 +122,7 @@ const AdminLogin: FC = () => {
                 shadow
               />
             </div>
-            <Button type="submit">
+            <Button type="submit" >
               {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to admin account"}
             </Button>
           </form>

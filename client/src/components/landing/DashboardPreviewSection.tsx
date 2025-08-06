@@ -9,7 +9,7 @@ const DashboardPreviewSection: React.FC = () => {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative" data-aos="zoom-in-up" data-aos-delay='100'>
       <Card className="bg-white/20 backdrop-blur-lg border border-white/20 shadow-2xl">
         <div className="space-y-4">
           {dashboardMetrics.map((metric, index) => (

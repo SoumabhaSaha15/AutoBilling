@@ -58,8 +58,8 @@ const AddProduct: FC = () => {
   }
 
   return (
-    <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
-      <form className="flex max-w-md md:w-md sm:w-sm flex-col gap-4"
+    <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center place-items-center">
+      <form className="flex max-w-[95%] md:w-md sm:w-sm flex-col gap-4"
         name="adminLogin"
         onSubmit={handleSubmit(productSubmit)}
         encType="multipart/form-data"

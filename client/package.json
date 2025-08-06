@@ -16,6 +16,7 @@
     "@ag-media/react-pdf-table": "^2.0.3",
     "@hookform/resolvers": "^5.1.1",
     "@react-pdf/renderer": "^4.3.0",
+    "aos": "^2.3.4",
     "axios": "^1.10.0",
     "flowbite-react": "^0.11.7",
     "react": "^19.1.0",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "@tailwindcss/vite": "^4.1.4",
+    "@types/aos": "^3.0.7",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.3.4",

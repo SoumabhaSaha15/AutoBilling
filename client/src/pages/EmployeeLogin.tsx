@@ -54,8 +54,8 @@ const EmployeeLogin: FC = () => {
   return (
     (isLoading) ?
       <OutletLoading /> :
-      (<div className="min-h-[calc(100dvh-64px)] grid items-center justify-center">
-        <form className="flex w-sm min-w-sm max-w-mg sm:w-sm md:w-md lg:w-lg flex-col gap-4" onSubmit={handleSubmit(formSubmit)}>
+      (<div className="min-h-[calc(100dvh-64px)] grid items-center justify-center place-items-center">
+        <form className="flex max-w-[95%] sm:w-sm md:w-md lg:w-lg flex-col gap-4" onSubmit={handleSubmit(formSubmit)}>
           <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Employee Login</h3>
           <div>
             <div className="mb-2 block">

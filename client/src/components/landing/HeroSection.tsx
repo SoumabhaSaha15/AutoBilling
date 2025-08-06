@@ -1,7 +1,7 @@
 import {FC, JSX} from "react";
 const HeroSection:FC<{children:JSX.Element;}> = ({children}) => {
   return (
-  <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white  snap-start">
+  <section className="bg-gradient-to-br from-blue-600 via-blue-700 to-purple-800 text-white  snap-start" data-aos="zoom-in-up" data-aos-delay='100'>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
