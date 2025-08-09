@@ -12,6 +12,10 @@
 
 > <img src="./public/flowbite-react.svg" width=16 /> flowbite-react
 
+## PDF generation
+
+> <img src="https://react-pdf.org/images/logo.png" width=16 /> react-pdf
+
 ## Data validation and visualization
 
 > <img src="https://zod.dev/_next/image?url=%2Flogo%2Flogo-glow.png&w=256&q=100" width=16/> zod
@@ -25,3 +29,7 @@
 > <img src ="https://reactrouter.com/favicon-light.png" width=16 /> react-router-dom [routing]
 
 > <img src ="https://axios-http.com/assets/favicon.ico" width=16 /> axios [API communication]
+
+## Others
+
+> <img src ="https://lodash.com/assets/img/lodash.svg" width=16 /> lodash

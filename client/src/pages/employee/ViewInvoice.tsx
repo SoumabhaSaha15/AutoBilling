@@ -24,6 +24,7 @@ const ViewInvoice: FC = () => {
           return false;
         }) :
         toast.open(flattenError(error), 'alert-error', true, 5000);
+        console.log(res.data);
     }).catch(console.log);
   }, [id]);
 

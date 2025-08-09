@@ -1,14 +1,14 @@
-import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
-import { useAuth } from '../../contexts/Auth/employee/AuthContext';
 import {Link} from 'react-router-dom';
-import EmployeeCard from './../employee/EmployeeCard';
 import { FC, useState, useEffect } from "react";
+import EmployeeCard from './../employee/EmployeeCard';
+import { useAuth } from '../../contexts/Auth/employee/AuthContext';
+import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import _ from "lodash";
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
-    window.onresize = (_) => {
-      setWidth(window.innerWidth);
-    };
+    window.onresize = _.throttle(() => setWidth(window.innerWidth), 1500);
+    return () => { window.onresize = () => { } };
   }, []);
   const auth = useAuth();
 

@@ -1,12 +1,12 @@
-import { DarkThemeToggle, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
-import { FC, useState, useEffect } from "react";
+import _ from "lodash"
 import { Link } from 'react-router-dom';
+import { FC, useState, useEffect } from "react";
+import { DarkThemeToggle, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
-    window.onresize = (_) => {
-      setWidth(window.innerWidth);
-    };
+    window.onresize = _.throttle(() => setWidth(window.innerWidth), 1500);
+    return () => { window.onresize = () => { } };
   }, []);
 
   const NAVBAR_COLLAPSE = (

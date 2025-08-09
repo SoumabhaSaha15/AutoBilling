@@ -1,18 +1,14 @@
-import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
-import { Link } from "react-router-dom";
-import { useAuth } from '../../contexts/Auth/admin/AuthContext';
-import { FC, useState, useEffect } from "react";
 import AdminCard from './AdminCard';
+import { Link } from "react-router-dom";
+import { FC, useState, useEffect } from "react";
+import { useAuth } from '../../contexts/Auth/admin/AuthContext';
+import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import _ from "lodash";
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
-    window.onresize = (_) => {
-      setWidth(window.innerWidth);
-    };
-    return ()=>{
-      console.log('unmounting...');
-      window.onresize = () => {};
-    };
+    window.onresize = _.throttle(() => setWidth(window.innerWidth), 1500);
+    return () => { window.onresize = () => { } };
   }, []);
   const auth = useAuth();
   const DIV = (
