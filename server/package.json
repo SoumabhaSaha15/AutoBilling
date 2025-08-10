@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
-    "build": "mkdir public && mkdir public/uploads && tsc"
+    "build": "tsc && mkdir public && mkdir public/uploads"
   },
   "keywords": [],
   "author": "",

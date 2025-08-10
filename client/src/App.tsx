@@ -6,7 +6,7 @@ const AdminPage = lazy(() => import("./pages/admin/AdminPage"));
 const EmployeeLogin = lazy(() => import("./pages/EmployeeLogin"));
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AdminAuthProvider from "./contexts/Auth/admin/AuthProvider";
-import EmployeeAuthProvider from "./contexts/Auth/employee/AuthProvider"
+import EmployeeAuthProvider from "./contexts/Auth/employee/AuthProvider";
 const App: FC = () => {
   return (
     <BrowserRouter>
@@ -25,6 +25,7 @@ const App: FC = () => {
             <Route path="dashboard" Component={AdminPage} />
             <Route path="add-product" Component={lazy(() => import("./pages/admin/AddProducts"))} />
             <Route path="view-products" Component={lazy(() => import("./pages/admin/ViewProducts"))} />
+            <Route path="search-products" Component={lazy(() => import("./pages/admin/SearchProducts"))} />
           </Route>
 
           <Route path="/employee" Component={() => <EmployeeAuthProvider children={<EmployeeLayout />} />} >

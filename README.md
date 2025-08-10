@@ -23,3 +23,5 @@
 ![add product](./screenshots/add_product.png)
 
 ![view product](./screenshots/view_product.png)
+
+![search product](./screenshots/search_product.png)
