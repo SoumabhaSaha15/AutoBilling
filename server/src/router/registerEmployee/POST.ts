@@ -1,10 +1,10 @@
 import fs from 'node:fs/promises';
 import { v2 as cloudinary } from 'cloudinary';
-import multer from "./../../configurations/multer.js"
+import multer from "../../configurations/multer.js"
 import { Request, Response, NextFunction } from "express";
-import { ProductModel, ProductValidator } from './../../databases/Product.js';
+import { EmployeeModel, EmployeeValidator } from '../../databases/Employee.js';
 const POST = {
-  uploadFile: multer.single('productImage'),
+  uploadFile: multer.single('profilePicture'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
     try {
       if (req.clientType !== 'admin') {
@@ -18,10 +18,10 @@ const POST = {
   },
   invalidDetails: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const validator = ProductValidator.omit({ productImage: true });
+      const validator = EmployeeValidator.omit({ profilePicture: true });
       req.body = validator.parse(req.body);
       if (req.file?.path) {
-        const { public_id } = await cloudinary.uploader.upload(req.file?.path, { folder: process.env.CLOUDINARY_PRODUCT_DIR })
+        const { public_id } = await cloudinary.uploader.upload(req.file?.path, { folder: process.env.CLOUDINARY_EMPLOYEE_DIR })
         const link = cloudinary.url(public_id, {
           transformation: [{
             fetch_format: 'auto',
@@ -31,7 +31,7 @@ const POST = {
           }]
         });
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
-        req.body = ProductValidator.parse({ ...req.body, productImage: link });
+        req.body = EmployeeValidator.parse({ ...req.body, profilePicture:link });
         next();
       } else {
         throw new Error('no image uploaded!');
@@ -42,9 +42,9 @@ const POST = {
   },
   sendData: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const product = await ProductModel.create(req.body);
+      const employee = await EmployeeModel.create(req.body);
       //@ts-ignore
-      const { _id, __v, createdAt, updatedAt, ...data } = product.toJSON();
+      const { _id, __v, password, createdAt, updatedAt, ...data } = employee.toJSON();
       //@ts-check
       res.status(200).json({ ...data, id: _id.toString() });
     } catch (e) {

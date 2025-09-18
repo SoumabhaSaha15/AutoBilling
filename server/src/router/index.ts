@@ -1,9 +1,10 @@
 import express from "express";
 import adminLogin from "./admin/index.js";
-import product from './product/index.js'
+import product from "./product/index.js";
 import employeeLogin from "./employee/index.js";
-import invoiceRouter from "./invoice/index.js"
+import invoiceRouter from "./invoice/index.js";
 import search from "./product/search/index.js";
+import registerEmployee from "./registerEmployee/index.js";
 const router = express.Router();
 const logoutRouter = express.Router();
 logoutRouter
@@ -22,5 +23,6 @@ router
   .use(product)
   .use(invoiceRouter)
   .use(logoutRouter)
-  .use(search);
+  .use(search)
+  .use(registerEmployee);
 export default router;

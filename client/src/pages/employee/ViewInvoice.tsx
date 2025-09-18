@@ -24,7 +24,7 @@ const ViewInvoice: FC = () => {
           return false;
         }) :
         toast.open(flattenError(error), 'alert-error', true, 5000);
-        console.log(res.data);
+      console.log(res.data);
     }).catch(console.log);
   }, [id]);
 
@@ -73,31 +73,31 @@ const ViewInvoice: FC = () => {
                 <h3 className="text-sm font-medium uppercase tracking-wide mb-1">
                   Order ID
                 </h3>
-                <p className="text-lg font-mono font-semibold">
+                <p className="text-lg font-mono font-semibold text-ellipsis overflow-hidden">
                   #{invoiceData.id}
                 </p>
               </div>
               <div>
-                <h3 className="text-sm font-medium  uppercase tracking-wide mb-1">
+                <h3 className="text-sm font-medium tracking-wide mb-1">
                   Employee
                 </h3>
-                <p className="text-lg font-semibold ">
+                <p className="text-lg font-semibold text-ellipsis overflow-hidden">
                   {invoiceData.employeeEmail}
                 </p>
               </div>
-                            <div>
-                <h3 className="text-sm font-medium  uppercase tracking-wide mb-1">
+              <div>
+                <h3 className="text-sm font-medium tracking-wide mb-1">
                   Customer
                 </h3>
-                <p className="text-lg font-semibold ">
+                <p className="text-lg font-semibold text-ellipsis overflow-hidden">
                   {invoiceData.customerEmail}
                 </p>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
+                <h3 className="text-sm font-medium text-gray-500 tracking-wide mb-1">
                   Date & Time
                 </h3>
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-lg font-semibold text-gray-900 text-ellipsis overflow-hidden">
                   {(new Date(invoiceData.dateTime)).toLocaleString('en-IN')}
                 </p>
               </div>

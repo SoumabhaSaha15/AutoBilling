@@ -26,6 +26,7 @@ const App: FC = () => {
             <Route path="add-product" Component={lazy(() => import("./pages/admin/AddProducts"))} />
             <Route path="view-products" Component={lazy(() => import("./pages/admin/ViewProducts"))} />
             <Route path="search-products" Component={lazy(() => import("./pages/admin/SearchProducts"))} />
+            <Route path="register-employee" Component={lazy(() => import("./pages/admin/RegisterEmployee"))} />
           </Route>
 
           <Route path="/employee" Component={() => <EmployeeAuthProvider children={<EmployeeLayout />} />} >

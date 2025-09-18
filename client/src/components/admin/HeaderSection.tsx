@@ -41,8 +41,8 @@ const HeaderSection: FC = () => {
           dashboard
         </Link>
       </NavbarLink>
-      <NavbarLink href="#contact" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
-        employee
+      <NavbarLink href="/admin/register-employee" className="text-gray-800 dark:text-gray-400 hover:text-blue-600">
+        new-employee
       </NavbarLink>
     </NavbarCollapse>
   );
