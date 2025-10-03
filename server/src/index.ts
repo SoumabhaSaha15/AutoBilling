@@ -1,17 +1,18 @@
-import express, { Request, Response, NextFunction } from "express";
-import zodErrorFlattener from "./utility/zod-error-flattener.js";
-import allowWithoutAuth from "./configurations/authenticator.js";
+import allowWithoutAuth from "./configurations/sessionAuthenticator.js";
 import cloudinaryConfig from "./configurations/cloudinary.js";
-import { MongoServerError } from "mongodb"
-import cookie_parser from "cookie-parser";
+import sessionConfig from "./configurations/session.js";
+import errorHadler from "./configurations/error.js";
+import cookieParser from "cookie-parser";
 import router from "./router/index.js";
 import { print } from "running-at";
 import { connect } from "mongoose";
-import { ZodError } from "zod";
+import express from "express";
 import dotenv from "dotenv";
+import lusca from "lusca";
 import chalk from "chalk";
 import path from "path";
 import cors from "cors";
+
 try {
   dotenv.config();
   cloudinaryConfig();
@@ -21,21 +22,13 @@ try {
     .use(express.static(path.join(import.meta.dirname, "./../public")))
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
-    .use(cookie_parser())
-    .use(allowWithoutAuth(['/admin_login','/employee_login']))
+    .use(cookieParser())
+    .use(sessionConfig())
+    .use(lusca({ csrf: true, xssProtection: true, xframe: "SAMEORIGIN" }))
+    .use(allowWithoutAuth(['/admin_login', '/employee_login','/get-csrf-token']))
     .use(router)
-    .use(async (err: Error, _: Request, res: Response, __: NextFunction) => {
-      if (err instanceof ZodError) res.status(400).send(zodErrorFlattener(err));
-      else if (err instanceof MongoServerError) {
-        const { keyValue } = err.errorResponse;
-        const errorMessage = Object
-          .entries(keyValue)
-          .map(el => `${el[0]} : ${el[1]} is already in use.`)
-          .join(" ");
-        res.status(400).send(errorMessage);
-      }
-      else res.status(500).send(err.message);
-    }).listen(process.env.PORT, () => print(process.env.PORT));
+    .use(errorHadler)
+    .listen(process.env.PORT, () => print(process.env.PORT));
   process.on("unhandledRejection", (reason) => {
     console.log(chalk.red.bold("Unhandled Rejection:"), '\n', reason);
   });

@@ -13,6 +13,7 @@ import { useToast } from "../../contexts/Toast/ToastContext";
 import { FC, useEffect, useState, useCallback } from "react";
 import { ProductResponseSchema, ProductFinder, ProductFinderType, ProductFinderTransformer } from "../../validator/product";
 import { Button, Modal, ModalBody, ModalHeader, TextInput, Kbd, Label } from "flowbite-react";
+import { SurroundedNotFound } from '../SurroundedNotFound';
 
 const ProductArray = z.array(ProductResponseSchema);
 const ViewProducts: FC = () => {
@@ -67,11 +68,11 @@ const ViewProducts: FC = () => {
 
   return (
     <div className="relative">
-      <div
+      {(products.length)?<div
         className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 items-center place-items-center p-2 justify-center"
       >
         {products.map(data => <ProductCard key={data.id} {...data} />)}
-      </div>
+      </div>:<SurroundedNotFound link='/admin/add-product'/>}
       <Button
         className="fixed !h-16 !w-16 bottom-6 right-6 z-50 rounded-2xl !p-4 shadow-lg hover:shadow-xl transition-shadow duration-300"
         color="blue"

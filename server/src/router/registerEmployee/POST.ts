@@ -7,7 +7,7 @@ const POST = {
   uploadFile: multer.single('profilePicture'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.clientType !== 'admin') {
+      if (req.session.clientType !== 'admin') {
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
         throw new Error("Not an admin");
       } else next();
@@ -45,7 +45,6 @@ const POST = {
       const employee = await EmployeeModel.create(req.body);
       //@ts-ignore
       const { _id, __v, password, createdAt, updatedAt, ...data } = employee.toJSON();
-      //@ts-check
       res.status(200).json({ ...data, id: _id.toString() });
     } catch (e) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));

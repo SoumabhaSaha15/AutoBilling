@@ -23,7 +23,7 @@ const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedI
         as={'div'}
         onClick={() => {
           adminAuth.logout(() => {
-            navigate('/login/admin');
+            navigate('/');
           })
         }}
       >Log Out</Button>

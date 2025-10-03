@@ -7,7 +7,7 @@ const POST = {
   uploadFile: multer.single('productImage'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.clientType !== 'admin') {
+      if (req.session.clientType !== 'admin') {
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
         throw new Error("Not an admin");
       } else next();
@@ -18,7 +18,7 @@ const POST = {
   },
   invalidDetails: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const validator = ProductValidator.omit({ productImage: true });
+      const validator = ProductValidator.omit({ productImage: true,productPublicId:true });
       req.body = validator.parse(req.body);
       if (req.file?.path) {
         const { public_id } = await cloudinary.uploader.upload(req.file?.path, { folder: process.env.CLOUDINARY_PRODUCT_DIR })
@@ -31,7 +31,7 @@ const POST = {
           }]
         });
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
-        req.body = ProductValidator.parse({ ...req.body, productImage: link });
+        req.body = ProductValidator.parse({ ...req.body, productImage: link,productPublicId:public_id });
         next();
       } else {
         throw new Error('no image uploaded!');
@@ -44,8 +44,7 @@ const POST = {
     try {
       const product = await ProductModel.create(req.body);
       //@ts-ignore
-      const { _id, __v, createdAt, updatedAt, ...data } = product.toJSON();
-      //@ts-check
+      const { _id, __v, createdAt, updatedAt,productPublicId, ...data } = product.toJSON();
       res.status(200).json({ ...data, id: _id.toString() });
     } catch (e) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));

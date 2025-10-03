@@ -5,9 +5,7 @@ import { Request, Response, NextFunction } from "express";
 const POST = {
   invalidCredentials: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      EmployeeValidator
-        .pick({ email: true, password: true })
-        .parse(req.body);
+      EmployeeValidator.pick({ email: true, password: true }).parse(req.body);
       next();
     } catch (e) {
       next(e);
@@ -42,12 +40,8 @@ const POST = {
   },
   setCookie: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const TenYearsFromNow = new Date();
-      TenYearsFromNow.setFullYear(TenYearsFromNow.getFullYear() + 10);
-      res.cookie('id', jwt.sign({ id: req.body?.id }, process.env.JWT_KEY), {
-        httpOnly: true,
-        expires: TenYearsFromNow,
-      });
+      req.session.clientId = req.body.id;
+      req.session.clientType = "employee";
       let { password, hashPassword, ...data } = req.body;
       res.status(200).json(data);
     } catch (err) {

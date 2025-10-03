@@ -1,13 +1,14 @@
 import chalk from "chalk";
+import dotenv from "dotenv";
 import figlet from "figlet";
 import inquirer from "inquirer"
+import mongoose from "mongoose";
+import { v2 as cloudinary } from "cloudinary";
+import cloudinaryConfig from "../configurations/cloudinary.js";
 import fileSelector from "inquirer-file-tree-selection-prompt";
 import { validatorFactory } from "../utility/validation-factory.js";
 import { AdminModel, AdminValidator, type AdminType } from "./../databases/Admin.js";
-import { v2 as cloudinary } from "cloudinary";
-import mongoose from "mongoose";
-import cloudinaryConfig from "../configurations/cloudinary.js";
-import dotenv from 'dotenv';
+
 inquirer.registerPrompt('file', fileSelector);
 const main = async () => {
   dotenv.config();

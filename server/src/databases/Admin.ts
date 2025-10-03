@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { z } from "zod";
+import { z } from "zod/v3";
 import bcrypt from "bcrypt";
 const AdminValidator = z.strictObject({
   name: z.string({ required_error: 'name is required' })

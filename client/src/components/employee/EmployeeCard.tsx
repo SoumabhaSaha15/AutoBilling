@@ -23,7 +23,7 @@ const EmployeeCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof Omitt
         as={'div'}
         onClick={() => {
           employeeAuth.logout(() => {
-            navigate('/login/employee');
+            navigate('/');
           })
         }}
       >Log Out</Button>

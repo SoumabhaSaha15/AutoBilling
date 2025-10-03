@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 import mongoose from "mongoose";
 import { ProductModel } from "./Product.js";
 const OrdersValidator = z.strictObject({

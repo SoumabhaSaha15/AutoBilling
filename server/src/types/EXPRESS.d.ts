@@ -1,10 +1,17 @@
-import express from 'express';
-import { Request } from 'express';
+import 'express';
+declare module 'express-session' {
+  interface SessionData {
+    clientId?: string;
+    clientType?: 'admin' | 'employee';
+  }
+}
+
+// import 'express';
+
 declare global {
   namespace Express {
     interface Request {
-      clientId:string|null;
-      clientType:'admin'|'employee'|null;
+      csrfToken: () => string;
     }
   }
 }
