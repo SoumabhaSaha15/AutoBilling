@@ -19,7 +19,7 @@ const POST = {
       })))
       //@ts-ignore
       const { _id } = invoice.toObject();
-      res.status(200).json({ id: _id.toString() });
+      res.status(201).json({ id: _id.toString() });
     } catch (err) {
       next(err);
     }

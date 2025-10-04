@@ -2,7 +2,7 @@ import { z, ZodError } from "zod/v4";
 import { MongoServerError } from "mongodb";
 import { Request, Response, NextFunction } from "express";
 export default async (err: Error, _: Request, res: Response, __: NextFunction) => {
-  // console.error(err);
+  console.error(err);
   if (err instanceof ZodError) res.status(400).send(z.prettifyError(err));
   else if (err instanceof MongoServerError) {
     const { keyValue } = err.errorResponse;

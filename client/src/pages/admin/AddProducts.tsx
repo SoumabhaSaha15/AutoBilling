@@ -44,11 +44,11 @@ const AddProduct: FC = () => {
     base
       .post('/products', formData)
       .then(({ data, status, statusText }) => {
-        if (status != 200) toast.open(statusText, 'alert-error', true, 5000);
+        if (status !== 200 && status !== 201) toast.open(statusText, 'alert-error', true, 5000);
         else {
           let safeParsed = ProductResponseSchema.safeParse(data);
           (safeParsed.success) ?
-            toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000) :
+            toast.open(statusText +" "+ safeParsed.data.id, 'alert-success', true, 5000) :
             toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
         }
         setIsLoading(false);

@@ -45,7 +45,7 @@ const POST = {
       const product = await ProductModel.create(req.body);
       //@ts-ignore
       const { _id, __v, createdAt, updatedAt,productPublicId, ...data } = product.toJSON();
-      res.status(200).json({ ...data, id: _id.toString() });
+      res.status(201).json({ ...data, id: _id.toString() });
     } catch (e) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
       next(e);

@@ -8,6 +8,7 @@ import { print } from "running-at";
 import { connect } from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
+import morgan from "morgan";
 import lusca from "lusca";
 import chalk from "chalk";
 import path from "path";
@@ -18,6 +19,7 @@ try {
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
   const APP = express()
+    .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
     .use(cors({ origin: process.env.CORS_URL, credentials: true }))
     .use(express.static(path.join(import.meta.dirname, "./../public")))
     .use(express.json())

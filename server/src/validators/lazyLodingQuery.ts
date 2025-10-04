@@ -9,6 +9,7 @@ const lazyLoadingQueryValidator = z.object({
     .transform(Number)
     .refine(val => val > 0, 'Limit must be greater than 0')
     .optional(),
+  q:z.string().optional()
 }).refine(
   (data) => {
     const hasSkip = data.skip !== undefined;

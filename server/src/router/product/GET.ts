@@ -12,7 +12,7 @@ const GET = {
   },
   sendData: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let { skip, limit } = lazyLoadingQueryValidator.parse(req.query);
+      let { skip, limit, q } = lazyLoadingQueryValidator.parse(req.query);
       (skip === undefined) && (skip = 0);
       (limit === undefined) && (limit = 20);
       const records = await ProductModel.aggregate([
@@ -45,6 +45,7 @@ const GET = {
     } catch (err) {
       next(err);
     }
-  }
+  },
+
 };
 export default GET;
