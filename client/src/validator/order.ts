@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 import { ProductResponseSchema } from "./product";
 const OrderValidator = ProductResponseSchema
   .pick({ id: true })
@@ -11,8 +11,7 @@ const OrdersValidator = z
     orders = [];
     uniqueOrdersMap.forEach((quantity, id) => orders.push({ id, quantity }));
     return orders;
-  })
-  ;
+  });
 export type OrderType = z.infer<typeof OrderValidator>;
 export type OrdersType = z.infer<typeof OrdersValidator>;
 const InvoiceValidator = z.strictObject({

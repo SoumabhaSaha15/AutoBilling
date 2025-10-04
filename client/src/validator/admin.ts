@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v3";
 export const AdminSubmit = z.strictObject({
   email: z.string({ required_error: 'email is required' })
     .email('invalid email'),

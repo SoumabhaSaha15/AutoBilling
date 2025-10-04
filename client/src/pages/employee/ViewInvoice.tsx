@@ -8,8 +8,9 @@ import { useToast } from '../../contexts/Toast/ToastContext';
 import { Page, PDFDownloadLink, Document, Text } from '@react-pdf/renderer';
 import { InvoiceResponseType, InvoiceResponse } from "../../validator/order";
 import OutletLoading from '../../OutletLoading';
+import { prettifyError } from 'zod';
 import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell } from 'flowbite-react';
-import flattenError from './../../utility/zod-error-flattener';
+// import flattenError from './../../utility/zod-error-flattener';
 const ViewInvoice: FC = () => {
   const toast = useToast();
   const [loading, setLoading] = useState<boolean>(true);
@@ -23,7 +24,7 @@ const ViewInvoice: FC = () => {
           setInvoiceData(data);
           return false;
         }) :
-        toast.open(flattenError(error), 'alert-error', true, 5000);
+        toast.open(prettifyError(error), 'alert-error', true, 5000);
       console.log(res.data);
     }).catch(console.log);
   }, [id]);

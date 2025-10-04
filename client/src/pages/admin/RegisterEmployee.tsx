@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import base from '../../utility/axios-base'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import flatten from '../../utility/zod-error-flattener';
+import { prettifyError } from "zod/v4";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { TbLockPassword } from "react-icons/tb";
 import { GrUserWorker } from "react-icons/gr";
@@ -49,7 +49,7 @@ const AddProduct: FC = () => {
           let safeParsed = EmployeeRegisterResopnse.safeParse(data);
           (safeParsed.success) ?
             toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000) :
-            toast.open(flatten(safeParsed.error), 'alert-error', true, 5000);
+            toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
         }
         setIsLoading(false);
       })

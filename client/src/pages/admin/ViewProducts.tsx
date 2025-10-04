@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from "zod";
+import { z } from "zod/v3";
 import base from './../../utility/axios-base';
 import { FaBarcode } from "react-icons/fa";
 import { AiFillProduct } from "react-icons/ai"

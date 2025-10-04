@@ -1,11 +1,13 @@
-import { z } from 'zod'
+import { z } from 'zod/v3'
+import { prettifyError } from 'zod/v4';
 import { useState, FC } from 'react';
 import { FaQrcode } from "react-icons/fa";
 import base from "./../../utility/axios-base"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LuTrash2, LuPlus, LuUpload } from 'react-icons/lu';
-import flatenner from "./../../utility/zod-error-flattener";
+// import flatenner from "./../../utility/zod-error-flattener";
+
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
@@ -36,7 +38,7 @@ const CreateInvoice: FC = () => {
         }
       }).catch(console.log);
     } catch (err) {
-      toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
+      toast.open((err instanceof z.ZodError) ? prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
     }
     setTimeout(setIsSubmitting, 1000, false);
   }
@@ -47,7 +49,7 @@ const CreateInvoice: FC = () => {
       try {
         return OrdersValidator.parse([...prev, data]);
       } catch (err) {
-        toast.open((err instanceof z.ZodError) ? flatenner(err) : (err as Error).message, 'alert-error', true, 2500);
+        toast.open((err instanceof z.ZodError) ? prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
         return prev;
       }
     });

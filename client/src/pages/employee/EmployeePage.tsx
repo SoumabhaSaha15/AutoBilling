@@ -4,7 +4,8 @@ import { useToast } from "../../contexts/Toast/ToastContext";
 import { InvoiceBriefCard } from '../../components/employee/InvoiceBriefCard';
 import { InvoiceBriefListType, InvoiceBriefList } from "../../validator/invoice_brief";
 import OutletLoading from "../../OutletLoading";
-import flattener from "./../../utility/zod-error-flattener";
+// import flattener from "./../../utility/zod-error-flattener";
+import { prettifyError } from "zod";
 import NoRecordsFound from "../NoRecordsFound";
 const EmployeePage: FC = () => {
   const toast = useToast();
@@ -19,7 +20,7 @@ const EmployeePage: FC = () => {
           return false;
         });
       } else {
-        toast.open(flattener(error), 'alert-error', true, 5000);
+        toast.open(prettifyError(error), 'alert-error', true, 5000);
       }
     })
   }, []);

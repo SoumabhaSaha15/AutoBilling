@@ -1,4 +1,4 @@
-import { object, z } from "zod";
+import { z } from "zod/v3";
 export const ProductFinder = z.object({
   id: z.string()
     .transform((val) => val.trim() === '' ? undefined : val)

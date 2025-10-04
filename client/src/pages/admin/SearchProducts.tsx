@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { z } from "zod";
+import { z } from "zod/v3";
 import { FaBarcode } from "react-icons/fa";
 import base from './../../utility/axios-base';
 import { AiFillProduct } from "react-icons/ai"

@@ -4,7 +4,7 @@ import { AiFillProduct } from "react-icons/ai"
 import { PiTrademarkFill } from "react-icons/pi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import flatten from './../../utility/zod-error-flattener';
+import { prettifyError } from "zod/v4";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
 import { Button, Label, TextInput, FileInput, Spinner} from "flowbite-react";
@@ -49,7 +49,7 @@ const AddProduct: FC = () => {
           let safeParsed = ProductResponseSchema.safeParse(data);
           (safeParsed.success) ?
             toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000) :
-            toast.open(flatten(safeParsed.error), 'alert-error', true, 5000);
+            toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
         }
         setIsLoading(false);
       })
