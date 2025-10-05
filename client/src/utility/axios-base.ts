@@ -1,6 +1,6 @@
 import axios from "axios";
 const base = axios.create({
-  baseURL: import.meta.env.VITE_CORS_URL,
+  baseURL: '/api',
   withCredentials: true,
   validateStatus: (_) => true
 });
