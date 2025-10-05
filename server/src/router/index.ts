@@ -3,7 +3,7 @@ import adminLogin from "./admin/index.js";
 import product from "./product/index.js";
 import employeeLogin from "./employee/index.js";
 import invoiceRouter from "./invoice/index.js";
-import search from "./product/search/index.js";
+// import search from "./product/search/index.js";
 import registerEmployee from "./registerEmployee/index.js";
 const router = express.Router();
 const logoutRouter = express.Router(), csrfRouter = express.Router();
@@ -31,7 +31,6 @@ router
   .use(product)
   .use(invoiceRouter)
   .use(logoutRouter)
-  .use(search)
   .use(registerEmployee)
   .use(csrfRouter);
 export default router;

@@ -60,3 +60,9 @@ export type ProductFinderType = z.infer<typeof ProductFinder>;
 
 export default ProductSchema;
 export type ProductSchemaType = z.infer<typeof ProductSchema>;
+
+export const ProductQuery = z.strictObject({
+  q:z.string().optional()
+})
+
+export type ProductQueryType = z.infer<typeof ProductQuery>;
