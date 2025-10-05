@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import base from './../../utility/axios-base'
+import base from '../../utility/axios-base'
 import { AiFillProduct } from "react-icons/ai"
 import { PiTrademarkFill } from "react-icons/pi";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +23,6 @@ const AddProduct: FC = () => {
     formState: { errors }
   } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
   const watchedImage = watch("productImage");
-
   useEffect(() => {
     if (watchedImage && watchedImage[0]) {
       const objectUrl = URL.createObjectURL(watchedImage[0]);

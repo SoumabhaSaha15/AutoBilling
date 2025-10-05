@@ -23,8 +23,9 @@ const App: FC = () => {
           <Route path="/admin" Component={() => <AdminAuthProvider children={<AdminLayout />} />} >
             <Route index Component={AdminPage} />
             <Route path="dashboard" Component={AdminPage} />
-            <Route path="add-product" Component={lazy(() => import("./pages/admin/AddProducts"))} />
+            <Route path="add-product" Component={lazy(() => import("./pages/admin/AddProduct"))} />
             <Route path="view-products" Component={lazy(() => import("./pages/admin/ViewProducts"))} />
+            <Route path="update-product/:id" Component={lazy(() => import("./pages/admin/UpdateProduct"))} />
             <Route path="register-employee" Component={lazy(() => import("./pages/admin/RegisterEmployee"))} />
           </Route>
 

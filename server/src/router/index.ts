@@ -1,9 +1,9 @@
 import express from "express";
 import adminLogin from "./admin/index.js";
-import product from "./product/index.js";
+import products from "./products/index.js";
 import employeeLogin from "./employee/index.js";
 import invoiceRouter from "./invoice/index.js";
-// import search from "./product/search/index.js";
+import productId from "./products/[id]/index.js";
 import registerEmployee from "./registerEmployee/index.js";
 const router = express.Router();
 const logoutRouter = express.Router(), csrfRouter = express.Router();
@@ -28,7 +28,8 @@ csrfRouter.route('/get-csrf-token').get(async (req: express.Request, res: expres
 router
   .use(adminLogin)
   .use(employeeLogin)
-  .use(product)
+  .use(products)
+  .use(productId)
   .use(invoiceRouter)
   .use(logoutRouter)
   .use(registerEmployee)

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { lazyLoadingQueryValidator } from '../../validators/lazyLodingQuery.js';
-import { ProductModel } from './../../databases/Product.js';
+import { ProductModel } from '../../databases/Product.js';
 import { ZodError } from "zod/v3";
 const GET = {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {
@@ -14,7 +14,6 @@ const GET = {
   sendData: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { skip, limit, q: textSearchTerm } = lazyLoadingQueryValidator.parse(req.query);
-      console.log(skip,limit,textSearchTerm);
       const finalSkip = skip ?? 0, finalLimit = limit ?? 20, pipeline: any[] = [];
       if (textSearchTerm) pipeline.unshift({ $match: { $text: { $search: textSearchTerm, $caseSensitive: false } } });
       pipeline.push(
