@@ -11,6 +11,7 @@ const AdminValidator = z.strictObject({
   password: z.string({ required_error: 'password is required' })
     .length(8, 'password should have 8 chars')
     .regex(/^[\x21-\x7E]+$/, 'invalid password'),
+  profilePublicId:z.string({required_error:"cloudinary image Id Required"}),
   profilePicture: z.string({ required_error: 'profilePicture is required' })
     .url({ message: "value is not propper url" })
     .startsWith(
@@ -44,6 +45,14 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     valodator: {
       validate: (value: string) => AdminValidator.pick({ password: true }).safeParse({ password: value }).success,
       message: (props: { value: string; }) => `${props.value} is not a valid password.`
+    }
+  },
+  profilePublicId:{
+    type:String,
+    required:true,
+    validator:{
+      validate: (value: string) => AdminValidator.pick({ profilePublicId: true }).safeParse({ profilePublicId : value }).success,
+      message: (props: { value: string; }) => `${props.value} is not a valid cloudinary id.`
     }
   },
   profilePicture: {

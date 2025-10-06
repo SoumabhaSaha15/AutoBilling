@@ -7,7 +7,7 @@ import POST from "./POST.js";
 const router = express.Router();
 const isEmployee = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if(req.clientType!=='employee') throw new Error('Not an Employee!!!');
+    if(req.session.clientType!=='employee') throw new Error('Not an Employee!!!');
     else next();
   } catch (err) {
     next(err);

@@ -1,7 +1,9 @@
 import allowWithoutAuth from "./configurations/sessionAuthenticator.js";
 import cloudinaryConfig from "./configurations/cloudinary.js";
+import { ZodError as v4Error, prettifyError } from "zod/v4";
 import sessionConfig from "./configurations/session.js";
 import errorHadler from "./configurations/error.js";
+import { ZodError as v3Error } from "zod/v3";
 import cookieParser from "cookie-parser";
 import router from "./router/index.js";
 import { print } from "running-at";
@@ -13,7 +15,6 @@ import lusca from "lusca";
 import chalk from "chalk";
 import path from "path";
 import cors from "cors";
-
 try {
   dotenv.config();
   cloudinaryConfig();
@@ -27,7 +28,7 @@ try {
     .use(cookieParser())
     .use(sessionConfig())
     .use(lusca({ csrf: true, xssProtection: true, xframe: "SAMEORIGIN" }))
-    .use(allowWithoutAuth(['/admin_login', '/employee_login','/get-csrf-token']))
+    .use(allowWithoutAuth(['/admin_login', '/employee_login', '/get-csrf-token']))
     .use(router)
     .use(errorHadler)
     .listen(process.env.PORT, () => print(process.env.PORT));
@@ -44,5 +45,6 @@ try {
     });
   });
 } catch (error) {
-  console.log(chalk.red.bold((error as Error).message));
+  if (error instanceof v3Error || error instanceof v4Error) console.log(chalk.red.bold(prettifyError(error)))
+  else console.error(error);
 }

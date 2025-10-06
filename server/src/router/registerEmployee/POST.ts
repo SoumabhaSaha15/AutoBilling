@@ -18,7 +18,7 @@ const POST = {
   },
   invalidDetails: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const validator = EmployeeValidator.omit({ profilePicture: true });
+      const validator = EmployeeValidator.omit({ profilePicture: true, profilePublicId: true });
       req.body = validator.parse(req.body);
       if (req.file?.path) {
         const { public_id } = await cloudinary.uploader.upload(req.file?.path, { folder: process.env.CLOUDINARY_EMPLOYEE_DIR })
@@ -31,7 +31,7 @@ const POST = {
           }]
         });
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
-        req.body = EmployeeValidator.parse({ ...req.body, profilePicture:link });
+        req.body = EmployeeValidator.parse({ ...req.body, profilePicture: link, profilePublicId: public_id });
         next();
       } else {
         throw new Error('no image uploaded!');
@@ -44,7 +44,7 @@ const POST = {
     try {
       const employee = await EmployeeModel.create(req.body);
       //@ts-ignore
-      const { _id, __v, password, createdAt, updatedAt, ...data } = employee.toJSON();
+      const { _id, __v, password, profilePublicId, createdAt, updatedAt, ...data } = employee.toJSON();
       res.status(201).json({ ...data, id: _id.toString() });
     } catch (e) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));

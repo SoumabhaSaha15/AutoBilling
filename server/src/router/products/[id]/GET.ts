@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { ProductModel } from "../../../databases/Product";
+import { ProductModel } from "../../../databases/Product.js";
 import mongoose from "mongoose";
 export default {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {

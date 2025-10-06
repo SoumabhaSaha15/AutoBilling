@@ -3,7 +3,7 @@ const ProductSchema = z.strictObject({
   productImage: z
     .instanceof(FileList)
     .refine(files => files.length == 1, "Single Product image is required")
-    .refine(files => files[0]?.size <= 2 ** 20, `Max image size is 1MB.`) // 5MB limit
+    .refine(files => files[0]?.size <= 2 ** 20, `Max image size is 1MB.`) // 1MB limit
     .refine(
       files => ['image/jpeg', 'image/png', 'image/webp'].includes(files[0]?.type),
       "Only .jpg, .png, .webp formats are supported."
@@ -59,6 +59,32 @@ export const ProductFinderTransformer = ProductFinder.transform(value => {
 export type ProductFinderType = z.infer<typeof ProductFinder>;
 
 export default ProductSchema;
+export const PartialProductSchema = z.strictObject({
+  productImage: z
+    .instanceof(FileList)
+    .refine(files => files.length <= 1, "Single Product image is required")
+    .refine(files => (files[0] === undefined)||(files[0]?.size <= 2 ** 20), `Max image size is 1MB.`) // 1MB limit
+    .refine(
+      files => ['image/jpeg', 'image/png', 'image/webp'].includes(files[0]?.type) || (files[0] === undefined),
+      "Only .jpg, .png, .webp formats are supported."
+    ).optional(),
+  productName: z
+    .string({ required_error: 'product name is required' })
+    .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name')
+    .optional(),
+  brandName: z
+    .string({ required_error: 'brand name is required' })
+    .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name')
+    .optional(),
+  price: z
+    .coerce
+    .number({ required_error: 'price is required' })
+    .int().positive().optional(),
+  productDescription: z
+    .string({ required_error: "product description is required" })
+    .min(10).max(200).optional()
+});
+export type PartialProductSchemaType = z.infer<typeof PartialProductSchema>;
 export type ProductSchemaType = z.infer<typeof ProductSchema>;
 
 export const ProductQuery = z.strictObject({
@@ -66,3 +92,5 @@ export const ProductQuery = z.strictObject({
 })
 
 export type ProductQueryType = z.infer<typeof ProductQuery>;
+
+

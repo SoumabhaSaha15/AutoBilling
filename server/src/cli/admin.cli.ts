@@ -55,7 +55,7 @@ const main = async () => {
   const { public_id } = await cloudinary.uploader.upload(data.profilePicture, {
     folder: process.env.CLOUDINARY_ADMIN_DIR
   });
-
+  data.profilePublicId = public_id;
   data.profilePicture = cloudinary.url(public_id, {
     transformation: [{
       fetch_format: 'auto',
@@ -64,11 +64,8 @@ const main = async () => {
       height: 720
     }]
   });
-
   let admin = await AdminModel.create(data);
-
-  console.log(admin.toJSON());
-
+  console.log(admin.toObject());
   process.on("SIGINT", async () => {
     console.log(chalk.yellow.bold("Server closed. MongoDB disconnected."));
     await CONNECTOR.disconnect();
