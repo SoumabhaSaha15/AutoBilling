@@ -8,8 +8,7 @@ const sessionConfig = () => {
     autoRemove:"native"
   });
   return session({
-    // Use a secure key, e.g., your existing JWT_KEY
-    secret: process.env.JWT_KEY || 'a_strong_fallback_secret',
+    secret: process.env.JWT_KEY || 'a_strong_fallback_secret', // Use a secure key, e.g., your existing JWT_KEY
     resave: false,
     saveUninitialized: true,
     store: sessionStore,

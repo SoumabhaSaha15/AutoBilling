@@ -27,7 +27,7 @@ router.get('/invoice/:id', isEmployee, async (req: Request, res: Response, next:
       //@ts-ignore
       const { _id, __v, createdAt, updatedAt, ...populatedInvoice } = (await invoice.populate({
         path: "orders.productId",
-        select: ["price", "brandName", "productName", "-_id"]
+        select: ["brandName", "productName", "-_id"]
       })).toObject();
       //@ts-check
       res.status(200).json({ ...populatedInvoice, id: _id.toString() })

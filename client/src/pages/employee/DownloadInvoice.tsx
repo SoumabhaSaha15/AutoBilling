@@ -213,13 +213,13 @@ const DownloadInvoice: FC<InvoiceResponseType> = (props: InvoiceResponseType) =>
                 <Text style={styles.tableCell}>{item.productId.productName}</Text>
               </View>
               <View style={styles.tableColPrice}>
-                <Text style={styles.tableCell}>Rs.{item.productId.price}</Text>
+                <Text style={styles.tableCell}>Rs.{item.price}</Text>
               </View>
               <View style={styles.tableColQty}>
                 <Text style={styles.tableCell}>{item.quantity}</Text>
               </View>
               <View style={styles.tableColTotal}>
-                <Text style={styles.tableCell}>Rs.{(item.productId.price * item.quantity)}</Text>
+                <Text style={styles.tableCell}>Rs.{(item.price * item.quantity)}</Text>
               </View>
             </View>
           ))}
@@ -233,7 +233,7 @@ const DownloadInvoice: FC<InvoiceResponseType> = (props: InvoiceResponseType) =>
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, styles.grandTotal]}>Grand Total:</Text>
             <Text style={[styles.summaryValue, styles.grandTotal]}>Rs.
-              {props.orders.reduce((total, item) => (total + (item.productId.price * item.quantity)), 0)}
+              {props.orders.reduce((total, item) => (total + (item.price * item.quantity)), 0)}
             </Text>
           </View>
         </View>

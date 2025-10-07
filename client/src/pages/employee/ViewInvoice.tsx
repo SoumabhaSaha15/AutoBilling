@@ -19,6 +19,7 @@ const ViewInvoice: FC = () => {
   useEffect(() => {
     base.get(`/invoice/${id}`).then((res) => {
       const { data, success, error } = InvoiceResponse.safeParse(res.data);
+      console.log(data,error&&prettifyError(error));
       (success) ?
         setLoading((_) => {
           setInvoiceData(data);
@@ -128,13 +129,13 @@ const ViewInvoice: FC = () => {
                           {item.productId.brandName}
                         </TableCell>
                         <TableCell className="text-center font-semibold">
-                          ₹{item.productId.price}
+                          ₹{item.price}
                         </TableCell>
                         <TableCell className="text-center">
                           {item.quantity}
                         </TableCell>
                         <TableCell className="text-center font-bold text-blue-600">
-                          ₹{item.productId.price * item.quantity}
+                          ₹{item.price * item.quantity}
                         </TableCell>
                       </TableRow>
                     ))}

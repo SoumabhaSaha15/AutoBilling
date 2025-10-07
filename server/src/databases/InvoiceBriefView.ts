@@ -1,38 +1,18 @@
 import mongoose from "mongoose";
 const aggrigation = [
+  { $unwind: "$orders" },
   {
-    $unwind: "$orders" // Flatten the orders array
-  },
-  {
-    $lookup: {
-      from: "product_models", // Assuming your product collection name is "products"
-      localField: "orders.productId",
-      foreignField: "_id",
-      as: "productDetails"
-    }
-  },
-  {
-    $unwind: "$productDetails"
-  },
-  {
-    $group: {
+    $group: { // 2. Group the documents back by Invoice ID
       _id: "$_id",
       dateTime: { $first: "$dateTime" },
       employeeEmail: { $first: "$employeeEmail" },
       customerEmail: { $first: "$customerEmail" },
-      ordersCount: { $sum: "$orders.quantity" }, // Sum of quantities
-      totalAmount: {
-        $sum: {
-          $multiply: [
-            "$orders.quantity",
-            "$productDetails.price"
-          ]
-        }
-      }
+      ordersCount: { $sum: "$orders.quantity" }, // Calculate the total number of items ordered
+      totalAmount: { $sum: { $multiply: ["$orders.quantity", "$orders.price"] } }
     }
   },
   {
-    $project: {
+    $project: { // 3. Project the final fields
       dateTime: 1,
       customerEmail: 1,
       ordersCount: 1,
@@ -52,7 +32,6 @@ interface InvoiceBriefView {
   _id: mongoose.Types.ObjectId;
 }
 
-// 4. Create a Mongoose schema for the view (optional, for type safety)
 const InvoiceBriefSchema = new mongoose.Schema<InvoiceBriefView>({
   customerEmail: String,
   employeeEmail: String,

@@ -1,8 +1,9 @@
-import { z } from "zod";
 import Loading from "../../../Loading";
 import { useState, Suspense } from "react";
+import { z, ZodError as v3Error } from "zod/v3";
 import base from './../../../utility/axios-base';
 import { useToast } from "../../Toast/ToastContext";
+import { prettifyError, ZodError as v4Error } from "zod/v4";
 import { AuthContext, UserDetailsSchema, type UserDetailsType } from "./AuthContext";
 
 
@@ -17,7 +18,8 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setUserDetails(parsedData);
       onSuccess();
     } catch (e) {
-      toast.open('Error login: ' + (e as Error).message, 'alert-error', true, 2000);
+      if (e instanceof v3Error || e instanceof v4Error) toast.open(prettifyError(e), 'alert-error', true, 2000);
+      else toast.open('Error login: ' + (e as Error).message, 'alert-error', true, 2000);
       console.error(e);
       onError();
     }

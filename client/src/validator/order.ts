@@ -32,8 +32,8 @@ export const InvoiceResponse = InvoiceValidator
       productId: ProductResponseSchema.pick({
         productName: true,
         brandName: true,
-        price: true
       }),
+      price:z.number().positive().default(0)
     }).merge(OrderValidator.pick({ quantity: true })))
   })
 export type InvoiceResponseType = z.infer<typeof InvoiceResponse>

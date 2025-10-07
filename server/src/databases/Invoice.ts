@@ -7,7 +7,8 @@ const OrdersValidator = z.strictObject({
   quantity: z.coerce
     .number({ required_error: "quantity is required" })
     .int({ message: "not an integer" })
-    .positive({ message: "must be positive" })
+    .positive({ message: "must be positive" }),
+  price:z.number().positive().default(0).optional()
 });
 
 const InvoiceValidator = z.strictObject({
@@ -28,6 +29,7 @@ const InvoiceValidator = z.strictObject({
 
 type InvoiceType = z.infer<typeof InvoiceValidator>;
 
+
 const InvoiceSchema = new mongoose.Schema<InvoiceType>({
   employeeEmail: { type: String, required: true },
   customerEmail: { type: String, required: true },
@@ -39,16 +41,21 @@ const InvoiceSchema = new mongoose.Schema<InvoiceType>({
       ref: "product_model",
       required: true
     },
-    quantity: { type: Number, required: true }
+    quantity: { type: Number, required: true },
+    price: { type: Number, default:0}
   }]
 }, { timestamps: true });
 
 InvoiceSchema.pre('save', async function (next) {
   const orders = this.orders;
   if (!orders || orders.length === 0) return next(new Error("At least one order is required"));
-  for (const order of orders)
-    if (!(await ProductModel.exists({ _id: order.productId })))
-      return next(new Error(`Product with ID ${order.productId} does not exist`));
+  for (const order of orders) {
+    const product = await ProductModel.findOne({ _id: order.productId }, { price: 1 }).lean();
+    if (!product) return next(new Error(`Product with ID ${order.productId} does not exist`));
+    order.price = product.price;
+    if (typeof order.price !== 'number' || order.price <= 0)
+      return next(new Error(`Invalid price (${order.price}) found in ProductModel for ID ${order.productId}`));
+  }
   next();
 });
 

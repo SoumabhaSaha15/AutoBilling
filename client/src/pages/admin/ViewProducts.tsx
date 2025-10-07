@@ -1,21 +1,22 @@
 import _ from 'lodash';
-import { useSearchParams } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from "zod/v3";
-import base from './../../utility/axios-base';
-import { AiFillProduct } from "react-icons/ai"
+import Loading from '../../Loading';
 import { HiSearch } from "react-icons/hi";
+import base from './../../utility/axios-base';
+import { useSearchParams } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { SurroundedNotFound } from '../SurroundedNotFound';
 import ProductCard from "../../components/admin/ProductCard";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { FC, useEffect, useState, useCallback } from "react";
 import { ProductResponseSchema, ProductQueryType, ProductQuery } from "../../validator/product";
 import { Button, Modal, ModalBody, ModalHeader, TextInput, Kbd, Label } from "flowbite-react";
-import { SurroundedNotFound } from '../SurroundedNotFound';
 
 const ProductArray = z.array(ProductResponseSchema);
 const ViewProducts: FC = () => {
   const toast = useToast();
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [products, setProducts] = useState<z.infer<typeof ProductArray>>([]);
   const [openModal, setOpenModal] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -35,7 +36,7 @@ const ViewProducts: FC = () => {
       setSkip(prevSkip => {
         const newSkip = (prevSkip === 0) ? 20 : prevSkip + 10;
         const param = new URLSearchParams({ skip: `${newSkip}`, limit: '10' });
-        if(query.get('q')) param.append('q',query.get('q')||'');
+        if (query.get('q')) param.append('q', query.get('q') || '');
         base.get(`/products?${param.toString()}`).then(res => {
           if (res.status !== 200) throw new Error(res.statusText);
           const parsedData = ProductArray.parse(res.data);
@@ -49,9 +50,12 @@ const ViewProducts: FC = () => {
 
   useEffect(() => {
     if (hasMore === false) return window.removeEventListener("scroll", handleScroll);
-    base.get('/products'+(query.get('q')?`?q=${query.get('q')}`:'')).then((res) => {
+    base.get('/products' + (query.get('q') ? `?q=${query.get('q')}` : '')).then((res) => {
       if (res.status !== 200) throw new Error(res.statusText);
-      setProducts(ProductArray.parse(res.data));
+      setProducts((_) => {
+        setTimeout(() => setIsLoaded(true), 1000);
+        return ProductArray.parse(res.data)
+      });
     }).catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
     window.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'k') {
@@ -64,15 +68,19 @@ const ViewProducts: FC = () => {
       window.removeEventListener("scroll", handleScroll);
       window.onkeydown = () => { };
     }
-  }, [hasMore,query]);
+  }, [hasMore, query]);
 
   return (
     <div className="relative">
-      {(products.length) ? <div
-        className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 items-center place-items-center p-2 justify-center"
-      >
-        {products.map(data => <ProductCard key={data.id} {...data} />)}
-      </div> : <SurroundedNotFound link='/admin/add-product' />}
+      {(products.length && isLoaded) ?
+        (<div
+          className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 items-center place-items-center p-2 justify-center"
+        >
+          {products.map(data => <ProductCard key={data.id} {...data} />)}
+        </div>) : (isLoaded) ?
+          <SurroundedNotFound link='/admin/add-product' /> :
+          <Loading />
+      }
       <Button
         className="fixed !h-16 !w-16 bottom-6 right-6 z-50 rounded-2xl !p-4 shadow-lg hover:shadow-xl transition-shadow duration-300"
         color="blue"
@@ -96,7 +104,7 @@ const ViewProducts: FC = () => {
               id="query"
               type="text"
               placeholder="product name"
-              icon={AiFillProduct}
+              icon={HiSearch}
               {...register('q')}
               shadow
             />
