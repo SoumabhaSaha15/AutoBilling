@@ -8,7 +8,7 @@ const base = axios.create({
 base.interceptors.request.use(async config => {
   if (config.method !== 'get' && config.method !== 'head' && config.method !== 'options') {
     try {
-      const response = await base.get('get-csrf-token');
+      const response = await base.get('get_csrf_token');
       if (response.status === 200) {
         const csrfToken = response.data;
         if (!csrfToken) console.warn('CSRF token missing for state change.');

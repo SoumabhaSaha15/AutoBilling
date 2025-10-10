@@ -2,7 +2,7 @@
   <img src="./client/public/logo.png" width=28/> AutoBilling
 </h1>
 
-> **Description:** **_Generates invoice by scanning barcode._**
+> ## **Description:** _Generates invoice by scanning barcode._
 
 ![dark](./screenshots/dark.png)
 
@@ -25,3 +25,5 @@
 ![view product](./screenshots/view_product.png)
 
 ![search product](./screenshots/search_product.png)
+
+![update product](./screenshots/update_product.png)
