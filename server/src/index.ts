@@ -1,3 +1,4 @@
+import ip from "ip"
 import cors from "cors";
 import path from "path";
 import chalk from "chalk";
@@ -6,7 +7,6 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import express from "express";
 import { connect } from "mongoose";
-import { print } from "running-at";
 import router from "./router/index.js";
 import cookieParser from "cookie-parser";
 import { ZodError as v3Error } from "zod/v3";
@@ -29,12 +29,16 @@ try {
     .use(cookieParser())
     .use(sessionConfig())
     .use(lusca({ csrf: true, xssProtection: true, xframe: "SAMEORIGIN" }))
-    .use(allowWithoutAuth(['/admin_login', '/employee_login', '/get_csrf_token']))
+    .use(allowWithoutAuth(['/admin_login', '/employee_login']))
+    .use(async (req:express.Request,res:express.Response,next:express.NextFunction)=>{
+      res.cookie('csrftoken',req.csrfToken());
+      next();
+    })
     .use(router)
     .use(errorHadler)
     .listen(process.env.PORT, () => {
       process.on("unhandledRejection", (reason) => console.log(chalk.red.bold("Unhandled Rejection:"), '\n', reason));
-      print(process.env.PORT);
+      console.log(chalk.blue(`Server is running!\n  -Local:   http://localhost:${process.env.PORT}\n  -Network: http://${ip.address()}:${process.env.PORT}`));
     });
 
   process.on("SIGINT", async () => {

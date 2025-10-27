@@ -7,10 +7,8 @@ import invoiceId from "./invoice/[id]/index.js";
 import productId from "./products/[id]/index.js";
 import employeeLogin from "./employee_login/index.js";
 import registerEmployee from "./register_employee/index.js";
-import CSRF from "./get_csrf_token/index.js";
 const router = express.Router();
 router
-  .use(CSRF)
   .use(adminLogin)
   .use(employeeLogin)
   .use(products)

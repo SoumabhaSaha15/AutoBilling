@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 const base = axios.create({
   baseURL: '/api',
   withCredentials: true,
@@ -8,12 +9,9 @@ const base = axios.create({
 base.interceptors.request.use(async config => {
   if (config.method !== 'get' && config.method !== 'head' && config.method !== 'options') {
     try {
-      const response = await base.get('get_csrf_token');
-      if (response.status === 200) {
-        const csrfToken = response.data;
+        const csrfToken = Cookies.get('csrftoken');
         if (!csrfToken) console.warn('CSRF token missing for state change.');
         else config.headers['X-CSRF-Token'] = csrfToken;
-      } else console.error('Failed to fetch CSRF token:', response.status);
     } catch (error) {
       console.error('Error fetching CSRF token:', error);
     }
