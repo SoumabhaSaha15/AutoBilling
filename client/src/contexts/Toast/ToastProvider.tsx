@@ -1,10 +1,10 @@
+import { prettifyError } from 'zod';
 import Loading from './../../Loading'; // Importing Loading component for fallback
 import { ToastContext } from './ToastContext';
 import { RiErrorWarningFill } from 'react-icons/ri'; // For different toast icons
 import { Toast, ToastToggle } from 'flowbite-react';
 import { useState, type ReactNode, Suspense } from 'react';
 import { ToastVariantType, ToastVariant } from './ToastContext';
-import issueFlattener from './../../utility/zod-error-flattener';
 import { HiCheck, HiX, HiInformationCircle, } from 'react-icons/hi'; // For different toast icons
 
 export default function ToastProvider({ children }: { children: ReactNode; }) {
@@ -45,7 +45,7 @@ export default function ToastProvider({ children }: { children: ReactNode; }) {
   const open = (component: string, toastVariant: ToastVariantType = "alert-info", autoClose: boolean = true, timeout: number = 1000) => {
     const isValid = ToastVariant.safeParse(toastVariant);
     setToastColor(prev => {
-      return isValid.success ? isValid.data : ((issueFlattener(isValid.error)), prev)
+      return isValid.success ? isValid.data : ((prettifyError(isValid.error)), prev)
     });
 
     const id = crypto.randomUUID();

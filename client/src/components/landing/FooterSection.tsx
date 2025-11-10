@@ -2,7 +2,7 @@ import { Footer, FooterLink, FooterBrand, FooterTitle, FooterLinkGroup, FooterDi
 import { FC } from 'react';
 const FooterSection: FC = () => {
   return (
-    <Footer container id='contact' data-aos="zoom-in-up" data-aos-delay='100'>
+    <Footer container id='contact' className='scroll-smooth transition-all'>
       <div className="w-full">
         <div className="grid w-full justify-between sm:flex sm:justify-between md:flex md:grid-cols-1">
           <div>

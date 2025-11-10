@@ -5,6 +5,7 @@ declare namespace NodeJS {
     JWT_KEY: string;
     CORS_URL: string;
     ADMIN_KEY: string;
+    MODE: "dev"|"prod";
     CLOUDINARY_ENV_VAR: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_ADMIN_DIR: string;

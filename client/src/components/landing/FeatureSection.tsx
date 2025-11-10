@@ -34,7 +34,7 @@ const FeaturesSection: React.FC = () => {
     }
   ];
   return (
-    <section id="features" className="py-20 dark:bg-gray-900 snap-start" data-aos="zoom-in-up" data-aos-delay='100'>
+    <section id="features" className="py-20 dark:bg-gray-900 scroll-smooth transition-all snap-y snap-mandatory">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-300 mb-4">

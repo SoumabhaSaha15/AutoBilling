@@ -1,6 +1,6 @@
 import AdminCard from './AdminCard';
 import { Link } from "react-router-dom";
-import { FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect } from "react";
 import { useAuth } from '../../contexts/Auth/admin/AuthContext';
 import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 import _ from "lodash";
@@ -16,9 +16,9 @@ const HeaderSection: FC = () => {
       <DarkThemeToggle />
       <Dropdown
         renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
-        className='rounded-3xl'
+        className='rounded-xl'
       >
-        <DropdownItem className='rounded-3xl'>
+        <DropdownItem as={'div'} className='rounded-xl flex flex-col'>
           <AdminCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
         </DropdownItem>
       </Dropdown>

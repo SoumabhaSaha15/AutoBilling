@@ -18,9 +18,9 @@ const HeaderSection: FC = () => {
       <DarkThemeToggle />
       <Dropdown
         renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
-        className='rounded-3xl'
+        className='rounded-xl'
       >
-        <DropdownItem className='rounded-3xl' >
+        <DropdownItem as={'div'} className='rounded-xl flex flex-col' >
           <EmployeeCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
         </DropdownItem>
       </Dropdown>

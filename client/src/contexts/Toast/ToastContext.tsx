@@ -1,5 +1,6 @@
-import { createContext, useContext, type Context } from "react";
 import { z } from 'zod';
+import { createContext, useContext, type Context } from "react";
+
 export const ToastVariant= z.enum(['alert-info', 'alert-success', 'alert-warning', 'alert-error']);
 export type ToastVariantType = z.infer<typeof ToastVariant>;
 export type ToastContextProps = {

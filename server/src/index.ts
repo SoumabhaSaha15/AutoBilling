@@ -19,7 +19,7 @@ try {
   dotenv.config({ quiet: true });
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
-
+  
   const APP = express()
     .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
     .use(cors({ origin: process.env.CORS_URL, credentials: true }))
@@ -36,7 +36,8 @@ try {
     })
     .use(router)
     .use(errorHadler)
-    .listen(process.env.PORT, () => {
+    .listen(process.env.PORT, (err:Error|undefined) => {
+      if(err) console.error(err);
       process.on("unhandledRejection", (reason) => console.log(chalk.red.bold("Unhandled Rejection:"), '\n', reason));
       console.log(chalk.blue(`Server is running!\n  -Local:   http://localhost:${process.env.PORT}\n  -Network: http://${ip.address()}:${process.env.PORT}`));
     });
