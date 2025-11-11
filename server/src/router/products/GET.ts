@@ -1,7 +1,7 @@
+import { ProductModel } from '../../databases/Product.js';
 import { Request, Response, NextFunction } from "express";
 import { lazyLoadingQueryValidator } from '../../validators/lazyLodingQuery.js';
-import { ProductModel } from '../../databases/Product.js';
-import { ZodError } from "zod/v3";
+// import { ZodError } from "zod/v3";
 const GET = {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {
     try {
@@ -19,7 +19,7 @@ const GET = {
       pipeline.push(
         { $skip: finalSkip },
         { $limit: finalLimit },
-        { $project: { id: { $toString: "$_id" }, productName: 1, price: 1, productDescription: 1, __v: 1, createdAt: 1, updatedAt: 1, productPublicId: 1, brandName: 1, productImage: 1 } },
+        { $project: { id: { $toString: "$_id" }, productName: 1, price: 1, __v: 1, createdAt: 1, updatedAt: 1, productPublicId: 1, brandName: 1, productImage: 1 } },
         { $project: { _id: 0, __v: 0, createdAt: 0, updatedAt: 0, productPublicId: 0 } }
       );
       const finalRecords = await ProductModel.aggregate(pipeline);

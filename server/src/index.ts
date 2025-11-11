@@ -2,6 +2,7 @@ import ip from "ip"
 import cors from "cors";
 import path from "path";
 import chalk from "chalk";
+import boxen from "boxen";
 import lusca from "lusca";
 import morgan from "morgan";
 import dotenv from "dotenv";
@@ -19,7 +20,7 @@ try {
   dotenv.config({ quiet: true });
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
-  
+
   const APP = express()
     .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
     .use(cors({ origin: process.env.CORS_URL, credentials: true }))
@@ -30,16 +31,26 @@ try {
     .use(sessionConfig())
     .use(lusca({ csrf: true, xssProtection: true, xframe: "SAMEORIGIN" }))
     .use(allowWithoutAuth(['/admin_login', '/employee_login']))
-    .use(async (req:express.Request,res:express.Response,next:express.NextFunction)=>{
-      res.cookie('csrftoken',req.csrfToken());
+    .use(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      res.cookie('csrftoken', req.csrfToken());
       next();
     })
     .use(router)
     .use(errorHadler)
-    .listen(process.env.PORT, (err:Error|undefined) => {
-      if(err) console.error(err);
-      process.on("unhandledRejection", (reason) => console.log(chalk.red.bold("Unhandled Rejection:"), '\n', reason));
-      console.log(chalk.blue(`Server is running!\n  -Local:   http://localhost:${process.env.PORT}\n  -Network: http://${ip.address()}:${process.env.PORT}`));
+    .listen(process.env.PORT, (err: Error | undefined) => {
+      if (err) console.error(err);
+      process.on(
+        "unhandledRejection",
+        (reason) => console.log(
+          chalk.red.bold("Unhandled Rejection:\n"),
+          reason
+        )
+      );
+      console.log(
+        boxen(chalk.blue(
+          `Server is running!\n-Local:   http://localhost:${process.env.PORT}\n-Network: http://${ip.address()}:${process.env.PORT}`
+        ), { padding: 1,borderColor:"blue" })
+      );
     });
 
   process.on("SIGINT", async () => {

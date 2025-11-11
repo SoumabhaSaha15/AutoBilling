@@ -14,7 +14,6 @@ router
     POST.checkAdminKey,
     POST.invalidCredentials,
     POST.userNotFound,
-    POST.wrongCredentials,
     POST.setCookie,
   );
 export default router;
