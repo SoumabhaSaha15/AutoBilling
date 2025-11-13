@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import fs from "node:fs/promises";
 import { v2 as cloudinary } from 'cloudinary';
+import multer from "../../../configurations/multer.js";
 import { Request, Response, NextFunction } from "express";
-import { ProductModel, ProductValidator } from "../../../databases/Product";
-import multer from "../../../configurations/multer";
+import { ProductModel, ProductValidator } from "../../../databases/Product.js";
 const PATCH = {
   uploadFile: multer.single('productImage'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {

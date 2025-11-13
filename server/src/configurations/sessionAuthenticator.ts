@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 import { z } from "zod";
+import mongoose from "mongoose";
+import { Request, Response, NextFunction } from "express";
 
 const routesValidator = z.array(z.string().startsWith('/'));
 

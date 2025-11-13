@@ -2,7 +2,7 @@ import { ZodError as v4Error } from "zod/v4";
 import { ZodError as v3Error } from "zod/v3";
 import { MongoServerError } from "mongodb";
 import { Request, Response, NextFunction } from "express";
-import ResponseError from "../utility/response-error";
+import ResponseError from "../utility/response-error.js";
 export default async (err: Error, _: Request, res: Response, __: NextFunction) => {
   console.error(err.message);
   if (err instanceof v4Error || err instanceof v3Error)

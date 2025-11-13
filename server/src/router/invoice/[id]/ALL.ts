@@ -1,4 +1,4 @@
-import ResponseError from "../../../utility/response-error";
+import ResponseError from "../../../utility/response-error.js";
 import { Request, Response, NextFunction } from "express";
 const ALL = {
   allowEmployee: async (req: Request, res: Response, next: NextFunction) => {
