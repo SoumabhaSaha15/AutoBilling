@@ -8,26 +8,25 @@ import { HiSearch, HiFilter } from "react-icons/hi";
 import { SurroundedNotFound } from '../SurroundedNotFound';
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { Button, TextInput, Pagination } from "flowbite-react";
-import { ProductResponseSchema } from "../../validator/product";
 import { ProductTable } from '../../components/admin/ProductTable';
+import { ProductPaginatedSchema,type ProductPaginatedType,paginationDefault } from "../../validator/product";
 
-const ProductArray = z.array(ProductResponseSchema.omit({ productDescription: true }));
 const ViewProducts: FC = () => {
   const toast = useToast();
+  const [search,setSearch] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [products, setProducts] = useState<z.infer<typeof ProductArray>>([]);
-  // const [openModal, setOpenModal] = useState(false);
+  const [products, setProducts] = useState<ProductPaginatedType>(paginationDefault);
   const [query, setQuery] = useSearchParams();
 
-
   useEffect(() => {
+    ((query.size && query.get('q')) && setSearch(query.get('q')||''));
     base
-      .get('/products' + (query.get('q') ? `?q=${query.get('q')}` : ''))
+      .get('/products' + (query.size ? `?${query.toString()}` : ''))
       .then((res) => {
         if (res.status !== 200) throw new Error(res.statusText);
         setProducts((_) => {
           setTimeout(() => setIsLoaded(true), 1000);
-          return ProductArray.parse(res.data)
+          return ProductPaginatedSchema.parse(res.data);
         });
       })
       .catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
@@ -35,7 +34,7 @@ const ViewProducts: FC = () => {
 
   return (
     <div className='flex flex-col justify-center items-center'>
-      {(products.length && isLoaded) ?
+      {(products?.docs.length && isLoaded) ?
         (
           <>
             <div className="w-full py-4 px-2 flex items-center justify-center">
@@ -45,6 +44,8 @@ const ViewProducts: FC = () => {
                 className='pr-2'
                 icon={HiSearch}
                 enterKeyHint='search'
+                value={search}
+                onChange={e=>setSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key == "Enter") {
                     if (e.currentTarget.value === '') return void setQuery({});
@@ -58,9 +59,9 @@ const ViewProducts: FC = () => {
               // onClick={() => setOpenModal(true)}
               />
             </div>
-            <ProductTable table={products} />
+            <ProductTable table={products.docs} />
             <div className="flex overflow-x-auto justify-center">
-              <Pagination currentPage={1} totalPages={100} onPageChange={() => { }} />
+              <Pagination currentPage={products.page} totalPages={products.totalPages} onPageChange={(pageNumber) => { setQuery(prev=>({...prev,page:pageNumber}))}} />
             </div>
           </>
 

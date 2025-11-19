@@ -1,4 +1,5 @@
 import { z } from "zod/v3";
+import paginatedDocx from "./pagination";
 const ProductSchema = z.strictObject({
   productImage: z
     .instanceof(FileList)
@@ -63,7 +64,7 @@ export const PartialProductSchema = z.strictObject({
   productImage: z
     .instanceof(FileList)
     .refine(files => files.length <= 1, "Single Product image is required")
-    .refine(files => (files[0] === undefined)||(files[0]?.size <= 2 ** 20), `Max image size is 1MB.`) // 1MB limit
+    .refine(files => (files[0] === undefined) || (files[0]?.size <= 2 ** 20), `Max image size is 1MB.`) // 1MB limit
     .refine(
       files => ['image/jpeg', 'image/png', 'image/webp'].includes(files[0]?.type) || (files[0] === undefined),
       "Only .jpg, .png, .webp formats are supported."
@@ -88,9 +89,22 @@ export type PartialProductSchemaType = z.infer<typeof PartialProductSchema>;
 export type ProductSchemaType = z.infer<typeof ProductSchema>;
 
 export const ProductQuery = z.strictObject({
-  q:z.string().optional()
+  q: z.string().optional()
 })
-
+export const ProductPaginatedSchema = paginatedDocx.extend({ docs: z.array(ProductResponseSchema.omit({ productDescription: true })) })
 export type ProductQueryType = z.infer<typeof ProductQuery>;
+export type ProductPaginatedType = z.infer<typeof ProductPaginatedSchema>
 
-
+export const paginationDefault = {
+  totalDocs: 0,
+  offset: 0,
+  limit: 0,
+  totalPages: 0,
+  page: 0,
+  pagingCounter: 0,
+  nextPage: null,
+  prevPage: null,
+  hasPrevPage: false,
+  hasNextPage: false,
+  docs: [],
+}

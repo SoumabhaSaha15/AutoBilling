@@ -1,26 +1,29 @@
 import base from './../utility/axios-base';
 import OutletLoading from '../OutletLoading';
-import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "../contexts/Toast/ToastContext";
-import { Button, Label, TextInput, Spinner } from "flowbite-react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useToast } from "../contexts/Toast/ToastContext";
+import { Button, Label, TextInput, Spinner, Checkbox } from "flowbite-react";
 import { EmployeeSubmit, type EmployeeSubmitType } from "../validator/employee";
 const EmployeeLogin: FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const navigate = useNavigate();
   const toast = useToast();
   useEffect(() => {
     try {
       base
         .get('/employee_login')
-        .then((res) => { (res.status === 200) ? navigate('/employee') : (()=>{
-          setIsLoading(false);
-          toast.open("No employee logged pls login", 'alert-error', true, 2000);
-        })(); })
+        .then((res) => {
+          (res.status === 200) ? navigate('/employee') : (() => {
+            setIsLoading(false);
+            toast.open("No employee logged pls login", 'alert-error', true, 2000);
+          })();
+        })
         .catch((e) => {
           setIsLoading(false);
           toast.open("Failed to load employee login page", 'alert-error', true, 2000);
@@ -84,7 +87,7 @@ const EmployeeLogin: FC = () => {
               placeholder="********"
               autoComplete="one-time-code"
               id="password2"
-              type="password"
+              type={isPasswordVisible?"text":"password"}
               icon={HiLockClosed}
               {...register("password")}
               onDoubleClick={e => {
@@ -93,6 +96,10 @@ const EmployeeLogin: FC = () => {
               }}
               required shadow
             />
+          </div>
+          <div className="flex justify-between items-center gap-2">
+            <Label htmlFor="remember">Show password</Label>
+            <Checkbox id="remember" checked={isPasswordVisible} onChange={()=>setIsPasswordVisible(prev=>!prev)}/>
           </div>
           <Button type="submit">
             {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to employee account"}

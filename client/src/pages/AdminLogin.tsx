@@ -7,10 +7,12 @@ import { useToast } from "../contexts/Toast/ToastContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { HiMail, HiLockClosed, HiKey } from "react-icons/hi";
 import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
-import { Button, Label, TextInput, Spinner } from "flowbite-react";
+import { Button, Label, TextInput, Spinner,Checkbox } from "flowbite-react";
 const AdminLogin: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isPasswordVisible,setIsPasswordVisible] = useState<boolean>(false);
+  const [isKeyVisible,setIsKeyVisible] = useState<boolean>(false);
   const navigate = useNavigate();
   const toast = useToast();
   useEffect(() => {
@@ -79,25 +81,24 @@ const AdminLogin: FC = () => {
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="admin-password">
-                  Your password (double click to view)
+                  Your password
                   {errors.password && (<div className="text-red-500">{errors.password.message}</div>)}
                 </Label>
               </div>
               <TextInput
                 id="admin-password"
-                type="password"
+                type={isPasswordVisible?"text":"password"}
                 placeholder="********"
-                // className='w-[95%] md:w-md sm:w-sm'
                 icon={HiLockClosed}
                 {...register("password")}
                 autoComplete="one-time-code"
-                onDoubleClick={e => {
-                  let inputType = e.currentTarget.type;
-                  e.currentTarget.type = inputType == "text" ? "password" : "text";
-                }}
                 required
                 shadow
               />
+            </div>
+            <div className="flex justify-between items-center gap-2">
+              <Label htmlFor="remember">Show password</Label>
+              <Checkbox id="remember" checked={isPasswordVisible} onChange={()=>{setIsPasswordVisible(prev=>!prev)}} />
             </div>
             <div>
               <div className="mb-2 block">
@@ -110,17 +111,17 @@ const AdminLogin: FC = () => {
                 id="admin-key"
                 // className='w-[95%] md:w-md sm:w-sm'
                 placeholder="****-****-****-****"
-                type="password"
+                type={isKeyVisible?"text":"password"}
                 icon={HiKey}
                 {...register("adminKey")}
                 autoComplete="one-time-code"
-                onDoubleClick={e => {
-                  let inputType = e.currentTarget.type;
-                  e.currentTarget.type = inputType == "text" ? "password" : "text";
-                }}
                 required
                 shadow
               />
+            </div>
+            <div className="flex justify-between items-center gap-2">
+              <Label htmlFor="remember">Show key</Label>
+              <Checkbox id="remember" checked={isKeyVisible} onChange={()=>{setIsKeyVisible(prev=>!prev)}} />
             </div>
             <Button type="submit" >
               {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to admin account"}
