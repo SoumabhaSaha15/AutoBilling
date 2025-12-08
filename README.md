@@ -27,3 +27,5 @@
 ![search product](./screenshots/search_product.png)
 
 ![update product](./screenshots/update_product.png)
+
+cp -r ./client/dist/* ./server/public/
