@@ -1,19 +1,18 @@
-import mongoose from "mongoose";
-import { z } from "zod/v3";
+import z from "zod";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
+
 const AdminValidator = z.strictObject({
-  name: z.string({ required_error: 'name is required' })
+  name: z.string({ error: 'name is required' })
     .min(4, 'name must have 4 or more chars')
     .max(30, 'name must be under 30 chars')
     .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid user name'),
-  email: z.string({ required_error: 'email is required' })
-    .email('invalid email'),
-  password: z.string({ required_error: 'password is required' })
+  email: z.email('invalid email'),
+  password: z.string({ error: 'password is required' })
     .length(8, 'password should have 8 chars')
     .regex(/^[\x21-\x7E]+$/, 'invalid password'),
-  profilePublicId: z.string({ required_error: "cloudinary image Id Required" }),
-  profilePicture: z.string({ required_error: 'profilePicture is required' })
-    .url({ message: "value is not propper url" })
+  profilePublicId: z.string({ error: "cloudinary image Id Required" }),
+  profilePicture: z.url({ message: "value is not propper url" })
     .startsWith(
       "https://res.cloudinary.com/",
       { message: "not a propper profilePicture url" }
@@ -66,9 +65,8 @@ const AdminSchema = new mongoose.Schema<AdminType>({
   }
 }, { timestamps: true });
 
-AdminSchema.pre("save", async function (next) {
+AdminSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, await bcrypt.genSalt(12));
-  next();
 });
 
 const AdminModel = mongoose.model<AdminType>('admin_model', AdminSchema);

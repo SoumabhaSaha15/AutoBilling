@@ -1,31 +1,14 @@
-import { z } from "zod/v3";
+import z from "zod";
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
 
 const ProductValidator = z.strictObject({
-  productImage: z
-    .string({ required_error: "image is required" })
-    .url({ message: "not an url" })
-    .startsWith("https://res.cloudinary.com/", {
-      message: "not a proper profilePicture url",
-    }),
-  productPublicId: z.string({
-    required_error: "cloudinary image Id Required",
-  }),
-  productName: z
-    .string({ required_error: "product name is required" })
-    .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, "invalid user name"),
-  brandName: z
-    .string({ required_error: "brand name is required" })
-    .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, "invalid user name"),
-  price: z.coerce
-    .number({ required_error: "price is required" })
-    .int()
-    .positive(),
-  productDescription: z
-    .string({ required_error: "product description is required" })
-    .min(10)
-    .max(200),
+  productImage: z.url({ message: "not an url" }).startsWith("https://res.cloudinary.com/", { message: "not a proper profilePicture url" }),
+  productPublicId: z.string({ error: "cloudinary image Id Required" }),
+  productName: z.string({ error: "product name is required" }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, "invalid user name"),
+  brandName: z.string({ error: "brand name is required" }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, "invalid user name"),
+  price: z.coerce.number({ error: "price is required" }).int().positive(),
+  productDescription: z.string({ error: "product description is required" }).min(10).max(200),
 });
 
 export type ProductType = z.infer<typeof ProductValidator>;

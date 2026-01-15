@@ -1,9 +1,9 @@
-import { z } from 'zod/v3';
+import z from 'zod';
 const lazyLoadingQueryValidator = z.object({
   q: z.string().optional(),
   page: z.coerce.number().int().min(0).optional()
-}).refine((params)=>{
-  if(params.page===undefined)
+}).refine((params) => {
+  if (params.page === undefined)
     params.page = 1;
   return params;
 });
