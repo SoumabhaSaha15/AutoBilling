@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import { v2 as cloudinary } from 'cloudinary';
 import multer from "../../configurations/multer.js"
+import express from 'express';
 import ResponseError from '../../utility/response-error.js';
 import { Request, Response, NextFunction } from "express";
 import { ProductModel, ProductValidator } from '../../databases/Product.js';
@@ -10,7 +11,7 @@ const POST = {
     try {
       if (req.session.clientType !== 'admin') {
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
-        throw new ResponseError(403,"Not an admin",'client_unauthorised');
+        throw new ResponseError(403, "Not an admin", 'client_unauthorised');
       } else next();
     } catch (err) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
@@ -19,7 +20,7 @@ const POST = {
   },
   invalidDetails: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const validator = ProductValidator.omit({ productImage: true,productPublicId:true });
+      const validator = ProductValidator.omit({ productImage: true, productPublicId: true });
       req.body = validator.parse(req.body);
       if (req.file?.path) {
         const { public_id } = await cloudinary.uploader.upload(req.file?.path, { folder: process.env.CLOUDINARY_PRODUCT_DIR })
@@ -32,7 +33,7 @@ const POST = {
           }]
         });
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
-        req.body = ProductValidator.parse({ ...req.body, productImage: link,productPublicId:public_id });
+        req.body = ProductValidator.parse({ ...req.body, productImage: link, productPublicId: public_id });
         next();
       } else throw new Error('no image uploaded!');
     } catch (e) {
@@ -43,7 +44,7 @@ const POST = {
     try {
       const product = await ProductModel.create(req.body);
       //@ts-ignore
-      const { _id, __v, createdAt, updatedAt,productPublicId, ...data } = product.toJSON();
+      const { _id, __v, createdAt, updatedAt, productPublicId, ...data } = product.toJSON();
       res.status(201).json({ ...data, id: _id.toString() });
     } catch (e) {
       (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));

@@ -1,10 +1,7 @@
-import ip from "ip";
 import cors from "cors";
 import path from "path";
 import chalk from "chalk";
-import boxen from "boxen";
 import lusca from "lusca";
-import morgan from "morgan";
 import dotenv from "dotenv";
 import express from "express";
 import { connect } from "mongoose";
@@ -13,6 +10,7 @@ import cookieParser from "cookie-parser";
 import { ZodError as v3Error } from "zod/v3";
 import errorHadler from "./configurations/error.js";
 import sessionConfig from "./configurations/session.js";
+import listenCallback from "./utility/listen-callback.js";
 import { ZodError as v4Error, prettifyError } from "zod/v4";
 import cloudinaryConfig from "./configurations/cloudinary.js";
 import allowWithoutAuth from "./configurations/sessionAuthenticator.js";
@@ -41,29 +39,9 @@ try {
       .use('/api', router)
       .get(/^\/(?!api\/).*/, (_, res) => res.sendFile(path.join(import.meta.dirname, '../public/index.html')));
 
+  if (process.env.MODE === 'dev') APP.use(router);
 
-  if (process.env.MODE === 'dev')
-    APP
-      .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
-      .use(router);
-
-
-  const SERVER = APP.use(errorHadler)
-    .listen(process.env.PORT, (err: Error | undefined) => {
-      if (err) console.error(err);
-      process.on(
-        "unhandledRejection",
-        (reason) => console.log(
-          chalk.red.bold("Unhandled Rejection:\n"),
-          reason
-        )
-      );
-      console.log(
-        boxen(chalk.blue(
-          `Server is running!\n-Local:   http://localhost:${process.env.PORT}\n-Network: http://${ip.address()}:${process.env.PORT}`
-        ), { padding: 1, borderColor: "blue", title: process.env.MODE })
-      );
-    });
+  const SERVER = APP.use(errorHadler).listen(process.env.PORT, listenCallback);
 
   process.on("SIGINT", async () => {
     console.log(chalk.yellow.bold("Server closed. Database disconnected."));
@@ -75,7 +53,9 @@ try {
   });
 
 } catch (error) {
+
   if (error instanceof v3Error || error instanceof v4Error) console.log(chalk.red.bold(prettifyError(error)))
   else console.log(chalk.red((error as Error).message));
   process.exit(0);
+
 }

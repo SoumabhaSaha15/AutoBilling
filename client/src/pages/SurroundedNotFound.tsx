@@ -1,10 +1,10 @@
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-export const SurroundedNotFound = ({link}:{link:string;}) => {
+export const SurroundedNotFound = ({ link }: { link: string; }) => {
   return (
     <>
       <section className="bg-white dark:bg-gray-900 min-h-[calc(100dvh-64px)] grid place-items-center">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <div className="py-8 px-4 mx-auto max-w-7xl lg:py-16 lg:px-6">
           <div className="mx-auto max-w-screen-sm text-center">
             <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
               Sorry
@@ -19,7 +19,7 @@ export const SurroundedNotFound = ({link}:{link:string;}) => {
             <Link
               to={link}
               className="inline-flex text-white bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
-              children={'Back to '+link}
+              children={'Back to ' + link}
             />
           </div>
         </div>

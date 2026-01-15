@@ -1,12 +1,13 @@
-import { z } from "zod/v3";
+import z from "zod";
+import id from "./objectId";
 
 const InvoiceBrief = z.strictObject({
-  customerEmail: z.string().email(),
-  employeeEmail: z.string().email(),
-  dateTime: z.string(),
+  customerEmail: z.email(),
+  employeeEmail: z.email(),
+  dateTime: z.iso.datetime({ message: "invalid date time." }),
   ordersCount: z.number().int().nonnegative(),
   totalAmount: z.number().nonnegative(),
-  _id: z.string({ required_error: "id is required." }).length(24).regex(/^[0-9a-fA-F]{24}$/)
+  _id: id
 });
 const InvoiceBriefList = z.array(InvoiceBrief);
 export type InvoiceBriefType = z.infer<typeof InvoiceBrief>;

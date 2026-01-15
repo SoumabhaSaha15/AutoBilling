@@ -1,27 +1,27 @@
 import _ from 'lodash';
-// import { z } from "zod/v3";
 import Loading from '../../Loading';
 import base from '../../utility/axios-base';
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from 'react-router-dom';
 import { HiSearch, HiFilter } from "react-icons/hi";
 import { SurroundedNotFound } from '../SurroundedNotFound';
+import { paginationDefault } from '../../validator/pagination';
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { Button, TextInput, Pagination } from "flowbite-react";
 import { ProductTable } from '../../components/admin/ProductTable';
-import { ProductPaginatedSchema,type ProductPaginatedType,paginationDefault } from "../../validator/product";
+import { ProductPaginatedSchema, type ProductPaginatedType } from "../../validator/product";
 
 const ViewProducts: FC = () => {
   const toast = useToast();
-  const [search,setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [products, setProducts] = useState<ProductPaginatedType>(paginationDefault);
   const [query, setQuery] = useSearchParams();
 
   useEffect(() => {
-    ((query.size && query.get('q')) && setSearch(query.get('q')||''));
+    ((query.size && query.get('q')) && setSearch(query.get('q') || ''));
     base
-      .get('/products' + (query.size ? `?${query.toString()}` : ''))
+      .get('/products', { params: { q: query.get('q') } })
       .then((res) => {
         if (res.status !== 200) throw new Error(res.statusText);
         setProducts((_) => {
@@ -45,7 +45,7 @@ const ViewProducts: FC = () => {
                 icon={HiSearch}
                 enterKeyHint='search'
                 value={search}
-                onChange={e=>setSearch(e.target.value)}
+                onChange={e => setSearch(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key == "Enter") {
                     if (e.currentTarget.value === '') return void setQuery({});
@@ -61,7 +61,7 @@ const ViewProducts: FC = () => {
             </div>
             <ProductTable table={products.docs} />
             <div className="flex overflow-x-auto justify-center">
-              <Pagination currentPage={products.page} totalPages={products.totalPages} onPageChange={(pageNumber) => { setQuery(prev=>({...prev,page:pageNumber}))}} />
+              <Pagination currentPage={products.page} totalPages={products.totalPages} onPageChange={(pageNumber) => { setQuery(prev => ({ ...prev, page: pageNumber })) }} />
             </div>
           </>
 

@@ -1,27 +1,21 @@
+import { prettifyError } from "zod";
+import base from '../../utility/axios-base';
+import { GrUserWorker } from "react-icons/gr";
+import { TbLockPassword } from "react-icons/tb";
 import { FC, useState, useEffect } from "react";
-import base from '../../utility/axios-base'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { prettifyError } from "zod/v4";
-import { useToast } from "../../contexts/Toast/ToastContext";
-import { TbLockPassword } from "react-icons/tb";
-import { GrUserWorker } from "react-icons/gr";
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import { Button, Label, TextInput, FileInput, Spinner} from "flowbite-react";
-import { EmployeeRegisterType, EmployeeRegister, EmployeeRegisterResopnse } from "../../validator/employee";
+import { useToast } from "../../contexts/Toast/ToastContext";
+import { Button, Label, TextInput, FileInput, Spinner } from "flowbite-react";
+import { type EmployeeRegisterType, EmployeeRegister, EmployeeRegisterResopnse } from "../../validator/employee";
 
 const AddProduct: FC = () => {
   const defaultUrl = '/employee-worker.svg';
   const [previewUrl, setPreviewUrl] = useState(defaultUrl);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors }
-  } = useForm<EmployeeRegisterType>({ resolver: zodResolver(EmployeeRegister) });
+  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<EmployeeRegisterType>({ resolver: zodResolver(EmployeeRegister) });
+
   const watchedImage = watch("profilePicture");
 
   useEffect(() => {
@@ -33,28 +27,21 @@ const AddProduct: FC = () => {
   }, [watchedImage]);
 
   const newEmployeeSubmit: SubmitHandler<EmployeeRegisterType> = (data) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    Object.entries(data)
-      .forEach(([key, value]) => formData.set(key,
-        (value instanceof FileList) ?
-          value[0] :
-          value.toString()
-      ));
     base
-      .post('/register_employee', formData)
+      .postForm('/register_employee', data)
       .then(({ data, status, statusText }) => {
-        if (status != 200) toast.open(statusText, 'alert-error', true, 5000);
+        if (status != 200) {
+          toast.open(statusText, 'alert-error', true, 5000);
+          reset();
+        }
         else {
           let safeParsed = EmployeeRegisterResopnse.safeParse(data);
           (safeParsed.success) ?
             toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000) :
             toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
         }
-        setIsLoading(false);
       })
       .catch(console.error);
-    reset();
   }
 
   return (
@@ -141,8 +128,8 @@ const AddProduct: FC = () => {
           />
         </div>
 
-        <Button type="submit" disabled={isLoading} className="disabled:bg-blue-950">{
-          (isLoading) ?
+        <Button type="submit" disabled={isSubmitting} className="disabled:bg-blue-950">{
+          (isSubmitting) ?
             (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"Registering new employee"}</>)
             : ("Register employee")
         }</Button>

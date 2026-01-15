@@ -23,15 +23,20 @@ const CreateInvoice: FC = () => {
   const submitInVoice = () => {
     setIsSubmitting(true);
     try {
-      const invoiceData: Pick<InvoiceType, 'orders'> & Pick<InvoiceType, 'customerEmail'> = InvoiceValidator.pick({ orders: true, customerEmail: true }).parse({ orders: list, customerEmail: customerEmail });
-      base.post('/invoice', invoiceData).then((response) => {
-        if (response.status === 201) {
-          const { id } = InvoiceValidator.pick({ id: true }).parse(response.data);
-          toast.open(id, 'alert-success', true, 2000);
-          setList([]);
-          setCustomerEmail('');
-        } else toast.open(response.data, 'alert-error', true, 2000);
-      }).catch(console.error);
+      const invoiceData: Pick<InvoiceType, 'orders'> & Pick<InvoiceType, 'customerEmail'> = InvoiceValidator
+        .pick({ orders: true, customerEmail: true })
+        .parse({ orders: list, customerEmail: customerEmail });
+      base
+        .postForm('/invoice', invoiceData)
+        .then((response) => {
+          if (response.status === 201) {
+            const { id } = InvoiceValidator.pick({ id: true }).parse(response.data);
+            toast.open(id, 'alert-success', true, 2000);
+            setList([]);
+            setCustomerEmail('');
+          } else toast.open(response.data, 'alert-error', true, 2000);
+        })
+        .catch(console.error);
     } catch (err) {
       toast.open((err instanceof z.ZodError) ? prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
     }

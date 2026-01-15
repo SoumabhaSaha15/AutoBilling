@@ -1,10 +1,11 @@
-import { z } from "zod/v3";
+import z from "zod";
 import { AdminSubmit } from "./admin";
+import id from "./objectId";
 export const EmployeeSubmit = AdminSubmit.omit({ adminKey: true });
 export type EmployeeSubmitType = z.infer<typeof EmployeeSubmit>;
 
 export const EmployeeRegister = EmployeeSubmit.extend({
-  name: z.string({ required_error: 'name is required' })
+  name: z.string({ error: 'name is required' })
     .min(4, 'name must have 4 or more chars')
     .max(30, 'name must be under 30 chars')
     .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid employee name'),
@@ -18,8 +19,8 @@ export const EmployeeRegister = EmployeeSubmit.extend({
     ),
 });
 export const EmployeeRegisterResopnse = EmployeeRegister.omit({ profilePicture: true, password: true }).extend({
-  profilePicture: z.string().url(),
-  id: z.string({ required_error: "id is required." }).length(24).regex(/^[0-9a-fA-F]{24}$/)
+  profilePicture: z.url({ error: "profile picture is required." }),
+  id: id
 })
 export type EmployeeRegisterType = z.infer<typeof EmployeeRegister>;
 export type EmployeeRegisterResponseType = z.infer<typeof EmployeeRegisterResopnse>;

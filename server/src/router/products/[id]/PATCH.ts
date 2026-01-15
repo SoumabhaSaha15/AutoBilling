@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import fs from "node:fs/promises";
+import express from "express";
 import { v2 as cloudinary } from 'cloudinary';
 import multer from "../../../configurations/multer.js";
 import { Request, Response, NextFunction } from "express";
@@ -20,7 +21,7 @@ const PATCH = {
   updateProduct: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const param = req.params['id'];
-      if (!mongoose.Types.ObjectId.isValid(param)) {
+      if (!mongoose.Types.ObjectId.isValid(param as string)) {
         (req.file?.path) && (await fs.unlink(req.file.path).catch(console.error));
         return void res.status(400).send(`Invalid product id ${param}.`);
       }

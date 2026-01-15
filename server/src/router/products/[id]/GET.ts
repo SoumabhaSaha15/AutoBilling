@@ -13,7 +13,7 @@ export default {
   sendProduct: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const param = req.params['id'];
-      if (!mongoose.Types.ObjectId.isValid(param)) return void res.status(400).send(`Invalid product id ${param}.`);
+      if (!mongoose.Types.ObjectId.isValid(param as string)) return void res.status(400).send(`Invalid product id ${param}.`);
       const productDoc = await ProductModel.findById(param).exec();
       if (productDoc === null) return void res.status(404).send(`No such product with id: ${param}.`);
       //@ts-ignore

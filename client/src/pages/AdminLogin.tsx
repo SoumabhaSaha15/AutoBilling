@@ -7,12 +7,12 @@ import { useToast } from "../contexts/Toast/ToastContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { HiMail, HiLockClosed, HiKey } from "react-icons/hi";
 import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
-import { Button, Label, TextInput, Spinner,Checkbox } from "flowbite-react";
+import { Button, Label, TextInput, Spinner, Checkbox } from "flowbite-react";
 const AdminLogin: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isPasswordVisible,setIsPasswordVisible] = useState<boolean>(false);
-  const [isKeyVisible,setIsKeyVisible] = useState<boolean>(false);
+  // const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [isKeyVisible, setIsKeyVisible] = useState<boolean>(false);
   const navigate = useNavigate();
   const toast = useToast();
   useEffect(() => {
@@ -34,21 +34,21 @@ const AdminLogin: FC = () => {
       console.log(e);
     }
     return () => {
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
       setIsLoading(true);
       console.clear();
     };
   }, []);
-  const { register, handleSubmit, formState: { errors } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
-    setIsSubmitting(true);
+    // setIsSubmitting(true);
     try {
-      let response = await base.post('/admin_login', data);
+      let response = await base.postForm('/admin_login', data);
       if (response.status == 200) navigate('/admin');
       else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);
     } catch (e) {
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
       toast.open((e as Error)?.message || "", 'alert-error', true, 2000);
     }
   };
@@ -87,7 +87,7 @@ const AdminLogin: FC = () => {
               </div>
               <TextInput
                 id="admin-password"
-                type={isPasswordVisible?"text":"password"}
+                type={isPasswordVisible ? "text" : "password"}
                 placeholder="********"
                 icon={HiLockClosed}
                 {...register("password")}
@@ -98,7 +98,7 @@ const AdminLogin: FC = () => {
             </div>
             <div className="flex justify-between items-center gap-2">
               <Label htmlFor="remember">Show password</Label>
-              <Checkbox id="remember" checked={isPasswordVisible} onChange={()=>{setIsPasswordVisible(prev=>!prev)}} />
+              <Checkbox id="remember" checked={isPasswordVisible} onChange={() => { setIsPasswordVisible(prev => !prev) }} />
             </div>
             <div>
               <div className="mb-2 block">
@@ -111,7 +111,7 @@ const AdminLogin: FC = () => {
                 id="admin-key"
                 // className='w-[95%] md:w-md sm:w-sm'
                 placeholder="****-****-****-****"
-                type={isKeyVisible?"text":"password"}
+                type={isKeyVisible ? "text" : "password"}
                 icon={HiKey}
                 {...register("adminKey")}
                 autoComplete="one-time-code"
@@ -121,7 +121,7 @@ const AdminLogin: FC = () => {
             </div>
             <div className="flex justify-between items-center gap-2">
               <Label htmlFor="remember">Show key</Label>
-              <Checkbox id="remember" checked={isKeyVisible} onChange={()=>{setIsKeyVisible(prev=>!prev)}} />
+              <Checkbox id="remember" checked={isKeyVisible} onChange={() => { setIsKeyVisible(prev => !prev) }} />
             </div>
             <Button type="submit" >
               {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to admin account"}

@@ -1,3 +1,4 @@
+import morgan from "morgan";
 import express from "express";
 import logout from "./logout/index.js"
 import invoices from "./invoice/index.js";
@@ -9,6 +10,7 @@ import employeeLogin from "./employee_login/index.js";
 import registerEmployee from "./register_employee/index.js";
 const router = express.Router();
 router
+  .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
   .use(adminLogin)
   .use(employeeLogin)
   .use(products)

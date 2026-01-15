@@ -7,20 +7,20 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { prettifyError } from "zod/v4";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
-import { Button, Label, TextInput, FileInput, Spinner} from "flowbite-react";
+import { Button, Label, TextInput, FileInput, Spinner } from "flowbite-react";
 import ProductSchema, { ProductSchemaType, ProductResponseSchema } from "../../validator/product";
 
 const AddProduct: FC = () => {
   const defaultUrl = '/upload-image.svg';
   const [previewUrl, setPreviewUrl] = useState(defaultUrl);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const toast = useToast();
   const {
     register,
     handleSubmit,
     watch,
     reset,
-    formState: { errors }
+    formState: { errors, isSubmitting }
   } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
   const watchedImage = watch("productImage");
   useEffect(() => {
@@ -32,25 +32,18 @@ const AddProduct: FC = () => {
   }, [watchedImage]);
 
   const productSubmit: SubmitHandler<ProductSchemaType> = (data) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    Object.entries(data)
-      .forEach(([key, value]) => formData.set(key,
-        (value instanceof FileList) ?
-          value[0] :
-          value.toString()
-      ));
+    // setIsLoading(true);
     base
-      .post('/products', formData)
+      .postForm('/products', data)
       .then(({ data, status, statusText }) => {
         if (status !== 200 && status !== 201) toast.open(statusText, 'alert-error', true, 5000);
         else {
           let safeParsed = ProductResponseSchema.safeParse(data);
           (safeParsed.success) ?
-            toast.open(statusText +" "+ safeParsed.data.id, 'alert-success', true, 5000) :
+            toast.open(statusText + " " + safeParsed.data.id, 'alert-success', true, 5000) :
             toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
         }
-        setIsLoading(false);
+        // setIsLoading(false);
       })
       .catch(console.error);
     reset();
@@ -155,8 +148,8 @@ const AddProduct: FC = () => {
           />
         </div>
 
-        <Button type="submit" disabled={isLoading} className="disabled:bg-blue-950">{
-          (isLoading) ?
+        <Button type="submit" disabled={isSubmitting} className="disabled:bg-blue-950">{
+          (isSubmitting) ?
             (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"adding product"}</>)
             : ("add product")
         }</Button>
