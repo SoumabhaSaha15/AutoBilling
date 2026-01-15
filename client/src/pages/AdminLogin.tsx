@@ -10,7 +10,6 @@ import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
 import { Button, Label, TextInput, Spinner, Checkbox } from "flowbite-react";
 const AdminLogin: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isKeyVisible, setIsKeyVisible] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -34,21 +33,18 @@ const AdminLogin: FC = () => {
       console.log(e);
     }
     return () => {
-      // setIsSubmitting(false);
       setIsLoading(true);
       console.clear();
     };
   }, []);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
-    // setIsSubmitting(true);
     try {
       let response = await base.postForm('/admin_login', data);
       if (response.status == 200) navigate('/admin');
       else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);
     } catch (e) {
-      // setIsSubmitting(false);
       toast.open((e as Error)?.message || "", 'alert-error', true, 2000);
     }
   };

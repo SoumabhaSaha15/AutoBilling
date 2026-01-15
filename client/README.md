@@ -4,7 +4,7 @@
 |------|------------|----------|
 | <img src="https://vite.dev/logo.svg" width=32 /> | [Vite](https://vite.dev/) | **Build tool** |
 | <img src="https://react.dev/favicon-32x32.png" width=32 /> | [React](https://react.dev/) | **UI building** |
-| <img src="https://tailwindcss.com/favicons/favicon-16x16.png?v=4" width=32 /> | [Tailwind CSS](https://tailwindcss.com/) | **CSS frameWork** |
+| <img src="https://tailwindcss.com/favicons/favicon.ico?v=4" width=32 /> | [Tailwind CSS](https://tailwindcss.com/) | **CSS frameWork** |
 | <img src="./public/flowbite-react.svg" width=32 /> | [Flowbite React](https://flowbite-react.com/) | **Component library** |
 | <img src="https://react-pdf.org/images/logo.png" width=32 /> | [React PDF](https://react-pdf.org/) | **PDF generation** |
 | <img src="https://zod.dev/_next/image?url=%2Flogo%2Flogo-glow.png&w=256&q=100" width=32/> | [Zod](https://zod.dev/) | **Data validation** |

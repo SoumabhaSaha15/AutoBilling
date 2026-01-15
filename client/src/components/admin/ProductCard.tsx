@@ -1,4 +1,4 @@
-import { z } from "zod/v3";
+import z from "zod";
 import { FC } from "react";
 import { ProductResponseSchema } from "../../validator/product";
 import { Card, Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";

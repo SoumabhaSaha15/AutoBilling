@@ -1,9 +1,11 @@
-import { z } from "zod/v3";
+import z from "zod";
 import { FC } from "react";
+import { Link } from "react-router-dom";
 import { ProductResponseSchema } from "../../validator/product";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Avatar } from "flowbite-react";
-import { Link } from "react-router-dom";
+
 type propType = z.infer<typeof ProductResponseSchema>;
+
 export const ProductTable: FC<{ table: Omit<propType, "productDescription">[] }> = ({ table }) => {
   return (
     <div className="overflow-x-auto p-2 max-h-[calc(100dvh-192px)] w-full flex flex-col sm:items-center">
@@ -42,8 +44,6 @@ export const ProductTable: FC<{ table: Omit<propType, "productDescription">[] }>
                   />
                 }
               />
-
-              {/* </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

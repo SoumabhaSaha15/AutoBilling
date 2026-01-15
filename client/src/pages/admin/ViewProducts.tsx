@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { z } from "zod/v3";
+import z from "zod";
+import _ from "lodash";
 import Loading from '../../Loading';
 import { HiSearch } from "react-icons/hi";
 import base from './../../utility/axios-base';
@@ -10,8 +10,8 @@ import { SurroundedNotFound } from '../SurroundedNotFound';
 import ProductCard from "../../components/admin/ProductCard";
 import { useToast } from "../../contexts/Toast/ToastContext";
 import { FC, useEffect, useState, useCallback } from "react";
-import { ProductResponseSchema, ProductQueryType, ProductQuery } from "../../validator/product";
 import { Button, Modal, ModalBody, ModalHeader, TextInput, Kbd, Label } from "flowbite-react";
+import { ProductResponseSchema, type ProductQueryType, ProductQuery } from "../../validator/product";
 
 const ProductArray = z.array(ProductResponseSchema);
 const ViewProducts: FC = () => {
@@ -82,7 +82,7 @@ const ViewProducts: FC = () => {
           <Loading />
       }
       <Button
-        className="fixed !h-16 !w-16 bottom-6 right-6 z-50 rounded-2xl !p-4 shadow-lg hover:shadow-xl transition-shadow duration-300"
+        className="fixed h-16! w-16! bottom-6 right-6 z-50 rounded-2xl p-4! shadow-lg hover:shadow-xl transition-shadow duration-300"
         color="blue"
         size="lg"
         onClick={() => {
@@ -91,7 +91,7 @@ const ViewProducts: FC = () => {
         children={<HiSearch className="h-6 w-6" />}
       />
       <Modal show={openModal} onClose={() => setOpenModal(false)} popup>
-        <ModalHeader children={<span className="font-normal text-gray-500">Search pannel <Kbd>ctrl + K</Kbd></span>} className="!p-4" />
+        <ModalHeader children={<span className="font-normal text-gray-500">Search pannel <Kbd>ctrl + K</Kbd></span>} className="p-4!" />
         <ModalBody children={<form className="space-y-6" onSubmit={handleSubmit(applySearch)}>
           <div>
             <div className="mb-2 block">

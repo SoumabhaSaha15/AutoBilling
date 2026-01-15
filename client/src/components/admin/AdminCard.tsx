@@ -1,11 +1,12 @@
-import { UserDetailsSchema } from '../../contexts/Auth/admin/AuthContext';
-import { useAuth } from '../../contexts/Auth/admin/AuthContext';
-import flattener from "./../../utility/zod-error-flattener"
-import { Card, Avatar, Button, DropdownDivider } from "flowbite-react";
-import { useNavigate } from 'react-router-dom';
+import z from "zod";
 import { FC } from "react";
-import { z } from "zod/v3";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/Auth/admin/AuthContext';
+import { Card, Avatar, Button, DropdownDivider } from "flowbite-react";
+import { UserDetailsSchema } from '../../contexts/Auth/admin/AuthContext';
+
 const OmittedId = UserDetailsSchema.omit({ id: true });
+
 const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedId>) => {
   const { success, data, error } = OmittedId.safeParse(props);
   const adminAuth = useAuth();
@@ -19,7 +20,7 @@ const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedI
           <span className="text-sm text-gray-500 dark:text-gray-400">{data?.email}</span>
         </div>
       </Card>
-      <DropdownDivider/>
+      <DropdownDivider />
       <Button
         className='w-full rounded-xl'
         size="md"
@@ -30,7 +31,7 @@ const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedI
     </>
     ) : (
       <Card>
-        {error && flattener(error)}
+        {error && z.prettifyError(error)}
       </Card>)
   )
 }

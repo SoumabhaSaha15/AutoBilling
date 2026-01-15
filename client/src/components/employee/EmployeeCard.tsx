@@ -1,10 +1,10 @@
-import { UserDetailsSchema } from '../../contexts/Auth/employee/AuthContext';
-import { useAuth } from '../../contexts/Auth/employee/AuthContext';
-import flattener from "../../utility/zod-error-flattener"
-import { Card, Avatar, Button, DropdownDivider } from "flowbite-react";
-import { useNavigate } from 'react-router-dom';
+import z from "zod";
 import { FC } from "react";
-import { z } from "zod/v3";
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/Auth/employee/AuthContext';
+import { Card, Avatar, Button, DropdownDivider } from "flowbite-react";
+import { UserDetailsSchema } from '../../contexts/Auth/employee/AuthContext';
+
 const OmittedId = UserDetailsSchema.omit({ id: true });
 const EmployeeCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedId>) => {
   const { success, data, error } = OmittedId.safeParse(props);
@@ -28,7 +28,7 @@ const EmployeeCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof Omitt
         children={"Log Out"}
       />
     </>) : (<Card>
-      {error && flattener(error)}
+      {error && z.prettifyError(error)}
     </Card>)
   )
 }

@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import z from 'zod';
 import { createContext, useContext, type Context } from "react";
 
-export const ToastVariant= z.enum(['alert-info', 'alert-success', 'alert-warning', 'alert-error']);
+export const ToastVariant = z.enum(['alert-info', 'alert-success', 'alert-warning', 'alert-error']);
 export type ToastVariantType = z.infer<typeof ToastVariant>;
 export type ToastContextProps = {
   /**
@@ -11,13 +11,13 @@ export type ToastContextProps = {
    * @param toastOptions ToastOptionsType the options for the toast customization alert-info is the default variant
    * @returns string
    */
-  open: (component: string, toastVariant?:ToastVariantType, autoClose?: boolean, timeout?: number) => string;
+  open: (component: string, toastVariant?: ToastVariantType, autoClose?: boolean, timeout?: number) => string;
   close: (id: string) => void;
 };
 export const ToastContext: Context<ToastContextProps> = createContext<ToastContextProps>({
   open: (
     component: string,
-    toastVariant:ToastVariantType = "alert-info",
+    toastVariant: ToastVariantType = "alert-info",
     autoClose: boolean = true,
     timeout: number = 1000,
   ) => {

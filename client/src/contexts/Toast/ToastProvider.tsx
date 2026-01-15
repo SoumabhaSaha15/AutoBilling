@@ -61,10 +61,10 @@ export default function ToastProvider({ children }: { children: ReactNode; }) {
         children={children}
       />
       <div
-        className='fixed bottom-4 right-4 space-y-2 z-[1]'
+        className='fixed bottom-4 right-4 space-y-2 z-1'
       >
         {toasts.map(({ id, component }) => (
-          <Toast key={id} className={`z-[1] bg-${getColor(toastColor)}-100 border-${getColor(toastColor)}-500`} >
+          <Toast key={id} className={`z-1 bg-${getColor(toastColor)}-100 border-${getColor(toastColor)}-500`} >
             {/* Apply z-index here */}
             <div className={
               `inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-${getColor(toastColor)}-700 text-black dark:text-white`

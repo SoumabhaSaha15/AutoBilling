@@ -1,15 +1,17 @@
+import _ from "lodash";
 import AdminCard from './AdminCard';
 import { Link } from "react-router-dom";
 import { type FC, useState, useEffect } from "react";
 import { useAuth } from '../../contexts/Auth/admin/AuthContext';
 import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
-import _ from "lodash";
+
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
     window.onresize = _.throttle(() => setWidth(window.innerWidth), 1500);
     return () => { window.onresize = () => { } };
   }, []);
+
   const auth = useAuth();
   const DIV = (
     <div className="flex flex-wrap gap-2">

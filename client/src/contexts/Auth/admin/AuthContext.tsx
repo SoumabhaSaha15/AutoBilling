@@ -1,9 +1,9 @@
 import { createContext, useContext, type Context } from "react";
-import { z } from "zod/v3";
+import z from "zod";
 export const UserDetailsSchema = z.object({
   name: z.string(),
   email: z.string().email(),
-  profilePicture: z.string({ required_error: 'profilePicture is required' })
+  profilePicture: z.string({ error: 'profilePicture is required' })
     .url({ message: "value is not propper url" })
     .startsWith(
       "https://res.cloudinary.com/",
