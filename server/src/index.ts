@@ -1,25 +1,22 @@
 import cors from "cors";
 import path from "path";
 import chalk from "chalk";
-import lusca from "lusca";
 import dotenv from "dotenv";
 import express from "express";
 import { connect } from "mongoose";
 import router from "./router/index.js";
 import cookieParser from "cookie-parser";
-import { ZodError as v3Error } from "zod/v3";
+import { ZodError, prettifyError } from "zod";
 import errorHadler from "./configurations/error.js";
 import sessionConfig from "./configurations/session.js";
 import listenCallback from "./utility/listen-callback.js";
-import { ZodError as v4Error, prettifyError } from "zod/v4";
 import cloudinaryConfig from "./configurations/cloudinary.js";
-import allowWithoutAuth from "./configurations/sessionAuthenticator.js";
+import { csrfSynchronisedProtection, generateToken } from "./configurations/csrf.js";
 
 try {
   dotenv.config({ quiet: true });
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
-
   const APP = express()
     .use(cors({ origin: process.env.CORS_URL, credentials: true }))
     .use(express.static(path.join(import.meta.dirname, "./../public")))
@@ -27,18 +24,14 @@ try {
     .use(express.urlencoded({ extended: true }))
     .use(cookieParser())
     .use(sessionConfig())
-    .use(lusca({ csrf: true, xssProtection: true, xframe: "SAMEORIGIN" }))
-    .use(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      res.cookie('csrftoken', req.csrfToken());
+    .use((req, res, next) => {
+      const token = generateToken(req);
+      res.cookie("csrftoken", token, { sameSite: "lax" });
       next();
     })
-    .use(allowWithoutAuth(process.env.MODE === 'prod' ? (['/api/admin_login', '/api/employee_login']) : (['/admin_login', '/employee_login'])));
+    .use(csrfSynchronisedProtection);
 
-  if (process.env.MODE === 'prod')
-    APP
-      .use('/api', router)
-      .get(/^\/(?!api\/).*/, (_, res) => res.sendFile(path.join(import.meta.dirname, '../public/index.html')));
-
+  if (process.env.MODE === 'prod') APP.use('/api', router).get(/^\/(?!api\/).*/, (_, res) => res.sendFile(path.join(import.meta.dirname, '../public/index.html')));
   if (process.env.MODE === 'dev') APP.use(router);
 
   const SERVER = APP.use(errorHadler).listen(process.env.PORT, listenCallback);
@@ -53,9 +46,7 @@ try {
   });
 
 } catch (error) {
-
-  if (error instanceof v3Error || error instanceof v4Error) console.log(chalk.red.bold(prettifyError(error)))
+  if (error instanceof ZodError) console.log(chalk.red.bold(prettifyError(error)))
   else console.log(chalk.red((error as Error).message));
   process.exit(0);
-
 }

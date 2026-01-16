@@ -1,6 +1,4 @@
-import { z } from "zod/v3";
-import { prettifyError } from "zod";
-// import flattener from "./zod-error-flattener.js"
+import z from "zod";
 /**
  * @name validatorFactory
  * @param {z.ZodObject<T extends z.ZodRawShape>} picked
@@ -10,6 +8,6 @@ export const validatorFactory = <T extends z.ZodRawShape>(picked: z.ZodObject<T>
   return (value: string) => {
     if (typeof value !== 'string') return "you need to provide a string";
     const { success, error } = picked.safeParse({ [Object.keys(picked.shape)[0] as string]: value });
-    return (success) ? (true) : prettifyError(error);
+    return (success) ? (true) : z.prettifyError(error);
   }
 };

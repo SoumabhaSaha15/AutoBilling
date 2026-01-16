@@ -1,5 +1,5 @@
-import { z } from 'zod/v3'
-import { prettifyError } from 'zod/v4';
+// import { z } from 'zod/v3'
+import z from 'zod/v4';
 import { useState, FC } from 'react';
 import { FaQrcode } from "react-icons/fa";
 import base from "./../../utility/axios-base"
@@ -13,15 +13,13 @@ import { Card, Button, Label, TextInput, Table, TableBody, TableHead, TableCell,
 
 const CreateInvoice: FC = () => {
   const toast = useToast();
+  const [list, setList] = useState<OrdersType>([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [customerEmail, setCustomerEmail] = useState<string>('')
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [list, setList] = useState<OrdersType>([]);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
+  const [customerEmail, setCustomerEmail] = useState<string>('');
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<OrderType>({ resolver: zodResolver(OrderValidator) });
 
   const submitInVoice = () => {
-    setIsSubmitting(true);
     try {
       const invoiceData: Pick<InvoiceType, 'orders'> & Pick<InvoiceType, 'customerEmail'> = InvoiceValidator
         .pick({ orders: true, customerEmail: true })
@@ -38,9 +36,8 @@ const CreateInvoice: FC = () => {
         })
         .catch(console.error);
     } catch (err) {
-      toast.open((err instanceof z.ZodError) ? prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
+      toast.open((err instanceof z.ZodError) ? z.prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
     }
-    setTimeout(setIsSubmitting, 1000, false);
   }
 
   const addProductIds: SubmitHandler<OrderType> = (data) => {
@@ -49,7 +46,7 @@ const CreateInvoice: FC = () => {
       try {
         return OrdersValidator.parse([...prev, data]);
       } catch (err) {
-        toast.open((err instanceof z.ZodError) ? prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
+        toast.open((err instanceof z.ZodError) ? z.prettifyError(err) : (err as Error).message, 'alert-error', true, 2500);
         return prev;
       }
     });

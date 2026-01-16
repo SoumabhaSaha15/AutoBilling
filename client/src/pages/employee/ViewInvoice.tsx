@@ -1,16 +1,16 @@
+import { prettifyError } from 'zod';
 import { LuPrinter } from 'react-icons/lu';
 import { useParams } from "react-router-dom";
 import base from './../../utility/axios-base';
+import OutletLoading from '../../OutletLoading';
 import { HiCheckCircle } from 'react-icons/hi2';
 import DownloadInvoice from './DownloadInvoice';
 import { FC, useState, useEffect, useMemo } from "react";
 import { useToast } from '../../contexts/Toast/ToastContext';
 import { Page, PDFDownloadLink, Document, Text } from '@react-pdf/renderer';
 import { InvoiceResponseType, InvoiceResponse } from "../../validator/order";
-import OutletLoading from '../../OutletLoading';
-import { prettifyError } from 'zod';
 import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell } from 'flowbite-react';
-// import flattenError from './../../utility/zod-error-flattener';
+
 const ViewInvoice: FC = () => {
   const toast = useToast();
   const [loading, setLoading] = useState<boolean>(true);
@@ -19,7 +19,7 @@ const ViewInvoice: FC = () => {
   useEffect(() => {
     base.get(`/invoice/${id}`).then((res) => {
       const { data, success, error } = InvoiceResponse.safeParse(res.data);
-      console.log(data,error&&prettifyError(error));
+      console.log(data, error && prettifyError(error));
       (success) ?
         setLoading((_) => {
           setInvoiceData(data);

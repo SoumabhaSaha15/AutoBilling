@@ -8,8 +8,10 @@ import invoiceId from "./invoice/[id]/index.js";
 import productId from "./products/[id]/index.js";
 import employeeLogin from "./employee_login/index.js";
 import registerEmployee from "./register_employee/index.js";
+import allowWithoutAuth from "./../configurations/sessionAuthenticator.js";
 const router = express.Router();
 router
+  .use(allowWithoutAuth(['/admin_login', '/employee_login']))
   .use(morgan(':method :url :status :res[content-length] - :response-time ms'))
   .use(adminLogin)
   .use(employeeLogin)

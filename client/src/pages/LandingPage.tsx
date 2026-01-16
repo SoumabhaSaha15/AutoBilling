@@ -1,7 +1,5 @@
-// import AOS from 'aos';
-import ScrollReveal from "scrollreveal";
 import { FC, useEffect } from 'react';
-// import 'aos/dist/aos.css'; // Import the AOS CSS
+import ScrollReveal from "scrollreveal";
 import StatSection from '../components/landing/StatSection';
 import HeroSection from '../components/landing/HeroSection';
 import HeaderSection from '../components/landing/HeaderSection';
@@ -13,7 +11,7 @@ const LandingPage: FC = () => {
   return (
     <>
       <div className="min-h-screen bg-white dark:bg-gray-900 transition-all scroll-smooth">
-      <HeaderSection />
+        <HeaderSection />
 
         <HeroSection
           children={<DashboardPreviewSection />}

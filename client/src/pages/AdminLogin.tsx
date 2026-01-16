@@ -40,7 +40,7 @@ const AdminLogin: FC = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
     try {
-      let response = await base.postForm('/admin_login', data);
+      let response = await base.post('/admin_login', data);
       if (response.status == 200) navigate('/admin');
       else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);
@@ -93,13 +93,13 @@ const AdminLogin: FC = () => {
               />
             </div>
             <div className="flex justify-between items-center gap-2">
-              <Label htmlFor="remember">Show password</Label>
-              <Checkbox id="remember" checked={isPasswordVisible} onChange={() => { setIsPasswordVisible(prev => !prev) }} />
+              <Label htmlFor="ShowPassword">Show password</Label>
+              <Checkbox id="ShowPassword" checked={isPasswordVisible} onChange={() => { setIsPasswordVisible(prev => !prev) }} />
             </div>
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="admin-key">
-                  Admin key (double click to view)
+                  Admin key
                   {errors.adminKey && (<div className="text-red-500">{errors.adminKey.message}</div>)}
                 </Label>
               </div>
@@ -116,8 +116,8 @@ const AdminLogin: FC = () => {
               />
             </div>
             <div className="flex justify-between items-center gap-2">
-              <Label htmlFor="remember">Show key</Label>
-              <Checkbox id="remember" checked={isKeyVisible} onChange={() => { setIsKeyVisible(prev => !prev) }} />
+              <Label htmlFor="ShowKey">Show key</Label>
+              <Checkbox id="ShowKey" checked={isKeyVisible} onChange={() => { setIsKeyVisible(prev => !prev) }} />
             </div>
             <Button type="submit" >
               {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to admin account"}

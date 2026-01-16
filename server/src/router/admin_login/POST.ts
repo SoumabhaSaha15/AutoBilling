@@ -27,7 +27,7 @@ const POST = {
       let admin = (await AdminModel.findOne({ email: req.body.email }).exec());
       if (admin === null)
         throw new ResponseError(404, 'Admin not found', 'not_found');
-      const hashResult = bcrypt.compareSync(req.body.password||'', admin.password);
+      const hashResult = bcrypt.compareSync(req.body.password || '', admin.password);
       if (!hashResult)
         throw new ResponseError(400, 'Admin not found', 'invalid_credentials');
       req.body = {

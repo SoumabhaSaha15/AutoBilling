@@ -6,7 +6,7 @@ const LoginHeader: FC = () => {
 
   return (
     <>
-      <div className="min-h-[100dvh] bg-gray-300 dark:bg-gray-900">
+      <div className="min-h-dvh bg-gray-300 dark:bg-gray-900">
         <Navbar fluid rounded>
           <Link to="/">
             <NavbarBrand as={'div'}>

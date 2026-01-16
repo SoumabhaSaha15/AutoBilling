@@ -1,8 +1,9 @@
 import OutletLoading from "../OutletLoading";
 import { FC, useEffect, Suspense } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import HeaderSection from "../components/admin/HeaderSection";
 import { useAuth } from "../contexts/Auth/admin/AuthContext";
+import HeaderSection from "../components/admin/HeaderSection";
+
 const AdminLayout: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();

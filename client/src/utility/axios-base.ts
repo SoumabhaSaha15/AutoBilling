@@ -10,12 +10,8 @@ const customFormSerializer = (data: any): FormData => {
 
     else if (Array.isArray(value)) value.forEach((item, index) => appendRecursive(`${key}[${index}]`, item)); // 3. Handle Arrays (RECURSIVE)
 
-    // 4. Handle Objects (RECURSIVE) - Instead of JSON.stringify
-    else if (value !== null && typeof value === 'object' && !(value instanceof Date)) {
-      Object.entries(value).forEach(([subKey, subValue]) =>
-        appendRecursive(`${key}[${subKey}]`, subValue)
-      );
-    }
+    else if (value !== null && typeof value === 'object' && !(value instanceof Date)) Object.entries(value).forEach(([subKey, subValue]) => appendRecursive(`${key}[${subKey}]`, subValue)); // 4. Handle Objects (RECURSIVE) - Instead of JSON.stringify
+
     else if (value !== undefined && value !== null) formData.append(key, value);  // 5. Handle Primitives
   };
   Object.entries(data).forEach(([key, value]) => appendRecursive(key, value));
@@ -43,10 +39,11 @@ base.interceptors.request.use(async config => {
 
 base.interceptors.request.use((config) => {
   const contentType = config.headers?.['Content-Type'];
-  if (contentType === 'multipart/form-data') // If we have data that isn't already FormData (like a plain object with FileList)
+  if (contentType === 'multipart/form-data')
     if (config.data && !(config.data instanceof FormData)) config.data = customFormSerializer(config.data);
+  // If we have data that isn't already FormData (like a plain object with FileList)
   return config;
-});
+}, error => Promise.reject(error));
 
 // --- Interceptor 3: Response Handling ---
 base.interceptors.response.use(

@@ -9,7 +9,6 @@ import { useToast } from "../contexts/Toast/ToastContext";
 import { Button, Label, TextInput, Spinner, Checkbox } from "flowbite-react";
 import { EmployeeSubmit, type EmployeeSubmitType } from "../validator/employee";
 const EmployeeLogin: FC = () => {
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -35,21 +34,18 @@ const EmployeeLogin: FC = () => {
       setIsLoading(false);
     }
     return () => {
-      setIsSubmitting(false);
       setIsLoading(true);
       console.clear();
     };
   }, []);
-  const { register, handleSubmit, formState: { errors } } = useForm<EmployeeSubmitType>({ resolver: zodResolver(EmployeeSubmit) });
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<EmployeeSubmitType>({ resolver: zodResolver(EmployeeSubmit) });
   const formSubmit: SubmitHandler<EmployeeSubmitType> = async (data) => {
-    setIsSubmitting(true);
     try {
       let response = await base.post('/employee_login', data);
       if (response.status == 200) navigate('/employee');
       else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);
     } catch (e) {
-      setIsSubmitting(false);
       toast.open((e as Error)?.message || "", 'alert-error', true, 2000);
     }
   };
@@ -87,7 +83,7 @@ const EmployeeLogin: FC = () => {
               placeholder="********"
               autoComplete="one-time-code"
               id="password2"
-              type={isPasswordVisible?"text":"password"}
+              type={isPasswordVisible ? "text" : "password"}
               icon={HiLockClosed}
               {...register("password")}
               onDoubleClick={e => {
@@ -99,7 +95,7 @@ const EmployeeLogin: FC = () => {
           </div>
           <div className="flex justify-between items-center gap-2">
             <Label htmlFor="remember">Show password</Label>
-            <Checkbox id="remember" checked={isPasswordVisible} onChange={()=>setIsPasswordVisible(prev=>!prev)}/>
+            <Checkbox id="remember" checked={isPasswordVisible} onChange={() => setIsPasswordVisible(prev => !prev)} />
           </div>
           <Button type="submit">
             {isSubmitting ? (<><Spinner aria-label="submit" size="sm" className="mr-2" />logging in</>) : "login to employee account"}
