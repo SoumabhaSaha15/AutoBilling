@@ -15,13 +15,13 @@ const ViewProducts: FC = () => {
   const toast = useToast();
   const [search, setSearch] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState(false);
   const [products, setProducts] = useState<ProductPaginatedType>(paginationDefault);
   const [query, setQuery] = useSearchParams();
 
   useEffect(() => {
-    ((query.size && query.get('q')) && setSearch(query.get('q') || ''));
     base
-      .get('/products', { params: { q: query.get('q') } })
+      .get('/products', { params: Object.fromEntries(query) })
       .then((res) => {
         if (res.status !== 200) throw new Error(res.statusText);
         setProducts((_) => {
@@ -56,7 +56,7 @@ const ViewProducts: FC = () => {
               <Button
                 className='p-0 h-10 w-10'
                 children={<HiFilter className='w-6 h-6' />}
-              // onClick={() => setOpenModal(true)}
+                onClick={() => setOpenModal(true)}
               />
             </div>
             <ProductTable table={products.docs} />
@@ -69,15 +69,7 @@ const ViewProducts: FC = () => {
           <SurroundedNotFound link='/admin/add-product' /> :
           <Loading />
       }
-      {/* <Button
-        className="fixed !h-16 !w-16 bottom-6 right-6 z-50 rounded-2xl !p-4 shadow-lg hover:shadow-xl transition-shadow duration-300"
-        color="blue"
-        size="lg"
-        onClick={() => {
-          setOpenModal(true);
-        }}
-        children={<HiSearch className="h-6 w-6" />}
-      /> */}
+
       {/* <Modal show={openModal} onClose={() => setOpenModal(false)} popup>
         <ModalHeader children={<span className="font-normal text-gray-500">Search pannel <Kbd>ctrl + K</Kbd></span>} className="!p-4" />
         <ModalBody children={

@@ -146,7 +146,7 @@ const ViewInvoice: FC = () => {
 
             {/* Order Summary */}
             <div className="border-t border-gray-200 pt-6">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
+              <div className="bg-linear-to-r from-blue-50 to-indigo-50 p-6 rounded-lg">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-700 mb-2">Order Summary</h3>

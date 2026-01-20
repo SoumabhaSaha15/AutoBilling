@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, Avatar
 
 type propType = z.infer<typeof ProductResponseSchema>;
 
-export const ProductTable: FC<{ table: Omit<propType, "productDescription">[] }> = ({ table }) => {
+export const ProductTable: FC<{ table: Omit<propType, "productQuantity">[] }> = ({ table }) => {
   return (
     <div className="overflow-x-auto p-2 max-h-[calc(100dvh-192px)] w-full flex flex-col sm:items-center">
       <Table hoverable className="max-w-4xl">
