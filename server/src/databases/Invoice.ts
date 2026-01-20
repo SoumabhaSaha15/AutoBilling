@@ -1,6 +1,7 @@
 import z from "zod";
 import mongoose from "mongoose";
 import { ProductModel } from "./Product.js";
+
 const OrdersValidator = z.strictObject({
   productId: z.coerce.string({ error: "product id is missing!!!" })
     .refine((v) => mongoose.Types.ObjectId.isValid(v), { message: "invalid object id" }),

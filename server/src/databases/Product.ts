@@ -8,7 +8,7 @@ const ProductValidator = z.strictObject({
   productName: z.string({ error: "product name is required" }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, "invalid user name"),
   brandName: z.string({ error: "brand name is required" }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, "invalid user name"),
   price: z.coerce.number({ error: "price is required" }).int().positive(),
-  productDescription: z.string({ error: "product description is required" }).min(10).max(200),
+  productQuantity: z.coerce.number({ error: "product quantity is required" }).int().nonnegative(),
 });
 
 export type ProductType = z.infer<typeof ProductValidator>;
@@ -55,16 +55,16 @@ const ProductSchema = new mongoose.Schema<ProductDocument>(
         message: (props: { value: string }) => `${props.value} is not valid.`,
       },
     },
-    productDescription: {
-      type: String,
-      required: [true, "description is required."],
+    productQuantity: {
+      type: Number,
+      required: [true, "product quantity is required."],
       validate: {
-        validator: (value: string) =>
-          ProductValidator.pick({ productDescription: true }).safeParse({
-            productDescription: value,
+        validator: (value: number) =>
+          ProductValidator.pick({ productQuantity: true }).safeParse({
+            productQuantity: value,
           }).success,
         message: (props: { value: string }) =>
-          `${props.value} is not a valid product description`,
+          `${props.value} is not a valid product quantity.`,
       },
     },
     productImage: {

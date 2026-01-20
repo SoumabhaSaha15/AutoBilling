@@ -12,14 +12,14 @@ const productImage = z.instanceof(FileList)
 const productName = z.string({ error: 'product name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name');
 const brandName = z.string({ error: 'brand name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name');
 const price = z.number({ error: 'price is required' }).int().positive();
-const productDescription = z.string({ error: "product description is required" }).min(10).max(200);
-
+// const productDescription = z.string({ error: "product description is required" }).min(10).max(200);
+const productQuantity = z.number({ error: "product quantity is required" }).int().nonnegative();
 const ProductSchema = z.strictObject({
   productImage,
   productName,
   brandName,
   price,
-  productDescription
+  productQuantity,
 });
 
 export const ProductResponseSchema = ProductSchema.omit({ productImage: true }).extend({
@@ -60,10 +60,10 @@ export const PartialProductSchema = z.strictObject({
   productName: productName.optional(),
   brandName: brandName.optional(),
   price: price.optional(),
-  productDescription: productDescription.optional()
+  productQuantity: productQuantity.optional()
 });
 
-export const ProductPaginatedSchema = paginatedDocx.extend({ docs: z.array(ProductResponseSchema.omit({ productDescription: true })) });
+export const ProductPaginatedSchema = paginatedDocx.extend({ docs: z.array(ProductResponseSchema.omit({ productQuantity: true })) });
 export const ProductQuery = z.strictObject({ q: z.string().optional() });
 
 export type ProductFinderType = z.infer<typeof ProductFinder>;

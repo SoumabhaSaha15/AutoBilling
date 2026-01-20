@@ -1,249 +1,98 @@
 import { FC } from 'react';
-import { InvoiceResponseType } from '../../validator/order';
+import { createTw } from "react-pdf-tailwind";
+import { type InvoiceResponseType } from '../../validator/order';
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
-import { StyleSheet } from "@react-pdf/renderer";
 
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'column',
-    backgroundColor: '#ffffff',
-    padding: 30,
-    fontFamily: 'Helvetica',
-  },
-  header: {
-    marginBottom: 20,
-    borderBottom: 1,
-    borderBottomColor: '#cccccc',
-    paddingBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerLeft: {
-    width: '30%',
-    alignItems: 'flex-start',
-  },
-  headerCenter: {
-    width: '70%',
-    alignItems: 'flex-start',
-  },
-  logo: {
-    width: 60,
-    height: 60,
-    marginBottom: 5,
-  },
-  brandName: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: '#333333',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  orderInfo: {
-    marginBottom: 20,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    marginBottom: 5,
-  },
-  infoLabel: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    width: 100,
-    color: '#666666',
-  },
-  infoValue: {
-    fontSize: 10,
-    flex: 1,
-    color: '#000000',
-  },
-  table: {
-    // display: 'table',
-    width: 'auto',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    marginBottom: 20,
-  },
-  tableRow: {
-    margin: 'auto',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#cccccc',
-    minHeight: 25,
-  },
-  tableHeader: {
-    backgroundColor: '#f5f5f5',
-  },
-  tableColProduct: {
-    width: '35%',
-    borderRightWidth: 1,
-    borderRightColor: '#cccccc',
-    padding: 5,
-  },
-  tableColBrand: {
-    width: '20%',
-    borderRightWidth: 1,
-    borderRightColor: '#cccccc',
-    padding: 5,
-  },
-  tableColPrice: {
-    width: '15%',
-    borderRightWidth: 1,
-    borderRightColor: '#cccccc',
-    padding: 5,
-    textAlign: 'center',
-  },
-  tableColQty: {
-    width: '15%',
-    borderRightWidth: 1,
-    borderRightColor: '#cccccc',
-    padding: 5,
-    textAlign: 'center',
-  },
-  tableColTotal: {
-    width: '15%',
-    padding: 5,
-    textAlign: 'center',
-  },
-  tableCellHeader: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: '#333333',
-  },
-  tableCell: {
-    fontSize: 10,
-    color: '#000000',
-  },
-  summary: {
-    marginTop: 20,
-    borderTop: 1,
-    borderTopColor: '#cccccc',
-    paddingTop: 10,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 5,
-  },
-  summaryLabel: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#333333',
-  },
-  summaryValue: {
-    fontSize: 12,
-    color: '#000000',
-  },
-  grandTotal: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#0066cc',
-  },
-  footer: {
-    marginTop: 30,
-    textAlign: 'center',
-    fontSize: 10,
-    color: '#666666',
+// 1. Initialize Tailwind for PDF
+const tw = createTw({
+  theme: {
+    extend: {
+      colors: {
+        brandBlue: "#0066cc",
+        headerGray: "#f5f5f5",
+        borderGray: "#cccccc",
+      },
+    },
   },
 });
 
-const DownloadInvoice: FC<InvoiceResponseType> = (props: InvoiceResponseType) => {
+const DownloadInvoice: FC<InvoiceResponseType> = (props) => {
+  const grandTotal = props.orders.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
   return (
     <Document title={props.id} subject="invoice" producer="auto-billing.inc">
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={tw("p-8 bg-white font-sans flex-col")}>
+
         {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Image
-              style={styles.logo}
-              src="/logo.png"
-            />
-            <Text style={styles.brandName}>Auto Billing</Text>
+        <View style={tw("flex-row items-center border-b border-borderGray pb-4 mb-5")}>
+          <View style={tw("w-1/3 items-start")}>
+            <Image style={tw("w-16 h-16 mb-1")} src="/logo.png" />
+            <Text style={tw("text-[10px] font-bold text-gray-800")}>Auto Billing</Text>
           </View>
-          <View style={styles.headerCenter}>
-            <Text style={styles.title}>Orders Reciept</Text>
+          <View style={tw("w-2/3 items-start")}>
+            <Text style={tw("text-2xl font-bold")}>Orders Receipt</Text>
           </View>
         </View>
+
         {/* Order Information */}
-        <View style={styles.orderInfo}>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Order ID:</Text>
-            <Text style={styles.infoValue}>{props.id}</Text>
+        <View style={tw("mb-5 text-[10px]")}>
+          <View style={tw("flex-row mb-1")}>
+            <Text style={tw("w-24 font-bold text-gray-500")}>Order ID:</Text>
+            <Text>{props.id}</Text>
           </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Date & Time:</Text>
-            <Text style={styles.infoValue}>{(new Date(props.dateTime)).toLocaleString('en-IN')}</Text>
+          <View style={tw("flex-row mb-1")}>
+            <Text style={tw("w-24 font-bold text-gray-500")}>Date & Time:</Text>
+            <Text>{new Date(props.dateTime).toLocaleString('en-IN')}</Text>
           </View>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Customer:</Text>
-            <Text style={styles.infoValue}>{props.customerEmail}</Text>
+          <View style={tw("flex-row mb-1")}>
+            <Text style={tw("w-24 font-bold text-gray-500")}>Customer:</Text>
+            <Text>{props.customerEmail}</Text>
           </View>
         </View>
-        {/* Order Items Table */}
-        <View style={styles.table}>
+
+        {/* Table */}
+        <View style={tw("border border-borderGray mb-5")}>
           {/* Table Header */}
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <View style={styles.tableColBrand}>
-              <Text style={styles.tableCellHeader}>Brand</Text>
-            </View>
-            <View style={styles.tableColProduct}>
-              <Text style={styles.tableCellHeader}>Product</Text>
-            </View>
-            <View style={styles.tableColPrice}>
-              <Text style={styles.tableCellHeader}>Price</Text>
-            </View>
-            <View style={styles.tableColQty}>
-              <Text style={styles.tableCellHeader}>Qty</Text>
-            </View>
-            <View style={styles.tableColTotal}>
-              <Text style={styles.tableCellHeader}>Total</Text>
-            </View>
+          <View style={tw("flex-row bg-headerGray border-b border-borderGray min-h-[25px] font-bold text-[10px]")}>
+            <Text style={tw("w-[20%] p-1 border-r border-borderGray")}>Brand</Text>
+            <Text style={tw("w-[35%] p-1 border-r border-borderGray")}>Product</Text>
+            <Text style={tw("w-[15%] p-1 border-r border-borderGray text-center")}>Price</Text>
+            <Text style={tw("w-[15%] p-1 border-r border-borderGray text-center")}>Qty</Text>
+            <Text style={tw("w-[15%] p-1 text-center")}>Total</Text>
           </View>
+
           {/* Table Rows */}
           {props.orders.map((item, index) => (
-            <View style={styles.tableRow} key={index}>
-              <View style={styles.tableColBrand}>
-                <Text style={styles.tableCell}>{item.productId.brandName}</Text>
-              </View>
-              <View style={styles.tableColProduct}>
-                <Text style={styles.tableCell}>{item.productId.productName}</Text>
-              </View>
-              <View style={styles.tableColPrice}>
-                <Text style={styles.tableCell}>Rs.{item.price}</Text>
-              </View>
-              <View style={styles.tableColQty}>
-                <Text style={styles.tableCell}>{item.quantity}</Text>
-              </View>
-              <View style={styles.tableColTotal}>
-                <Text style={styles.tableCell}>Rs.{(item.price * item.quantity)}</Text>
-              </View>
+            <View key={index} style={tw("flex-row border-b border-borderGray min-h-[25px] text-[10px]")}>
+              <Text style={tw("w-[20%] p-1 border-r border-borderGray")}>{item.productId.brandName}</Text>
+              <Text style={tw("w-[35%] p-1 border-r border-borderGray")}>{item.productId.productName}</Text>
+              <Text style={tw("w-[15%] p-1 border-r border-borderGray text-center")}>Rs.{item.price}</Text>
+              <Text style={tw("w-[15%] p-1 border-r border-borderGray text-center")}>{item.quantity}</Text>
+              <Text style={tw("w-[15%] p-1 text-center")}>Rs.{item.price * item.quantity}</Text>
             </View>
           ))}
         </View>
+
         {/* Summary */}
-        <View style={styles.summary}>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Total Items:</Text>
-            <Text style={styles.summaryValue}>{props.orders.length}</Text>
+        <View style={tw("mt-5 border-t border-borderGray pt-2")}>
+          <View style={tw("flex-row justify-between mb-1")}>
+            <Text style={tw("text-xs font-bold")}>Total Items:</Text>
+            <Text style={tw("text-xs")}>{props.orders.length}</Text>
           </View>
-          <View style={styles.summaryRow}>
-            <Text style={[styles.summaryLabel, styles.grandTotal]}>Grand Total:</Text>
-            <Text style={[styles.summaryValue, styles.grandTotal]}>Rs.
-              {props.orders.reduce((total, item) => (total + (item.price * item.quantity)), 0)}
-            </Text>
+          <View style={tw("flex-row justify-between mt-2")}>
+            <Text style={tw("text-base font-bold text-brandBlue")}>Grand Total:</Text>
+            <Text style={tw("text-base font-bold text-brandBlue")}>Rs.{grandTotal}</Text>
           </View>
         </View>
-        <View style={styles.footer}>
+
+        {/* Footer */}
+        <View style={tw("mt-8 text-center text-[10px] text-gray-500")}>
           <Text>Thank you for your order!</Text>
           <Text>Generated on {new Date().toLocaleDateString("en-IN")} by Auto Billing.inc</Text>
         </View>
       </Page>
     </Document>
-  )
-}
+  );
+};
 
 export default DownloadInvoice;
