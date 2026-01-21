@@ -109,17 +109,17 @@ const AddProduct: FC = () => {
 
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="product-description">
-              Product Description
-              {errors.productDescription && (<div className="text-red-500">{errors.productDescription.message}</div>)}
+            <Label htmlFor="product-quantity">
+              Product Quantity
+              {errors.productQuantity && (<div className="text-red-500">{errors.productQuantity.message}</div>)}
             </Label>
           </div>
           <TextInput
-            id="product-description"
-            type="text"
-            placeholder="product description"
+            id="product-quantity"
+            type="number"
+            placeholder="product quantity"
             icon={HiPencilAlt}
-            {...register("productDescription")}
+            {...register("productQuantity")}
             required
             shadow
           />
