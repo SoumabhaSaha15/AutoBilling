@@ -1,7 +1,8 @@
 import z from 'zod';
+import page from './pagination.js';
 const lazyLoadingQueryValidator = z.object({
   q: z.string().optional(),
-  page: z.coerce.number().int().min(0).optional()
+  page,
 }).refine((params) => {
   if (params.page === undefined)
     params.page = 1;

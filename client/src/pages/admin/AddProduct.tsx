@@ -14,7 +14,12 @@ const AddProduct: FC = () => {
   const defaultUrl = '/upload-image.svg';
   const [previewUrl, setPreviewUrl] = useState(defaultUrl);
   const toast = useToast();
-  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<ProductSchemaType>({ resolver: zodResolver(ProductSchema) });
+  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<ProductSchemaType>({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
+    resolver: zodResolver(ProductSchema)
+  });
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedImage = watch("productImage");
   useEffect(() => {
     if (watchedImage && watchedImage[0]) {
@@ -24,31 +29,34 @@ const AddProduct: FC = () => {
     } else setPreviewUrl(defaultUrl);
   }, [watchedImage]);
 
-  const productSubmit: SubmitHandler<ProductSchemaType> = (data) => {
-    base
-      .postForm('/products', data)
-      .then(({ data, status, statusText }) => {
-        if (status !== 200 && status !== 201) {
-          toast.open(statusText, 'alert-error', true, 5000);
-          reset();
-        }
-        else {
-          let safeParsed = ProductResponseSchema.safeParse(data);
-          (safeParsed.success) ?
-            toast.open(`${statusText} ${safeParsed.data.id}`, 'alert-success', true, 5000) :
-            toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
-        }
-      })
-      .catch((e: Error) => {
-        toast.open(e.message, 'alert-error', true, 5000);
-      });
+  const productSubmit: SubmitHandler<ProductSchemaType> = async (postData) => {
+    try {
+      const { data, status, statusText } = await base.postForm('/products', postData);
+      if (status !== 200 && status !== 201) {
+        toast.open(statusText, 'alert-error', true, 5000);
+        reset();
+      }
+      else {
+        const safeParsed = ProductResponseSchema.safeParse(data);
+        if (safeParsed.success) toast.open(`${statusText} ${safeParsed.data.id}`, 'alert-success', true, 5000);
+        else toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      toast.open(e.message, 'alert-error', true, 5000);
+    }
+
   }
 
   return (
     <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center place-items-center">
       <form className="flex max-w-[95%] md:w-md sm:w-sm flex-col gap-4"
         name="adminLogin"
-        onSubmit={handleSubmit(productSubmit)}
+        onSubmit={
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          //@ts-expect-error
+          handleSubmit(productSubmit)
+        }
         encType="multipart/form-data"
       >
         <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Add Product</h3>

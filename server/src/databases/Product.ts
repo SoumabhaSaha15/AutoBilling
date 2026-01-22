@@ -95,8 +95,6 @@ const ProductSchema = new mongoose.Schema<ProductDocument>(
   { timestamps: true }
 );
 
-ProductSchema.index({ productDescription: "text" });
-
 ProductSchema.plugin(mongoosePaginate);
 
 const ProductModel = mongoose.model<

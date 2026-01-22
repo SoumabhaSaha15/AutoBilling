@@ -18,10 +18,11 @@ const EmployeeLogin: FC = () => {
       base
         .get('/employee_login')
         .then((res) => {
-          (res.status === 200) ? navigate('/employee') : (() => {
+          if (res.status === 200) navigate('/employee')
+          else {
             setIsLoading(false);
             toast.open("No employee logged pls login", 'alert-error', true, 2000);
-          })();
+          };
         })
         .catch((e) => {
           setIsLoading(false);
@@ -37,11 +38,11 @@ const EmployeeLogin: FC = () => {
       setIsLoading(true);
       console.clear();
     };
-  }, []);
+  }, [navigate, toast]);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<EmployeeSubmitType>({ resolver: zodResolver(EmployeeSubmit) });
   const formSubmit: SubmitHandler<EmployeeSubmitType> = async (data) => {
     try {
-      let response = await base.post('/employee_login', data);
+      const response = await base.post('/employee_login', data);
       if (response.status == 200) navigate('/employee');
       else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);
@@ -87,7 +88,7 @@ const EmployeeLogin: FC = () => {
               icon={HiLockClosed}
               {...register("password")}
               onDoubleClick={e => {
-                let inputType = e.currentTarget.type;
+                const inputType = e.currentTarget.type;
                 e.currentTarget.type = inputType == "text" ? "password" : "text";
               }}
               required shadow

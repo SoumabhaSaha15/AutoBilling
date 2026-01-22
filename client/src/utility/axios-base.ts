@@ -1,8 +1,9 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const customFormSerializer = (data: any): FormData => {
+const customFormSerializer = (data: object): FormData => {
   const formData = new FormData();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const appendRecursive = (key: string, value: any) => {
     if (value instanceof FileList) [...value].forEach((file) => formData.append(key, file));  // 1. Handle FileList (Preserved from your fix)
 

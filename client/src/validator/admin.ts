@@ -1,4 +1,4 @@
-import z from "zod";
+import * as z from 'zod'; // valid usage
 export const AdminSubmit = z.strictObject({
   email: z.email('invalid email'),
   password: z.string({ error: 'password is required' })

@@ -16,6 +16,7 @@ const AddProduct: FC = () => {
   const toast = useToast();
   const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<EmployeeRegisterType>({ resolver: zodResolver(EmployeeRegister) });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedImage = watch("profilePicture");
 
   useEffect(() => {
@@ -26,22 +27,22 @@ const AddProduct: FC = () => {
     } else setPreviewUrl(defaultUrl);
   }, [watchedImage]);
 
-  const newEmployeeSubmit: SubmitHandler<EmployeeRegisterType> = (data) => {
-    base
-      .postForm('/register_employee', data)
-      .then(({ data, status, statusText }) => {
-        if (status != 200) {
-          toast.open(statusText, 'alert-error', true, 5000);
-          reset();
-        }
-        else {
-          let safeParsed = EmployeeRegisterResopnse.safeParse(data);
-          (safeParsed.success) ?
-            toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000) :
-            toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
-        }
-      })
-      .catch(console.error);
+  const newEmployeeSubmit: SubmitHandler<EmployeeRegisterType> = async (postData) => {
+    try {
+      const { data, status, statusText } = await base.postForm('/register_employee', postData)
+      if (status != 200) {
+        toast.open(statusText, 'alert-error', true, 5000);
+        reset();
+      }
+      else {
+        const safeParsed = EmployeeRegisterResopnse.safeParse(data);
+        if (safeParsed.success) toast.open('product added id:' + safeParsed.data.id, 'alert-success', true, 5000);
+        else toast.open(prettifyError(safeParsed.error), 'alert-error', true, 5000);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error(error)
+    }
   }
 
   return (

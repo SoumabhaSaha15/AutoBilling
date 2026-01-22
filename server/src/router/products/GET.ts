@@ -13,6 +13,7 @@ const GET = {
   sendData: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { q: textSearchTerm, page } = lazyLoadingQueryValidator.parse(req.query);
+      console.log(req.query);
       const query: any = textSearchTerm ? { $text: { $search: textSearchTerm, $caseSensitive: false } } : {};
       const { docs, ...data } = await ProductModel.paginate(query, {
         page,

@@ -11,9 +11,14 @@ const productImage = z.instanceof(FileList)
   );
 const productName = z.string({ error: 'product name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name').trim();
 const brandName = z.string({ error: 'brand name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name').trim();
-const price = z.number({ error: 'price is required' }).int().positive();
-const productQuantity = z.number({ error: "product quantity is required" }).int().nonnegative();
-
+const price = z.preprocess(
+  (val) => (val === "" ? undefined : val),
+  z.coerce.number().int().positive()
+);
+const productQuantity = z.preprocess(
+  (val) => (val === "" ? undefined : val),
+  z.coerce.number().int().nonnegative()
+);
 
 const ProductSchema = z.strictObject({
   productImage,
@@ -29,13 +34,16 @@ export const ProductResponseSchema = ProductSchema
     productImage: z.url({ error: "product image is required." }),
     id,
   });
-
-export const PartialProductSchema = z.strictObject({
-  productImage: productImage.optional(),
+const optionalProductImage = z.instanceof(FileList)
+  .refine(files => files.length === 0 || files.length <= 1, "Only one image allowed")
+  .refine(files => files.length === 0 || files[0]?.size <= 2 ** 20, "Max image size is 1MB")
+  .refine(files => files.length === 0 || ['image/jpeg', 'image/png', 'image/webp'].includes(files[0]?.type), "Supported formats: .jpg, .png, .webp").optional()
+export const PartialProductSchema = z.object({
+  productImage: optionalProductImage,
   productName: productName.optional(),
   brandName: brandName.optional(),
   price: price.optional(),
-  productQuantity: productQuantity.optional()
+  productQuantity: productQuantity.optional(),
 });
 
 export const ProductFinder = z.object({

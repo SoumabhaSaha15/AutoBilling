@@ -17,8 +17,13 @@ const UpdateProduct: FC = () => {
   const [previewUrl, setPreviewUrl] = useState<string>(defaultUrl);
   const { id } = useParams();
   const toast = useToast();
-  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting, isDirty } } = useForm<PartialProductSchemaType>({ resolver: zodResolver(PartialProductSchema) });
+  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting, isDirty } } = useForm<PartialProductSchemaType>({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
+    resolver: zodResolver(PartialProductSchema)
+  });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedImage = watch("productImage");
 
   useEffect(() => {
@@ -27,7 +32,8 @@ const UpdateProduct: FC = () => {
       setPreviewUrl(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     } else setPreviewUrl((prev) => prev.includes('https://res.cloudinary.com/') ? prev : defaultUrl);
-  }, [watchedImage]);
+  },
+    [defaultUrl, watchedImage]);
 
   useEffect(() => {
     if (!id) return;
@@ -45,17 +51,19 @@ const UpdateProduct: FC = () => {
           else console.error(err);
         }
       })
-  }, [id]);
+  }, [id, reset, toast]);
 
-  const productSubmit: SubmitHandler<PartialProductSchemaType> = (patchData) => {
-    base
-      .patchForm(`/products/${id}`, patchData)
-      .then(({ data, status, statusText }) => {
-        if (status === 204) {
-          toast.open(`Updated successfully:- ${status}`, 'alert-success');
-          reset(patchData);
-        } else toast.open(`${statusText} ${data}`, 'alert-error');
-      });
+  const productSubmit: SubmitHandler<PartialProductSchemaType> = async (patchData) => {
+    try {
+      const { data, status, statusText } = await base.patchForm(`/products/${id}`, patchData)
+      if (status === 204) {
+        toast.open(`Updated successfully:- ${status}`, 'alert-success');
+        reset(patchData);
+      } else toast.open(`${statusText} ${data}`, 'alert-error');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      toast.open(e.message, 'alert-error', true, 5000);
+    }
   }
 
   if (!id) return (< SurroundedNotFound link="/admin/products" />)
@@ -134,7 +142,6 @@ const UpdateProduct: FC = () => {
             placeholder="product quantity"
             icon={HiPencilAlt}
             {...register("productQuantity")}
-            required
             shadow
           />
         </div>
@@ -161,6 +168,7 @@ const UpdateProduct: FC = () => {
             (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"updating product"}</>)
             : ("update product")
         }</Button>
+
       </form>
     </div>
   )

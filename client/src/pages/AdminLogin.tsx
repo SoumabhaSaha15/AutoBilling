@@ -19,12 +19,13 @@ const AdminLogin: FC = () => {
       base
         .get('/admin_login')
         .then((res) => {
-          (res.status === 200) ? navigate('/admin') : (() => {
+          if (res.status === 200) navigate('/admin');
+          else {
             setIsLoading(false);
             toast.open("No admin logged in please login.", 'alert-error', true, 2000);
-          })();
+          }
         })
-        .catch((_) => {
+        .catch(() => {
           toast.open("Failed to load admin login page", 'alert-error', true, 2000);
           setIsLoading(false);
         });
@@ -36,11 +37,11 @@ const AdminLogin: FC = () => {
       setIsLoading(true);
       console.clear();
     };
-  }, []);
+  }, [navigate, toast]);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
     try {
-      let response = await base.post('/admin_login', data);
+      const response = await base.post('/admin_login', data);
       if (response.status == 200) navigate('/admin');
       else throw new Error(response.data?.message || "Login failed");
       toast.open("login successful.", 'alert-success', true, 2000);

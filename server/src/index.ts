@@ -20,6 +20,7 @@ try {
   const APP = express()
     .use(cors({ origin: process.env.CORS_URL, credentials: true }))
     .use(express.static(path.join(import.meta.dirname, "./../public")))
+    .set('query parser', 'extended')
     .use(express.json())
     .use(express.urlencoded({ extended: true }))
     .use(cookieParser())

@@ -1,20 +1,8 @@
 import z from "zod";
-export const ProductFinder = z.object({
-  id: z.string()
-    .transform((val) => val.trim() === '' ? undefined : val)
-    .optional()
-    .refine((val) => !val || /^[0-9a-fA-F]/.test(val), 'invalid id'),
-
-  brandName: z.string()
-    .transform((val) => val.trim() === '' ? undefined : val)
-    .optional()
-    .refine((val) => !val || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid brand name'),
-
-  productName: z.string()
-    .transform((val) => val.trim() === '' ? undefined : val)
-    .optional()
-    .refine((val) => !val || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid product name'),
-
+export const ProductFinder = z.strictObject({
+  id: z.string().trim().regex(/^[0-9a-fA-F]{1,24}$/, 'invalid id').optional(),
+  brandName: z.string().trim().regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name').optional(),
+  productName: z.string().trim().regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name').optional(),
   price: z.string().optional().transform(str => {
     const num = parseInt(str || '', 10);
     return (Number.isInteger(num) && num > 0) ? str : undefined;

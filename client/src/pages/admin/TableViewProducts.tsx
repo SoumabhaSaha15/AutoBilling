@@ -1,5 +1,5 @@
 import z from "zod";
-import _ from 'lodash';
+import qs from 'qs';
 import Loading from '../../Loading';
 import base from '../../utility/axios-base';
 import { FC, useEffect, useState } from "react";
@@ -22,26 +22,33 @@ const ViewProducts: FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [products, setProducts] = useState<ProductPaginatedType>(paginationDefault);
-  const { register, handleSubmit, formState: { errors } } = useForm<ProductFinderType>({ resolver: zodResolver(ProductFinder) });
+  const { register, handleSubmit, formState: { errors } } = useForm<ProductFinderType>({
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
+    resolver: zodResolver(ProductFinder)
+  });
   const Operators = ProductFinder.shape.price.unwrap().def.innerType.shape.operator.options;
 
   const applySearch: SubmitHandler<ProductFinderType> = (data) => {
-    let transformed = ProductFinderTransformer.parse(data);
-    setQuery(transformed as Record<string, string>);
+    const transformed = ProductFinderTransformer.parse(data);
+    console.log(transformed);
+    setQuery(qs.stringify(transformed));
+    setOpenModal(false);
   }
 
   useEffect(() => {
+    const parsedParams = qs.parse(query.toString(), { allowDots: true });
     base
-      .get('/products', { params: Object.fromEntries(query) })
+      .get('/products', { params: parsedParams })
       .then((res) => {
         if (res.status !== 200) throw new Error(res.statusText);
-        setProducts((_) => {
+        setProducts(() => {
           setTimeout(() => setIsLoaded(true), 1000);
           return ProductPaginatedSchema.parse(res.data);
         });
       })
       .catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
-  }, [query]);
+  }, [query, toast]);
 
   return (
     <div className='flex flex-col justify-center items-center'>
@@ -101,7 +108,6 @@ const ViewProducts: FC = () => {
                 id="brand-name"
                 type="text"
                 placeholder="brand name"
-                icon={HiSearch}
                 {...register('brandName')}
                 shadow
               />
@@ -118,7 +124,6 @@ const ViewProducts: FC = () => {
                 id="product-name"
                 type="text"
                 placeholder="product name"
-                icon={HiSearch}
                 {...register('productName')}
                 shadow
               />
@@ -133,9 +138,8 @@ const ViewProducts: FC = () => {
               </div>
               <TextInput
                 id="price-value"
-                type="text"
+                type="number"
                 placeholder="price range"
-                icon={HiSearch}
                 {...register('price.value')}
                 shadow
               />

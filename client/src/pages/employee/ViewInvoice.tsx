@@ -20,15 +20,15 @@ const ViewInvoice: FC = () => {
     base.get(`/invoice/${id}`).then((res) => {
       const { data, success, error } = InvoiceResponse.safeParse(res.data);
       console.log(data, error && prettifyError(error));
-      (success) ?
-        setLoading((_) => {
+      if (success)
+        setLoading(() => {
           setInvoiceData(data);
           return false;
-        }) :
-        toast.open(prettifyError(error), 'alert-error', true, 5000);
+        })
+      else toast.open(prettifyError(error), 'alert-error', true, 5000);
       console.log(res.data);
     }).catch(console.log);
-  }, [id]);
+  }, [id, toast]);
 
   const pdfDocument = useMemo(() => {
     return (invoiceData) ?
