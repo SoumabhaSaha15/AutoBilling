@@ -10,6 +10,7 @@ const AdminLayout: FC = () => {
     if (auth.userDetails == null) {
       auth.login(() => { }, () => { navigate('/login/admin'); })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

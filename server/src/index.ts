@@ -11,7 +11,7 @@ import errorHadler from "./configurations/error.js";
 import sessionConfig from "./configurations/session.js";
 import listenCallback from "./utility/listen-callback.js";
 import cloudinaryConfig from "./configurations/cloudinary.js";
-import { csrfSynchronisedProtection, generateToken } from "./configurations/csrf.js";
+import { csrfSynchronisedProtection, csrfTokenMiddleware } from "./configurations/csrf.js";
 
 try {
   dotenv.config({ quiet: true });
@@ -25,11 +25,7 @@ try {
     .use(express.urlencoded({ extended: true }))
     .use(cookieParser())
     .use(sessionConfig())
-    .use((req, res, next) => {
-      const token = generateToken(req);
-      res.cookie("csrftoken", token, { sameSite: "lax" });
-      next();
-    })
+    .use(csrfTokenMiddleware)
     .use(csrfSynchronisedProtection);
 
   if (process.env.MODE === 'prod') APP.use('/api', router).get(/^\/(?!api\/).*/, (_, res) => res.sendFile(path.join(import.meta.dirname, '../public/index.html')));

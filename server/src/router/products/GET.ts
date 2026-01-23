@@ -1,6 +1,7 @@
 import { ProductModel } from '../../databases/Product.js';
 import { Request, Response, NextFunction } from "express";
 import { lazyLoadingQueryValidator } from '../../validators/lazyLodingQuery.js';
+import { ProductFinder } from '../../validators/productFilter.js';
 const GET = {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {
     try {
@@ -13,7 +14,7 @@ const GET = {
   sendData: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { q: textSearchTerm, page } = lazyLoadingQueryValidator.parse(req.query);
-      console.log(req.query);
+      console.log(ProductFinder.safeParse(req.query));
       const query: any = textSearchTerm ? { $text: { $search: textSearchTerm, $caseSensitive: false } } : {};
       const { docs, ...data } = await ProductModel.paginate(query, {
         page,

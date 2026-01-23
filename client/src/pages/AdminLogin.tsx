@@ -37,7 +37,8 @@ const AdminLogin: FC = () => {
       setIsLoading(true);
       console.clear();
     };
-  }, [navigate, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<AdminSubmitType>({ resolver: zodResolver(AdminSubmit) });
   const formSubmit: SubmitHandler<AdminSubmitType> = async (data) => {
     try {
@@ -67,7 +68,6 @@ const AdminLogin: FC = () => {
               <TextInput
                 id="admin-email"
                 type="email"
-                // className='w-[95%] md:w-md sm:w-sm'
                 placeholder="name@flowbite.com"
                 {...register("email")}
                 icon={HiMail}

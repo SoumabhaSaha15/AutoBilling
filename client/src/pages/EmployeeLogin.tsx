@@ -38,7 +38,8 @@ const EmployeeLogin: FC = () => {
       setIsLoading(true);
       console.clear();
     };
-  }, [navigate, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<EmployeeSubmitType>({ resolver: zodResolver(EmployeeSubmit) });
   const formSubmit: SubmitHandler<EmployeeSubmitType> = async (data) => {
     try {

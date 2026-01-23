@@ -8,9 +8,9 @@ const AdminLayout: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
-    if (auth.userDetails == null) {
-      auth.login(() => { }, () => { navigate('/login/admin'); })
-    }
+    if (auth.userDetails === null)
+      auth.login(() => { }, () => { navigate('/login/admin'); });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

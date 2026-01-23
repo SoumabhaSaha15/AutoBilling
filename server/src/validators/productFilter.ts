@@ -1,12 +1,17 @@
 import z from "zod";
+import page from "./pagination";
 export const ProductFinder = z.strictObject({
   id: z.string().trim().regex(/^[0-9a-fA-F]{1,24}$/, 'invalid id').optional(),
   brandName: z.string().trim().regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name').optional(),
   productName: z.string().trim().regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name').optional(),
-  price: z.string().optional().transform(str => {
-    const num = parseInt(str || '', 10);
-    return (Number.isInteger(num) && num > 0) ? str : undefined;
-  })
+  price: z.strictObject({
+    value: z.coerce.number().int().positive().optional(),
+    operator: z.enum(['gt', 'lt', 'gte', 'lte', 'eq']).default('lte'),
+  }).transform(price => {
+    if (price.value === undefined) return undefined;
+    return price;
+  }).optional(),
+  page,
 });
 
 export const FinderFilter = ProductFinder.transform((value) => {
@@ -20,7 +25,7 @@ export const FinderFilter = ProductFinder.transform((value) => {
     }
   });
   if (Object.hasOwn(value, 'price') && value.price)
-    filter['price'] = { $lte: parseInt(value.price, 10) };
-  return filter;
+    // filter['price'] = { $lte: parseInt(value.price?.value||"", 10) };
+    return filter;
 })
 export type ProductFinderType = z.infer<typeof ProductFinder>;

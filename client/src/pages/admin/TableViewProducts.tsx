@@ -48,7 +48,8 @@ const ViewProducts: FC = () => {
         });
       })
       .catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
-  }, [query, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   return (
     <div className='flex flex-col justify-center items-center'>

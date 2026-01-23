@@ -11,14 +11,8 @@ const productImage = z.instanceof(FileList)
   );
 const productName = z.string({ error: 'product name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name').trim();
 const brandName = z.string({ error: 'brand name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name').trim();
-const price = z.preprocess(
-  (val) => (val === "" ? undefined : val),
-  z.coerce.number().int().positive()
-);
-const productQuantity = z.preprocess(
-  (val) => (val === "" ? undefined : val),
-  z.coerce.number().int().nonnegative()
-);
+const productQuantity = z.coerce.number().int().nonnegative();
+const price = z.coerce.number().int().positive();
 
 const ProductSchema = z.strictObject({
   productImage,
@@ -40,15 +34,15 @@ const optionalProductImage = z.instanceof(FileList)
   .refine(files => files.length === 0 || ['image/jpeg', 'image/png', 'image/webp'].includes(files[0]?.type), "Supported formats: .jpg, .png, .webp").optional()
 export const PartialProductSchema = z.object({
   productImage: optionalProductImage,
-  productName: productName.optional(),
-  brandName: brandName.optional(),
-  price: price.optional(),
-  productQuantity: productQuantity.optional(),
+  productName: productName,
+  brandName: brandName,
+  price: price,
+  productQuantity: productQuantity,
 });
 
 export const ProductFinder = z.object({
-  brandName: brandName.optional(),
-  productName: productName.optional(),
+  brandName: z.string().optional().refine(val => val === undefined || val.trim() === '' || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid brand name'),
+  productName: z.string().optional().refine(val => val === undefined || val.trim() === '' || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid product name'),
   price: z.object({
     value: price.optional(),
     operator: z.enum(['gt', 'lt', 'gte', 'lte', 'eq']),
