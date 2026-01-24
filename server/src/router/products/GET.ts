@@ -1,7 +1,7 @@
 import { ProductModel } from '../../databases/Product.js';
 import { Request, Response, NextFunction } from "express";
 import { lazyLoadingQueryValidator } from '../../validators/lazyLodingQuery.js';
-import { ProductFinder } from '../../validators/productFilter.js';
+import { ProductQueryTransformer } from '../../validators/productFilter.js';
 const GET = {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {
     try {
@@ -13,15 +13,15 @@ const GET = {
   },
   sendData: async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { q: textSearchTerm, page } = lazyLoadingQueryValidator.parse(req.query);
-      console.log(ProductFinder.safeParse(req.query));
-      const query: any = textSearchTerm ? { $text: { $search: textSearchTerm, $caseSensitive: false } } : {};
-      const { docs, ...data } = await ProductModel.paginate(query, {
-        page,
-        select: "-__v -createdAt -updatedAt -productPublicId",
-        lean: true
-      });
-      res.status(200).json({ ...data, docs: docs.map(({ _id, productQuantity, ...productData }) => productData) });
+      const { queryBuilder, page } = ProductQueryTransformer.parse(req.query);
+      const data = await ProductModel.aggregatePaginate(
+        ProductModel.aggregate([
+          queryBuilder,
+          { $addFields: { id: "$_id" } },
+          { $project: { _id: 0, __v: 0, productPublicId: 0, productQuantity: 0, createdAt: 0, updatedAt: 0 } },
+        ]),
+        { page });
+      res.status(200).json(data);
     } catch (err) {
       next(err);
     }

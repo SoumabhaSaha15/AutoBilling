@@ -26,27 +26,29 @@ const ViewProducts: FC = () => {
 
   const applySearch: SubmitHandler<z.infer<typeof ProductQuery>> = (data) => {
     reset();
-    setQuery(_ => data);
+    setQuery(() => data);
     setOpenModal(false);
   }
 
-  const handleScroll = useCallback(_.throttle(() => {
-    const docEl = document.documentElement;
-    if (docEl.clientHeight + window.pageYOffset >= docEl.scrollHeight - 50 && hasMore) {
-      setSkip(prevSkip => {
-        const newSkip = (prevSkip === 0) ? 20 : prevSkip + 10;
-        const param = new URLSearchParams({ skip: `${newSkip}`, limit: '10' });
-        if (query.get('q')) param.append('q', query.get('q') || '');
-        base.get(`/products?${param.toString()}`).then(res => {
-          if (res.status !== 200) throw new Error(res.statusText);
-          const parsedData = ProductArray.parse(res.data);
-          setProducts(prev => prev.concat(parsedData));
-          setHasMore(parsedData.length > 0);
-        }).catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
-        return newSkip;
-      });
-    }
-  }, 1500), [query]);
+  const handleScroll = useCallback(
+    // eslint-disable-next-line react-hooks/use-memo
+    _.throttle(() => {
+      const docEl = document.documentElement;
+      if (docEl.clientHeight + window.pageYOffset >= docEl.scrollHeight - 50 && hasMore) {
+        setSkip(prevSkip => {
+          const newSkip = (prevSkip === 0) ? 20 : prevSkip + 10;
+          const param = new URLSearchParams({ skip: `${newSkip}`, limit: '10' });
+          if (query.get('q')) param.append('q', query.get('q') || '');
+          base.get(`/products?${param.toString()}`).then(res => {
+            if (res.status !== 200) throw new Error(res.statusText);
+            const parsedData = ProductArray.parse(res.data);
+            setProducts(prev => prev.concat(parsedData));
+            setHasMore(parsedData.length > 0);
+          }).catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
+          return newSkip;
+        });
+      }
+    }, 1500), [query]);
 
   useEffect(() => {
     if (hasMore === false) return window.removeEventListener("scroll", handleScroll);

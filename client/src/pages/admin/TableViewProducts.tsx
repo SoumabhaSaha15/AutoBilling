@@ -1,10 +1,11 @@
 import z from "zod";
 import qs from 'qs';
 import Loading from '../../Loading';
+import { HiSearch } from "react-icons/hi";
 import base from '../../utility/axios-base';
+import { useHotkeys } from "react-hotkeys-hook";
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from 'react-router-dom';
-import { HiSearch, HiFilter } from "react-icons/hi";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SurroundedNotFound } from '../SurroundedNotFound';
 import { useToast } from "../../contexts/Toast/ToastContext";
@@ -18,7 +19,6 @@ const ViewProducts: FC = () => {
 
   const toast = useToast();
   const [query, setQuery] = useSearchParams();
-  const [search, setSearch] = useState<string>('');
   const [openModal, setOpenModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [products, setProducts] = useState<ProductPaginatedType>(paginationDefault);
@@ -30,9 +30,11 @@ const ViewProducts: FC = () => {
   const Operators = ProductFinder.shape.price.unwrap().def.innerType.shape.operator.options;
 
   const applySearch: SubmitHandler<ProductFinderType> = (data) => {
-    const transformed = ProductFinderTransformer.parse(data);
-    console.log(transformed);
-    setQuery(qs.stringify(transformed));
+    const { price, ...transformed } = ProductFinderTransformer.parse(data);
+    if (price === undefined || price?.value === 0) {
+      console.log(transformed);
+      setQuery(qs.stringify(transformed));
+    } else setQuery(qs.stringify({ ...transformed, price }));
     setOpenModal(false);
   }
 
@@ -43,49 +45,42 @@ const ViewProducts: FC = () => {
       .then((res) => {
         if (res.status !== 200) throw new Error(res.statusText);
         setProducts(() => {
-          setTimeout(() => setIsLoaded(true), 1000);
-          return ProductPaginatedSchema.parse(res.data);
+          try {
+            const parsed = ProductPaginatedSchema.parse(res.data);
+            setTimeout(() => setIsLoaded(true), 1000);
+            return parsed;
+          } catch (error) {
+            setTimeout(() => setIsLoaded(true), 1000);
+            if (error instanceof z.ZodError) toast.open(z.prettifyError(error), 'alert-error', true, 5000);
+            else toast.open((error as Error).message, 'alert-error');
+            return paginationDefault;
+          }
         });
       })
-      .catch((error: Error) => toast.open(error.message, 'alert-error', true, 5000));
+      .catch((error: Error) => {
+        setTimeout(() => setIsLoaded(true), 1000);
+        if (error instanceof z.ZodError) toast.open(z.prettifyError(error), 'alert-error', true, 5000);
+        else toast.open(error.message, 'alert-error');
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  useHotkeys('mod+k', () => setOpenModal(true), { preventDefault: true });
   return (
     <div className='flex flex-col justify-center items-center'>
       {(products?.docs.length && isLoaded) ?
         (
           <>
-            <div className="w-full py-4 px-2 flex items-center justify-center">
-              <TextInput
-                type='search'
-                placeholder='Search product [id]'
-                className='pr-2'
-                icon={HiSearch}
-                enterKeyHint='search'
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                onKeyDown={(e) => {
-                  try {
-                    if (e.key == "Enter") {
-                      if (e.currentTarget.value === '') return;
-                      z.string().max(24).regex(/^[0-9a-fA-F]/).parse(e.currentTarget.value);
-                      setQuery({ id: e.currentTarget.value });
-                    }
-                  } catch (error) {
-                    toast.open(((error instanceof Error) ? (error.message) : ('Invalid product id')), 'alert-error');
-                  }
-                }}
-              />
-              <Button
-                className='p-0 h-10 w-10'
-                children={<HiFilter className='w-6 h-6' />}
-                onClick={() => setOpenModal(true)}
-              />
-            </div>
             <ProductTable table={products.docs} />
             <div className="flex overflow-x-auto justify-center">
-              <Pagination currentPage={products.page} totalPages={products.totalPages} onPageChange={(pageNumber) => { setQuery(prev => ({ ...prev, page: pageNumber })) }} />
+              <Pagination
+                currentPage={products.page}
+                totalPages={products.totalPages}
+                onPageChange={(pageNumber) => setQuery(prev => qs.stringify({
+                  ...qs.parse(prev.toString()),
+                  page: pageNumber
+                }))}
+              />
             </div>
           </>
 
@@ -94,10 +89,35 @@ const ViewProducts: FC = () => {
           <Loading />
       }
 
+      <Button
+        className="fixed h-16! w-16! bottom-6 right-6 z-50 rounded-2xl p-4! shadow-lg hover:shadow-xl transition-shadow duration-300"
+        color="blue"
+        size="lg"
+        onClick={() => {
+          setOpenModal(true);
+        }}
+        children={<HiSearch className="h-6 w-6" />}
+      />
       <Modal dismissible={true} show={openModal} onClose={() => setOpenModal(false)} popup>
         <ModalHeader children={<span className="font-normal text-base"> Product Filter <Kbd>ctrl + K</Kbd></span>} className="p-4!" />
         <ModalBody children={
           <form className="space-y-6" onSubmit={handleSubmit(applySearch)} >
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="id">
+                  id
+                  {errors.id && (<div className="text-red-500">{errors.id.message}</div>)}
+                </Label>
+              </div>
+              <TextInput
+                id="id"
+                type="text"
+                placeholder="id"
+                {...register('id')}
+                shadow
+              />
+            </div>
+
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="brand-name">

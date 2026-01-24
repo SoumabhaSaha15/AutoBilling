@@ -1,6 +1,7 @@
 import z from "zod";
-import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
+import mongoose, { AggregatePaginateModel } from "mongoose";
+import aggrigatePaginate from "mongoose-aggregate-paginate-v2";
 
 const ProductValidator = z.strictObject({
   productImage: z.url({ message: "not an url" }).startsWith("https://res.cloudinary.com/", { message: "not a proper profilePicture url" }),
@@ -96,10 +97,12 @@ const ProductSchema = new mongoose.Schema<ProductDocument>(
 );
 
 ProductSchema.plugin(mongoosePaginate);
+ProductSchema.plugin(aggrigatePaginate);
 
 const ProductModel = mongoose.model<
   ProductDocument,
   mongoose.PaginateModel<ProductDocument>
+  & AggregatePaginateModel<ProductDocument>
 >("product_model", ProductSchema);
 
 export { ProductModel, ProductSchema, ProductValidator };

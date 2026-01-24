@@ -13,19 +13,15 @@ export const ProductFinder = z.strictObject({
   }).optional(),
   page,
 });
-
-export const FinderFilter = ProductFinder.transform((value) => {
-  const key = ['brandName', 'productName'];
-  let filter: any = {};
-  if (value.id != undefined) return { _id: value.id };
-  key.forEach(key => {
-    if (Object.hasOwn(value, key)) {
-      //@ts-ignore
-      filter[key] = { $regex: value[key], $options: 'i' };
-    }
-  });
-  if (Object.hasOwn(value, 'price') && value.price)
-    // filter['price'] = { $lte: parseInt(value.price?.value||"", 10) };
-    return filter;
+export const ProductQueryTransformer = ProductFinder.transform((value) => {
+  const queryBuilder: any = { $match: {} };
+  if (value.id) queryBuilder.$match['$expr'] = { $regexMatch: { input: { $toString: "$_id" }, regex: value.id, options: "i" } };
+  if (value.brandName) queryBuilder.$match['brandName'] = { $regex: value.brandName, $options: "i" };
+  if (value.productName) queryBuilder.$match['productName'] = { $regex: value.productName, $options: "i" };
+  if (value.price) queryBuilder.$match['price'] = { [`$${value.price.operator}`]: value.price.value };
+  return {
+    queryBuilder,
+    page: value.page,
+  };
 })
 export type ProductFinderType = z.infer<typeof ProductFinder>;

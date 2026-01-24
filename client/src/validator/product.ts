@@ -41,10 +41,11 @@ export const PartialProductSchema = z.object({
 });
 
 export const ProductFinder = z.object({
+  id: z.string().optional().refine(val => val === '' || val === undefined || /^[0-9a-fA-F]{1,24}$/.test(val), 'invalid id'),
   brandName: z.string().optional().refine(val => val === undefined || val.trim() === '' || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid brand name'),
   productName: z.string().optional().refine(val => val === undefined || val.trim() === '' || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid product name'),
   price: z.object({
-    value: price.optional(),
+    value: z.coerce.number().optional().refine(val => (val === undefined || val >= 0), { message: 'price must be positive' }),
     operator: z.enum(['gt', 'lt', 'gte', 'lte', 'eq']),
   }).default({ operator: 'lte' }).optional(),
 });
@@ -52,7 +53,6 @@ export const ProductFinder = z.object({
 export const ProductFinderTransformer = ProductFinder.transform(value => {
   if (value.brandName === undefined || value.brandName.trim() === '') delete value.brandName;
   if (value.productName === undefined || value.productName.trim() === '') delete value.productName;
-  if (value.price?.value === undefined) delete value.price;
   return value;
 })
 

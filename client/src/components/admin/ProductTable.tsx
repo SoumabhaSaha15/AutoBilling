@@ -8,13 +8,13 @@ type propType = z.infer<typeof ProductResponseSchema>;
 
 export const ProductTable: FC<{ table: Omit<propType, "productQuantity">[] }> = ({ table }) => {
   return (
-    <div className="overflow-x-auto p-2 max-h-[calc(100dvh-192px)] w-full flex flex-col sm:items-center">
+    <div className="overflow-x-auto p-2 max-h-[calc(100dvh-120px)] w-full flex flex-col sm:items-center">
       <Table hoverable className="max-w-4xl">
         <TableHead>
           <TableRow>
             <TableHeadCell>Image</TableHeadCell>
-            <TableHeadCell>Product name</TableHeadCell>
             <TableHeadCell>Brand name</TableHeadCell>
+            <TableHeadCell>Product name</TableHeadCell>
             <TableHeadCell>Price</TableHeadCell>
             <TableHeadCell>Edit</TableHeadCell>
           </TableRow>
