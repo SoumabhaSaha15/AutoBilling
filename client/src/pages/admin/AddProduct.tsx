@@ -15,8 +15,6 @@ const AddProduct: FC = () => {
   const [previewUrl, setPreviewUrl] = useState(defaultUrl);
   const toast = useToast();
   const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm<ProductSchemaType>({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-expect-error
     resolver: zodResolver(ProductSchema)
   });
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -52,11 +50,7 @@ const AddProduct: FC = () => {
     <div className="min-h-[calc(100dvh-64px)] grid items-center justify-center place-items-center">
       <form className="flex max-w-[95%] md:w-md sm:w-sm flex-col gap-4"
         name="adminLogin"
-        onSubmit={
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          //@ts-expect-error
-          handleSubmit(productSubmit)
-        }
+        onSubmit={handleSubmit(productSubmit)}
         encType="multipart/form-data"
       >
         <h3 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Add Product</h3>
@@ -127,7 +121,7 @@ const AddProduct: FC = () => {
             type="number"
             placeholder="product quantity"
             icon={HiPencilAlt}
-            {...register("productQuantity")}
+            {...register("productQuantity", { valueAsNumber: true })}
             required
             shadow
           />
@@ -145,7 +139,7 @@ const AddProduct: FC = () => {
             placeholder="price"
             type="number"
             icon={HiCurrencyRupee}
-            {...register("price")}
+            {...register("price", { valueAsNumber: true })}
             required
             shadow
           />

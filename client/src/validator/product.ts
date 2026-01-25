@@ -11,8 +11,8 @@ const productImage = z.instanceof(FileList)
   );
 const productName = z.string({ error: 'product name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid product name').trim();
 const brandName = z.string({ error: 'brand name is required' }).regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name').trim();
-const productQuantity = z.coerce.number().int().nonnegative();
-const price = z.coerce.number().int().positive();
+const productQuantity = z.int().nonnegative();
+const price = z.int().positive();
 
 const ProductSchema = z.strictObject({
   productImage,
@@ -45,25 +45,27 @@ export const ProductFinder = z.object({
   brandName: z.string().optional().refine(val => val === undefined || val.trim() === '' || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid brand name'),
   productName: z.string().optional().refine(val => val === undefined || val.trim() === '' || /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/.test(val), 'invalid product name'),
   price: z.object({
-    value: z.coerce.number().optional().refine(val => (val === undefined || val >= 0), { message: 'price must be positive' }),
+    value: z.coerce.number().int().nonnegative(),
     operator: z.enum(['gt', 'lt', 'gte', 'lte', 'eq']),
-  }).default({ operator: 'lte' }).optional(),
+  }).default({ operator: 'lte', value: 0 }).optional(),
 });
 
 export const ProductFinderTransformer = ProductFinder.transform(value => {
+  if (value.id === undefined || value.id.trim() === '') delete value.id;
   if (value.brandName === undefined || value.brandName.trim() === '') delete value.brandName;
   if (value.productName === undefined || value.productName.trim() === '') delete value.productName;
-  return value;
-})
+  const { price, ...transformed } = value;
+  return (price !== undefined && (price.value === 0 || price.value === undefined)) ? transformed : ({ ...transformed, price });
+});
 
 export const ProductPaginatedSchema = paginatedDocx.extend({ docs: z.array(ProductResponseSchema.omit({ productQuantity: true })) });
 
 export const ProductQuery = z.strictObject({ q: z.string().optional() });
 
-export type ProductFinderType = z.infer<typeof ProductFinder>;
-export type PartialProductSchemaType = z.infer<typeof PartialProductSchema>;
-export type ProductSchemaType = z.infer<typeof ProductSchema>;
 export type ProductQueryType = z.infer<typeof ProductQuery>;
+export type ProductFinderType = z.infer<typeof ProductFinder>;
+export type ProductSchemaType = z.infer<typeof ProductSchema>;
 export type ProductPaginatedType = z.infer<typeof ProductPaginatedSchema>;
+export type PartialProductSchemaType = z.infer<typeof PartialProductSchema>;
 
 export default ProductSchema;

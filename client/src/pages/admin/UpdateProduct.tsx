@@ -18,8 +18,6 @@ const UpdateProduct: FC = () => {
   const { id } = useParams();
   const toast = useToast();
   const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting, isDirty } } = useForm<PartialProductSchemaType>({
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-expect-error
     resolver: zodResolver(PartialProductSchema)
   });
 
@@ -141,7 +139,7 @@ const UpdateProduct: FC = () => {
             type="number"
             placeholder="product quantity"
             icon={HiPencilAlt}
-            {...register("productQuantity")}
+            {...register("productQuantity", { valueAsNumber: true })}
             shadow
           />
         </div>
@@ -158,7 +156,7 @@ const UpdateProduct: FC = () => {
             placeholder="price"
             type="number"
             icon={HiCurrencyRupee}
-            {...register("price")}
+            {...register("price", { valueAsNumber: true })}
             shadow
           />
         </div>

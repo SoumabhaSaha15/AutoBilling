@@ -1,7 +1,7 @@
 import z from "zod";
 import qs from 'qs';
 import Loading from '../../Loading';
-import { HiSearch } from "react-icons/hi";
+import { HiFilter } from "react-icons/hi";
 import base from '../../utility/axios-base';
 import { useHotkeys } from "react-hotkeys-hook";
 import { FC, useEffect, useState } from "react";
@@ -22,24 +22,23 @@ const ViewProducts: FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [products, setProducts] = useState<ProductPaginatedType>(paginationDefault);
-  const { register, handleSubmit, formState: { errors } } = useForm<ProductFinderType>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ProductFinderType>({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-expect-error
-    resolver: zodResolver(ProductFinder)
+    resolver: zodResolver(ProductFinder),
   });
   const Operators = ProductFinder.shape.price.unwrap().def.innerType.shape.operator.options;
 
   const applySearch: SubmitHandler<ProductFinderType> = (data) => {
-    const { price, ...transformed } = ProductFinderTransformer.parse(data);
-    if (price === undefined || price?.value === 0) {
-      console.log(transformed);
-      setQuery(qs.stringify(transformed));
-    } else setQuery(qs.stringify({ ...transformed, price }));
+    const parsedData = ProductFinderTransformer.parse(data);
+    setQuery(qs.stringify(parsedData));
     setOpenModal(false);
   }
 
   useEffect(() => {
     const parsedParams = qs.parse(query.toString(), { allowDots: true });
+    const finderFormData = ProductFinderTransformer.parse(parsedParams);
+    reset(finderFormData);
     base
       .get('/products', { params: parsedParams })
       .then((res) => {
@@ -68,7 +67,7 @@ const ViewProducts: FC = () => {
   useHotkeys('mod+k', () => setOpenModal(true), { preventDefault: true });
   return (
     <div className='flex flex-col justify-center items-center'>
-      {(products?.docs.length && isLoaded) ?
+      {(products.docs.length && isLoaded) ?
         (
           <>
             <ProductTable table={products.docs} />
@@ -76,10 +75,7 @@ const ViewProducts: FC = () => {
               <Pagination
                 currentPage={products.page}
                 totalPages={products.totalPages}
-                onPageChange={(pageNumber) => setQuery(prev => qs.stringify({
-                  ...qs.parse(prev.toString()),
-                  page: pageNumber
-                }))}
+                onPageChange={(pageNumber) => setQuery(prev => qs.stringify({ ...qs.parse(prev.toString()), page: pageNumber }))}
               />
             </div>
           </>
@@ -93,10 +89,8 @@ const ViewProducts: FC = () => {
         className="fixed h-16! w-16! bottom-6 right-6 z-50 rounded-2xl p-4! shadow-lg hover:shadow-xl transition-shadow duration-300"
         color="blue"
         size="lg"
-        onClick={() => {
-          setOpenModal(true);
-        }}
-        children={<HiSearch className="h-6 w-6" />}
+        onClick={() => setOpenModal(true)}
+        children={<HiFilter className="h-6 w-6" />}
       />
       <Modal dismissible={true} show={openModal} onClose={() => setOpenModal(false)} popup>
         <ModalHeader children={<span className="font-normal text-base"> Product Filter <Kbd>ctrl + K</Kbd></span>} className="p-4!" />
@@ -161,7 +155,8 @@ const ViewProducts: FC = () => {
                 id="price-value"
                 type="number"
                 placeholder="price range"
-                {...register('price.value')}
+                defaultValue={0}
+                {...register('price.value', { valueAsNumber: true })}
                 shadow
               />
             </div>
@@ -179,7 +174,7 @@ const ViewProducts: FC = () => {
                 ))}
               </Select>
             </div>
-            <Button className="w-full" type='submit' ><HiSearch className="mr-2" /> {'Apply search filters'}
+            <Button className="w-full" type='submit' ><HiFilter className="mr-2" /> {'Apply search filters'}
             </Button>
           </form>} />
       </Modal>

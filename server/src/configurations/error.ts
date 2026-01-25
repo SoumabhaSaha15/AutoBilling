@@ -1,10 +1,11 @@
 import z from "zod";
+import chalk from "chalk";
 import { MongoServerError } from "mongodb";
 import ResponseError from "../utility/response-error.js";
 import { Request, Response, NextFunction } from "express";
 export default async (err: Error, _: Request, res: Response, __: NextFunction) => {
   if (err instanceof z.ZodError) {
-    console.log(z.prettifyError(err));
+    console.log(chalk.bold.red(z.prettifyError(err)));
     return void res.status(400).send('Invalid format');
   }
   else if (err instanceof MongoServerError) {
