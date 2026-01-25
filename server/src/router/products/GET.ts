@@ -1,6 +1,5 @@
 import { ProductModel } from '../../databases/Product.js';
 import { Request, Response, NextFunction } from "express";
-import { lazyLoadingQueryValidator } from '../../validators/lazyLodingQuery.js';
 import { ProductQueryTransformer } from '../../validators/productFilter.js';
 const GET = {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {

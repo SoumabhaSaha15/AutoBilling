@@ -124,7 +124,7 @@ const CreateInvoice: FC = () => {
                   min={1}
                   icon={MdOutlineProductionQuantityLimits}
                   required
-                  {...register("quantity")}
+                  {...register("quantity", { valueAsNumber: true })}
                   placeholder="1"
                 />
               </div>

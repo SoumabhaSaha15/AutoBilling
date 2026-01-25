@@ -46,7 +46,7 @@
     "express": "^5.2.1",
     "express-fileupload": "^1.5.2",
     "express-session": "^1.19.0",
-    "figlet": "^1.9.4",
+    "figlet": "^1.10.0",
     "inquirer": "9.3.8",
     "inquirer-file-path": "^1.0.1",
     "inquirer-file-selector": "^1.0.1",

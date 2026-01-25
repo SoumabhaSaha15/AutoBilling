@@ -30,7 +30,7 @@ export const InvoiceResponse = InvoiceValidator
         productName: true,
         brandName: true,
       }),
-      price: z.number().positive().default(0),
+      price: z.int().positive().default(0),
       quantity,
     }))
   })

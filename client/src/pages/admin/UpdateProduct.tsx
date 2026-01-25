@@ -21,7 +21,6 @@ const UpdateProduct: FC = () => {
     resolver: zodResolver(PartialProductSchema)
   });
 
-  // eslint-disable-next-line react-hooks/incompatible-library
   const watchedImage = watch("productImage");
 
   useEffect(() => {
@@ -30,8 +29,7 @@ const UpdateProduct: FC = () => {
       setPreviewUrl(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
     } else setPreviewUrl((prev) => prev.includes('https://res.cloudinary.com/') ? prev : defaultUrl);
-  },
-    [defaultUrl, watchedImage]);
+  }, [defaultUrl, watchedImage]);
 
   useEffect(() => {
     if (!id) return;
@@ -49,7 +47,8 @@ const UpdateProduct: FC = () => {
           else console.error(err);
         }
       })
-  }, [id, reset, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const productSubmit: SubmitHandler<PartialProductSchemaType> = async (patchData) => {
     try {
@@ -58,9 +57,8 @@ const UpdateProduct: FC = () => {
         toast.open(`Updated successfully:- ${status}`, 'alert-success');
         reset(patchData);
       } else toast.open(`${statusText} ${data}`, 'alert-error');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      toast.open(e.message, 'alert-error', true, 5000);
+    } catch (e) {
+      toast.open((e as Error).message, 'alert-error', true, 5000);
     }
   }
 
