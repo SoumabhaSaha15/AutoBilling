@@ -9,7 +9,7 @@ import { FC, useState, useEffect, useMemo } from "react";
 import { useToast } from '../../contexts/Toast/ToastContext';
 import { Page, PDFDownloadLink, Document, Text } from '@react-pdf/renderer';
 import { InvoiceResponseType, InvoiceResponse } from "../../validator/order";
-import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell } from 'flowbite-react';
+import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell, Spinner } from 'flowbite-react';
 
 const ViewInvoice: FC = () => {
   const toast = useToast();
@@ -19,16 +19,15 @@ const ViewInvoice: FC = () => {
   useEffect(() => {
     base.get(`/invoice/${id}`).then((res) => {
       const { data, success, error } = InvoiceResponse.safeParse(res.data);
-      console.log(data, error && prettifyError(error));
       if (success)
         setLoading(() => {
           setInvoiceData(data);
           return false;
         })
       else toast.open(prettifyError(error), 'alert-error', true, 5000);
-      console.log(res.data);
     }).catch(console.log);
-  }, [id, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const pdfDocument = useMemo(() => {
     return (invoiceData) ?
@@ -62,8 +61,9 @@ const ViewInvoice: FC = () => {
                     <Button
                       color="blue"
                       size="md"
+                      disabled={!invoiceData}
                       className='rounded-3xl'
-                      children={<LuPrinter size='1.2rem' />}
+                      children={invoiceData ? <LuPrinter size='1.2rem' /> : <Spinner aria-label="loading pdf" />}
                     />}
                 />
               </div>

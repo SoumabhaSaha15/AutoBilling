@@ -1,6 +1,7 @@
 import cors from "cors";
 import path from "path";
 import chalk from "chalk";
+import dns from 'node:dns';
 import dotenv from "dotenv";
 import express from "express";
 import { connect } from "mongoose";
@@ -12,8 +13,8 @@ import sessionConfig from "./configurations/session.js";
 import listenCallback from "./utility/listen-callback.js";
 import cloudinaryConfig from "./configurations/cloudinary.js";
 import { csrfSynchronisedProtection, csrfTokenMiddleware } from "./configurations/csrf.js";
-
 try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
   dotenv.config({ quiet: true });
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
@@ -44,6 +45,6 @@ try {
 
 } catch (error) {
   if (error instanceof ZodError) console.log(chalk.red.bold(prettifyError(error)))
-  else console.log(chalk.red((error as Error).message));
+  else console.log(chalk.red((error as Error).message), error);
   process.exit(0);
 }

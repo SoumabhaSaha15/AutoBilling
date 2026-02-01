@@ -1,9 +1,10 @@
 import _ from "lodash";
 import AdminCard from './AdminCard';
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { type FC, useState, useEffect } from "react";
 import { useAuth } from '../../contexts/Auth/admin/AuthContext';
-import { Avatar, DarkThemeToggle, Dropdown, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
+import { Avatar, DarkThemeToggle, Dropdown, DropdownDivider, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
@@ -13,16 +14,24 @@ const HeaderSection: FC = () => {
   }, []);
 
   const auth = useAuth();
+  const navigate = useNavigate();
   const DIV = (
     <div className="flex flex-wrap gap-2">
       <DarkThemeToggle />
       <Dropdown
         renderTrigger={() => (<Avatar img={auth.userDetails?.profilePicture || './logo.png'} rounded />)}
-        className='rounded-xl'
+        className='rounded-sm'
       >
-        <DropdownItem as={'div'} className='rounded-xl flex flex-col'>
+        <DropdownItem className='flex flex-col'>
           <AdminCard name={auth.userDetails?.name || ""} email={auth.userDetails?.email || ''} profilePicture={auth.userDetails?.profilePicture || ''} />
         </DropdownItem>
+        <DropdownDivider />
+        <DropdownItem
+          className='w-full'
+          color="red"
+          onClick={() => auth.logout(() => navigate('/'))}
+          children={"Log Out"}
+        />
       </Dropdown>
     </div>
   );

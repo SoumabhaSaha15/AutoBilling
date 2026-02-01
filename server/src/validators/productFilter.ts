@@ -1,5 +1,5 @@
 import z from "zod";
-import page from "./pagination";
+import page from "./pagination.js";
 export const ProductFinder = z.strictObject({
   id: z.string().trim().regex(/^[0-9a-fA-F]{1,24}$/, 'invalid id').optional(),
   brandName: z.string().trim().regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid brand name').optional(),

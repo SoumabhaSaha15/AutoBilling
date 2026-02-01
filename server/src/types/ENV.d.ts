@@ -2,10 +2,13 @@ declare namespace NodeJS {
   interface ProcessEnv {
     PORT: number;
     DB_URI: string;
+    DB_NAME: string;
+    DB_APP_NAME: string;
+    DB_W: "majority";
     JWT_KEY: string;
     CORS_URL: string;
     ADMIN_KEY: string;
-    MODE: "dev"|"prod";
+    MODE: "dev" | "prod";
     CLOUDINARY_ENV_VAR: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_ADMIN_DIR: string;

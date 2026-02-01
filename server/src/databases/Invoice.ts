@@ -52,6 +52,9 @@ InvoiceSchema.pre('save', async function () {
     if (!product) throw Error(`Product with ID ${order.productId} does not exist`);
     order.price = product.price;
     if (typeof order.price !== 'number' || order.price <= 0) throw Error(`Invalid price (${order.price}) found in ProductModel for ID ${order.productId}`);
+    const left = product.productQuantity - order.quantity;
+    if (left < 0) throw Error(`Insufficient stock for product ID ${order.productId}`);
+    await ProductModel.updateOne({ _id: order.productId }, { productQuantity: left });
   }
 });
 
