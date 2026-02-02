@@ -7,7 +7,6 @@ import flowbiteReact from "flowbite-react/plugin/vite";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   const targetUrl = env.VITE_CORS_URL;
-  console.log(targetUrl)
   return {
     plugins: [react(), tailwindcss(), flowbiteReact()],
     server: {
