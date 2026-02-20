@@ -204,8 +204,8 @@ const DownloadInvoice: FC<InvoiceResponseType> = (props: InvoiceResponseType) =>
             </View>
           </View>
           {/* Table Rows */}
-          {props.orders.map((item, index) => (
-            <View style={styles.tableRow} key={index}>
+          {props.orders.map((item) => (
+            <View style={styles.tableRow} key={crypto.randomUUID()}>
               <View style={styles.tableColBrand}>
                 <Text style={styles.tableCell}>{item.productId.brandName}</Text>
               </View>

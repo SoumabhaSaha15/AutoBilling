@@ -56,10 +56,9 @@ export default function ToastProvider({ children }: { children: ReactNode; }) {
 
   return (
     <ToastContext.Provider value={{ open, close }}>
-      < Suspense
-        fallback={<Loading />}
-        children={children}
-      />
+      <Suspense fallback={<Loading />}>
+        {children}
+      </Suspense>
       <div
         className='fixed bottom-4 right-4 space-y-2 z-1'
       >

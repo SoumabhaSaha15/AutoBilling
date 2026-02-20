@@ -31,8 +31,8 @@ const data = [
 const AdminPage: FC = () => {
   return (
     <div className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 items-center place-items-center p-2 justify-center">
-      {data.map((value, index) => (
-        <Card className="w-full hover:scale-90 hover:shadow-2xl hover:shadow-gray-600 dark:hover:shadow-gray-950" key={index}>
+      {data.map((value) => (
+        <Card className="w-full hover:scale-90 hover:shadow-2xl hover:shadow-gray-600 dark:hover:shadow-gray-950" key={crypto.randomUUID()}>
           <img src={value.url} alt="sales report" className="aspect-square h-56" onError={(e) => { e.currentTarget.src = './image-broken.svg' }} />
           <div className="flex flex-row items-center justify-center space-y-2">
             <Badge icon={value.comingSoon ? HiClock : HiCheck} color="green" size="sm" className="mr-2 mb-0" />

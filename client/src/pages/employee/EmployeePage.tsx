@@ -28,7 +28,7 @@ const EmployeePage: FC = () => {
     (<div
       className="min-h-[calc(100dvh-64px)] grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 items-center p-2 justify-center place-items-center"
     >
-      {invoiceList.map(data => <InvoiceBriefCard {...data} key={data._id} />)}
+      {invoiceList.map(data => <InvoiceBriefCard {...data} key={crypto.randomUUID()} />)}
     </div>) : (<NoRecordsFound />)
 
   ) : (<OutletLoading />);

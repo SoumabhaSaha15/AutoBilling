@@ -46,8 +46,8 @@ const FeaturesSection: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <Card key={index} className="hover:shadow-xl transition-shadow dark:hover:shadow-gray-800">
+          {features.map((feature) => (
+            <Card key={crypto.randomUUID()} className="hover:shadow-xl transition-shadow dark:hover:shadow-gray-800">
               <div className="text-blue-600 mb-4">{feature.icon}</div>
               <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-300">{feature.title}</h3>
               <p className="text-gray-600">{feature.description}</p>

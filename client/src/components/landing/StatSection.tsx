@@ -11,8 +11,8 @@ const StatSection: React.FC = () => {
     <section className="bg-blue-600 text-white py-16 scroll-smooth transition-all" id="about" >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-          {stats.map((stat, index) => (
-            <Card key={index} className="bg-blue-700/50 border-blue-500/50 hover:shadow-2xl hover:transition-shadow">
+          {stats.map((stat) => (
+            <Card key={crypto.randomUUID()} className="bg-blue-700/50 border-blue-500/50 hover:shadow-2xl hover:transition-shadow">
               <div className="text-center">
                 <div className="text-4xl font-bold mb-2 text-white">{stat.number}</div>
                 <div className="text-blue-200">{stat.label}</div>

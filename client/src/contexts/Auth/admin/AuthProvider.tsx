@@ -42,7 +42,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
   return (
     <AuthContext.Provider value={{ login, logout, userDetails }}>
-      <Suspense fallback={<Loading />} children={children} />
+      <Suspense fallback={<Loading />}>
+        {children}
+      </Suspense>
     </AuthContext.Provider>
   );
 }

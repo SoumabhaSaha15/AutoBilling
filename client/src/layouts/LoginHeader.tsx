@@ -16,7 +16,9 @@ const LoginHeader: FC = () => {
           </Link>
           <DarkThemeToggle />
         </Navbar>
-        <Suspense fallback={<OutletLoading />} children={<Outlet />} />
+        <Suspense fallback={<OutletLoading />}>
+          <Outlet />
+        </Suspense>
       </div>
     </>
   );

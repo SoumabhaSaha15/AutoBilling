@@ -16,7 +16,9 @@ const AdminLayout: FC = () => {
     <>
       <div className="min-h-screen bg-gray-300 dark:bg-gray-900">
         <HeaderSection />
-        <Suspense fallback={<OutletLoading />} children={<Outlet />} />
+        <Suspense fallback={<OutletLoading />}>
+          <Outlet />
+        </Suspense>
       </div>
     </>
   );

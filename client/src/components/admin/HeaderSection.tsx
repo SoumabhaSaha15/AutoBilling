@@ -1,6 +1,6 @@
-import _ from "lodash";
 import AdminCard from './AdminCard';
 import { Link } from "react-router-dom";
+import throttle from "lodash/throttle";
 import { useNavigate } from "react-router-dom";
 import { type FC, useState, useEffect } from "react";
 import { useAuth } from '../../contexts/Auth/admin/AuthContext';
@@ -9,7 +9,7 @@ import { Avatar, DarkThemeToggle, Dropdown, DropdownDivider, DropdownItem, Navba
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
   useEffect(() => {
-    window.onresize = _.throttle(() => setWidth(window.innerWidth), 1500);
+    window.onresize = throttle(() => setWidth(window.innerWidth), 1500);
     return () => { window.onresize = () => { } };
   }, []);
 
@@ -30,8 +30,9 @@ const HeaderSection: FC = () => {
           className='w-full'
           color="red"
           onClick={() => auth.logout(() => navigate('/'))}
-          children={"Log Out"}
-        />
+        >
+          Log Out
+        </DropdownItem>
       </Dropdown>
     </div>
   );

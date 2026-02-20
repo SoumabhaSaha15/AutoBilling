@@ -57,15 +57,17 @@ const ViewInvoice: FC = () => {
                 <PDFDownloadLink
                   document={pdfDocument}
                   fileName={`invoice-${invoiceData.id}.pdf`}
-                  children={
-                    <Button
-                      color="blue"
-                      size="md"
-                      disabled={!invoiceData}
-                      className='rounded-3xl'
-                      children={invoiceData ? <LuPrinter size='1.2rem' /> : <Spinner aria-label="loading pdf" />}
-                    />}
-                />
+
+                >
+                  <Button
+                    color="blue"
+                    size="md"
+                    disabled={!invoiceData}
+                    className='rounded-3xl'
+                  >
+                    {invoiceData ? <LuPrinter size='1.2rem' /> : <Spinner aria-label="loading pdf" />}
+                  </Button>
+                </PDFDownloadLink>
               </div>
             </div>
 
@@ -120,8 +122,8 @@ const ViewInvoice: FC = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody className="divide-y">
-                    {invoiceData.orders.map((item, index) => (
-                      <TableRow key={index} >
+                    {invoiceData.orders.map((item) => (
+                      <TableRow key={crypto.randomUUID()} >
                         <TableCell className="whitespace-nowrap text-center font-semibold">
                           {item.productId.productName}
                         </TableCell>

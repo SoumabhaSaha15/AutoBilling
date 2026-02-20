@@ -12,10 +12,9 @@ const LandingPage: FC = () => {
     <>
       <div className="min-h-screen bg-white dark:bg-gray-900 transition-all scroll-smooth">
         <HeaderSection />
-
-        <HeroSection
-          children={<DashboardPreviewSection />}
-        />
+        <HeroSection>
+          <DashboardPreviewSection />
+        </HeroSection>
         <FeaturesSection />
         <StatSection />
         <FooterSection />

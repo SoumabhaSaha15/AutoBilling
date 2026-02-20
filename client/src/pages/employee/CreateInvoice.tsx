@@ -1,4 +1,3 @@
-// import { z } from 'zod/v3'
 import z from 'zod/v4';
 import { useState, FC } from 'react';
 import { FaQrcode } from "react-icons/fa";
@@ -76,10 +75,10 @@ const CreateInvoice: FC = () => {
           className='w-[calc(50%-6px)]'
           onClick={submitInVoice}
           disabled={isSubmitting || list.length === 0}
-          children={(isSubmitting) ?
-            (<><Spinner aria-label="submit" size="md" className="mr-2" />{"createing invoice"}</>) : (<><LuUpload className="mr-2 h-4 w-4" />
-              Upload Invoice</>)}
-        />
+        >{(isSubmitting) ?
+          (<><Spinner aria-label="submit" size="md" className="mr-2" />{"createing invoice"}</>) : (<><LuUpload className="mr-2 h-4 w-4" />
+            Upload Invoice</>)}
+        </Button>
 
         <Button
           onClick={() => {
@@ -88,8 +87,9 @@ const CreateInvoice: FC = () => {
           }}
           color="blue"
           className='w-[calc(50%-6px)]'
-          children={<><LuPlus className="mr-2 h-4 w-4" />Add Item</>}
-        />
+        >
+          <LuPlus className="mr-2 h-4 w-4" />Add Item
+        </Button>
         <Modal show={openModal} onClose={() => { setOpenModal(false) }} size="md" popup>
           <ModalHeader />
           <ModalBody>
@@ -105,7 +105,7 @@ const CreateInvoice: FC = () => {
                   id="productId"
                   icon={FaQrcode}
                   type="text"
-                  autoFocus
+                  // autoFocus
                   placeholder="product id"
                   {...register('id')}
                 // readOnly
@@ -131,12 +131,11 @@ const CreateInvoice: FC = () => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                children={
+              >{
                   (isLoading) ?
                     (<><Spinner aria-label="submit" size="sm" className="mr-2" />{"...adding id"}</>) :
                     ("add product id")
-                }
-              />
+                }</Button>
             </form>
           </ModalBody>
         </Modal>
@@ -155,9 +154,9 @@ const CreateInvoice: FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody className="divide-y">
-                {list.map((item, i) => {
+                {list.map((item) => {
                   return (
-                    <TableRow key={i} >
+                    <TableRow key={crypto.randomUUID()} >
                       <TableCell>
                         {item.id}
                       </TableCell>

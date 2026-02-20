@@ -90,11 +90,14 @@ const ViewProducts: FC = () => {
         color="blue"
         size="lg"
         onClick={() => setOpenModal(true)}
-        children={<HiFilter className="h-6 w-6" />}
-      />
+      >
+        <HiFilter className="h-6 w-6" />
+      </Button>
       <Modal dismissible={true} show={openModal} onClose={() => setOpenModal(false)} popup>
-        <ModalHeader children={<span className="font-normal text-base"> Product Filter <Kbd>ctrl + K</Kbd></span>} className="p-4!" />
-        <ModalBody children={
+        <ModalHeader className="p-4!">
+          <span className="font-normal text-base"> Product Filter <Kbd>ctrl + K</Kbd></span>
+        </ModalHeader>
+        <ModalBody>
           <form className="space-y-6" onSubmit={handleSubmit(applySearch)} >
             <div>
               <div className="mb-2 block">
@@ -176,7 +179,8 @@ const ViewProducts: FC = () => {
             </div>
             <Button className="w-full" type='submit' ><HiFilter className="mr-2" /> {'Apply search filters'}
             </Button>
-          </form>} />
+          </form>
+        </ModalBody>
       </Modal>
     </div>
   );
