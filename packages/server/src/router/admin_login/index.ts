@@ -3,7 +3,7 @@ import POST from "./POST.js";
 import GET from "./GET.js";
 const router = express.Router();
 router
-  .route('/employee_login')
+  .route('/admin_login')
   .get(
     GET.cookiesNotFound,
     GET.invalidCookies,
@@ -11,9 +11,12 @@ router
     GET.provideAdminData
   )
   .post(
+    //@ts-ignore
+    async (_req, _res, next) => {
+      console.log("Admin login attempt:", _req.body);
+      next();
+    },
     POST.invalidCredentials,
     POST.userNotFound,
-    POST.wrongCredentials,
-    POST.setCookie,
   );
 export default router;

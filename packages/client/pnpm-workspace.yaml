@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: true
+  scrollreveal: true
+minimumReleaseAgeExclude:
+  - react-router-dom@7.18.0
+  - react-router@7.18.0
+onlyBuiltDependencies:
+  - esbuild
+  - scrollreveal

@@ -3,7 +3,7 @@ import POST from "./POST.js";
 import GET from "./GET.js";
 const router = express.Router();
 router
-  .route('/admin_login')
+  .route('/employee_login')
   .get(
     GET.cookiesNotFound,
     GET.invalidCookies,
@@ -11,9 +11,7 @@ router
     GET.provideAdminData
   )
   .post(
-    POST.checkAdminKey,
     POST.invalidCredentials,
     POST.userNotFound,
-    POST.setCookie,
   );
 export default router;

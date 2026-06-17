@@ -1,0 +1,24 @@
+{
+  "name": "auto_billing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -r dev"
+  },
+  "workspaces": [
+    "./packages/client",
+    "./packages/server"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.7.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module"
+}

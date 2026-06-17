@@ -7,7 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import cloudinaryConfig from "../configurations/cloudinary.js";
 import fileSelector from "inquirer-file-tree-selection-prompt";
 import { validatorFactory } from "../utility/validation-factory.js";
-import { AdminModel, AdminValidator, type AdminType } from "./../databases/Admin.js";
+import { AdminModel, AdminValidator, type AdminType } from "../databases/Admin.js";
 
 inquirer.registerPrompt('file', fileSelector);
 const main = async () => {
