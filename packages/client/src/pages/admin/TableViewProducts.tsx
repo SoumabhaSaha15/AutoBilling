@@ -1,19 +1,19 @@
 import z from "zod";
 import qs from 'qs';
-import Loading from '../../Loading';
+import Loading from '@/Loading';
 import { HiFilter } from "react-icons/hi";
-import base from '../../utility/axios-base';
+import base from '@/utility/axios-base';
 import { useHotkeys } from "react-hotkeys-hook";
 import { FC, useEffect, useState } from "react";
 import { useSearchParams } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SurroundedNotFound } from '../SurroundedNotFound';
-import { useToast } from "../../contexts/Toast/ToastContext";
+import { SurroundedNotFound } from '@/pages/SurroundedNotFound';
+import { useToast } from "@/contexts/Toast/ToastContext";
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { paginationDefault } from '../../validator/pagination';
-import { ProductTable } from '../../components/admin/ProductTable';
+import { paginationDefault } from '@/validator/pagination';
+import { ProductTable } from '@/components/admin/ProductTable';
 import { Button, TextInput, Pagination, Modal, ModalBody, ModalHeader, Kbd, Label, Select } from "flowbite-react";
-import { ProductPaginatedSchema, type ProductPaginatedType, type ProductFinderType, ProductFinder, ProductFinderTransformer } from "../../validator/product";
+import { ProductPaginatedSchema, type ProductPaginatedType, type ProductFinderType, ProductFinder, ProductFinderTransformer } from "@/validator/product";
 
 const ViewProducts: FC = () => {
 

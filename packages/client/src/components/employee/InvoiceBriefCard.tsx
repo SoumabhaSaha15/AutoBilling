@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { Link } from 'react-router-dom';
 import { Card } from 'flowbite-react';
-import { InvoiceBriefType } from '../../validator/invoice_brief';
+import { Link } from 'react-router-dom';
+import { InvoiceBriefType } from '@/validator/invoice_brief';
 export const InvoiceBriefCard: FC<InvoiceBriefType> = (props: InvoiceBriefType) => {
   return (
     <Card id={props._id} className="w-full hover:scale-90 hover:shadow-2xl hover:dark:shadow-black hover:shadow-gray-600">

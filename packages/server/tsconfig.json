@@ -8,6 +8,11 @@
     "outDir": "./dist",
     "skipLibCheck": true,
     "moduleResolution": "Bundler",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "esModuleInterop": true,

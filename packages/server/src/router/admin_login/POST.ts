@@ -8,15 +8,16 @@ import { AdminModel, AdminValidator } from "../../databases/Admin.js";
 const AdminLoginValidator = AdminValidator
   .pick({ email: true, password: true })
   .extend({
-    adminKey: z.literal(process.env.ADMIN_KEY || "admin_key_placeholder", { error: "Incorrect admin key." })
+    adminKey: z.string().refine((val) => val === process.env.ADMIN_KEY, { error: "Incorrect admin key." })
   });
 type AdminLoginRequest = ValidatedRequest<{ body: typeof AdminLoginValidator }>;
 
 const POST = {
 
-  invalidCredentials: validate({ body: AdminLoginValidator }),
+  invalidCredentials: validate({
+    body: AdminLoginValidator
+  }),
   userNotFound: async (req: AdminLoginRequest, res: Response, next: NextFunction) => {
-    console.log(req.body);
 
     try {
       let admin = (await AdminModel.findOne({ email: req.body.email }).exec());
@@ -25,7 +26,6 @@ const POST = {
       const hashResult = bcrypt.compareSync(req.body.password || '', admin.password);
       if (!hashResult)
         throw new ResponseError(400, 'Wrong admin password or email', 'invalid_credentials');
-
 
       req.session.clientId = admin._id.toString();
       req.session.clientType = "admin";

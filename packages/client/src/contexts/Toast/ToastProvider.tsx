@@ -1,11 +1,10 @@
+import Loading from '@/Loading'; // Importing Loading component for fallback
 import { prettifyError } from 'zod';
-import Loading from './../../Loading'; // Importing Loading component for fallback
-import { ToastContext } from './ToastContext';
 import { RiErrorWarningFill } from 'react-icons/ri'; // For different toast icons
 import { Toast, ToastToggle } from 'flowbite-react';
 import { useState, type ReactNode, Suspense } from 'react';
-import { ToastVariantType, ToastVariant } from './ToastContext';
 import { HiCheck, HiX, HiInformationCircle, } from 'react-icons/hi'; // For different toast icons
+import { ToastContext, ToastVariantType, ToastVariant } from '@/contexts/Toast/ToastContext';
 
 export default function ToastProvider({ children }: { children: ReactNode; }) {
 

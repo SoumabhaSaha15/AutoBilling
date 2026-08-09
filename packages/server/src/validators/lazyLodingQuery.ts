@@ -1,5 +1,5 @@
 import z from 'zod';
-import page from './pagination.js';
+import page from "@/validators/pagination"
 const lazyLoadingQueryValidator = z.object({
   q: z.string().optional(),
   page,

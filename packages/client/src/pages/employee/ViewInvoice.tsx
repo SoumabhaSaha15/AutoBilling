@@ -1,14 +1,14 @@
 import { prettifyError } from 'zod';
 import { LuPrinter } from 'react-icons/lu';
 import { useParams } from "react-router-dom";
-import base from './../../utility/axios-base';
-import OutletLoading from '../../OutletLoading';
+import base from '@/utility/axios-base';
+import OutletLoading from '@/OutletLoading';
 import { HiCheckCircle } from 'react-icons/hi2';
 import DownloadInvoice from './DownloadInvoice';
 import { FC, useState, useEffect, useMemo } from "react";
-import { useToast } from '../../contexts/Toast/ToastContext';
+import { useToast } from '@/contexts/Toast/ToastContext';
 import { Page, PDFDownloadLink, Document, Text } from '@react-pdf/renderer';
-import { InvoiceResponseType, InvoiceResponse } from "../../validator/order";
+import { InvoiceResponseType, InvoiceResponse } from "@/validator/order";
 import { Card, Button, Badge, Table, TableHeadCell, TableHead, Alert, TableBody, TableRow, TableCell, Spinner } from 'flowbite-react';
 
 const ViewInvoice: FC = () => {

@@ -1,10 +1,10 @@
 import { prettifyError } from "zod";
-import base from "./../../utility/axios-base";
-import NoRecordsFound from "../NoRecordsFound";
-import OutletLoading from "../../OutletLoading";
+import base from "@/utility/axios-base";
+import NoRecordsFound from "@/pages/NoRecordsFound";
+import OutletLoading from "@/OutletLoading";
 import { FC, useState, useEffect } from "react";
-import { useToast } from "../../contexts/Toast/ToastContext";
-import { InvoiceBriefCard } from '../../components/employee/InvoiceBriefCard';
+import { useToast } from "@/contexts/Toast/ToastContext";
+import { InvoiceBriefCard } from '@/components/employee/InvoiceBriefCard';
 import { InvoiceBriefListType, InvoiceBriefList } from "../../validator/invoice_brief";
 
 const EmployeePage: FC = () => {

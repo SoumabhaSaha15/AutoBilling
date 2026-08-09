@@ -1,7 +1,7 @@
 import z from "zod";
 import { FC } from "react";
-import { UserDetailsSchema } from '../../contexts/Auth/employee/AuthContext';
-import { useToast } from "../../contexts/Toast/ToastContext";
+import { useToast } from "@/contexts/Toast/ToastContext";
+import { UserDetailsSchema } from '@/contexts/Auth/employee/AuthContext';
 
 const OmittedId = UserDetailsSchema.omit({ id: true });
 const EmployeeCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedId>) => {

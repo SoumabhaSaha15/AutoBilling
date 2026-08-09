@@ -4,6 +4,37 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - react-router-dom@7.18.0
   - react-router@7.18.0
+  - '@types/node@26.1.1'
+  - '@typescript/typescript-aix-ppc64@7.0.2'
+  - '@typescript/typescript-darwin-arm64@7.0.2'
+  - '@typescript/typescript-darwin-x64@7.0.2'
+  - '@typescript/typescript-freebsd-arm64@7.0.2'
+  - '@typescript/typescript-freebsd-x64@7.0.2'
+  - '@typescript/typescript-linux-arm64@7.0.2'
+  - '@typescript/typescript-linux-arm@7.0.2'
+  - '@typescript/typescript-linux-loong64@7.0.2'
+  - '@typescript/typescript-linux-mips64el@7.0.2'
+  - '@typescript/typescript-linux-ppc64@7.0.2'
+  - '@typescript/typescript-linux-riscv64@7.0.2'
+  - '@typescript/typescript-linux-s390x@7.0.2'
+  - '@typescript/typescript-linux-x64@7.0.2'
+  - '@typescript/typescript-netbsd-arm64@7.0.2'
+  - '@typescript/typescript-netbsd-x64@7.0.2'
+  - '@typescript/typescript-openbsd-arm64@7.0.2'
+  - '@typescript/typescript-openbsd-x64@7.0.2'
+  - '@typescript/typescript-sunos-x64@7.0.2'
+  - '@typescript/typescript-win32-arm64@7.0.2'
+  - '@typescript/typescript-win32-x64@7.0.2'
+  - typescript@7.0.2
+  - '@react-pdf/font@4.0.9'
+  - '@react-pdf/image@3.1.1'
+  - '@react-pdf/layout@4.7.0'
+  - '@react-pdf/pdfkit@6.0.0'
+  - '@react-pdf/render@4.6.0'
+  - '@react-pdf/renderer@4.6.0'
+  - '@react-pdf/stylesheet@6.2.2'
+  - '@react-pdf/textkit@6.4.0'
+  - '@react-pdf/types@2.11.2'
 onlyBuiltDependencies:
   - esbuild
   - scrollreveal

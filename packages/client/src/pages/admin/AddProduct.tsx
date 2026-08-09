@@ -1,14 +1,14 @@
 import { prettifyError } from "zod";
-import base from '../../utility/axios-base'
+import base from '@/utility/axios-base'
 import { AiFillProduct } from "react-icons/ai"
 import { FC, useState, useEffect } from "react";
 import { PiTrademarkFill } from "react-icons/pi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useToast } from "../../contexts/Toast/ToastContext";
+import { useToast } from "@/contexts/Toast/ToastContext";
 import { HiCurrencyRupee, HiPencilAlt } from "react-icons/hi";
 import { Button, Label, TextInput, FileInput, Spinner } from "flowbite-react";
-import ProductSchema, { type ProductSchemaType, ProductResponseSchema } from "../../validator/product";
+import ProductSchema, { type ProductSchemaType, ProductResponseSchema } from "@/validator/product";
 
 const AddProduct: FC = () => {
   const defaultUrl = '/upload-image.svg';

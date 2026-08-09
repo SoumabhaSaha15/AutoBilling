@@ -1,5 +1,5 @@
-import { Footer, FooterLink, FooterBrand, FooterTitle, FooterLinkGroup, FooterDivider, FooterCopyright } from 'flowbite-react';
 import { FC } from 'react';
+import { Footer, FooterLink, FooterBrand, FooterTitle, FooterLinkGroup, FooterDivider, FooterCopyright } from 'flowbite-react';
 const FooterSection: FC = () => {
   return (
     <Footer container id='contact' className='scroll-smooth transition-all'>

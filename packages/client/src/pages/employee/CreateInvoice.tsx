@@ -1,13 +1,13 @@
 import z from 'zod/v4';
 import { useState, FC } from 'react';
 import { FaQrcode } from "react-icons/fa";
-import base from "./../../utility/axios-base"
+import base from "@/utility/axios-base"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { LuTrash2, LuPlus, LuUpload } from 'react-icons/lu';
-import { useToast } from "../../contexts/Toast/ToastContext";
+import { useToast } from "@/contexts/Toast/ToastContext";
 import { MdOutlineProductionQuantityLimits } from "react-icons/md";
-import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '../../validator/order';
+import { OrderValidator, OrderType, OrdersType, OrdersValidator, InvoiceValidator, InvoiceType } from '@/validator/order';
 import { Card, Button, Label, TextInput, Table, TableBody, TableHead, TableCell, TableRow, TableHeadCell, Modal, ModalBody, ModalHeader, Spinner } from 'flowbite-react';
 
 const CreateInvoice: FC = () => {

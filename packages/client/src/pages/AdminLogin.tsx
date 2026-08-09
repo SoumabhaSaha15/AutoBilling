@@ -1,12 +1,12 @@
-import base from './../utility/axios-base';
-import OutletLoading from '../OutletLoading';
+import base from '@/utility/axios-base';
+import OutletLoading from '@/OutletLoading';
 import { useNavigate } from "react-router-dom";
 import { FC, useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "../contexts/Toast/ToastContext";
+import { useToast } from "@/contexts/Toast/ToastContext";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { HiMail, HiLockClosed, HiKey } from "react-icons/hi";
-import { AdminSubmit, type AdminSubmitType } from "../validator/admin";
+import { AdminSubmit, type AdminSubmitType } from "@/validator/admin";
 import { Button, Label, TextInput, Spinner, Checkbox } from "flowbite-react";
 const AdminLogin: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);

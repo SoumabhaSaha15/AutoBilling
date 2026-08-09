@@ -1,9 +1,9 @@
 import { z, ZodError } from "zod";
-import Loading from "../../../Loading";
+import Loading from "@/Loading";
 import { useState, Suspense } from "react";
-import base from './../../../utility/axios-base';
-import { useToast } from "../../Toast/ToastContext";
-import { AuthContext, UserDetailsSchema, type UserDetailsType } from "./AuthContext";
+import base from '@/utility/axios-base';
+import { useToast } from "@/contexts/Toast/ToastContext";
+import { AuthContext, UserDetailsSchema, type UserDetailsType } from "@/contexts/Auth/employee/AuthContext";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userDetails, setUserDetails] = useState<UserDetailsType>(null);

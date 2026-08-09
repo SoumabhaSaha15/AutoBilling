@@ -1,6 +1,6 @@
 import z from "zod";
 import { FC } from "react";
-import { UserDetailsSchema } from '../../contexts/Auth/admin/AuthContext';
+import { UserDetailsSchema } from '@/contexts/Auth/admin/AuthContext';
 const OmittedId = UserDetailsSchema.omit({ id: true });
 const AdminCard: FC<z.infer<typeof OmittedId>> = (props: z.infer<typeof OmittedId>) => {
   const { success, data, error } = OmittedId.safeParse(props);

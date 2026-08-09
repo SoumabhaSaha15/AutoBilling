@@ -1,8 +1,8 @@
-import OutletLoading from "../OutletLoading";
+import OutletLoading from "@/OutletLoading";
 import { FC, useEffect, Suspense } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../contexts/Auth/employee/AuthContext";
-import HeaderSection from "../components/employee/HeaderSection";
+import { useAuth } from "@/contexts/Auth/employee/AuthContext";
+import HeaderSection from "@/components/employee/HeaderSection";
 const AdminLayout: FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();

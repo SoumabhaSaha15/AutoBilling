@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { AdminModel } from "../../databases/Admin.js";
+import { AdminModel } from "@/databases/Admin";
 import { Request, Response, NextFunction } from "express";
-import ResponseError from "../../utility/response-error.js";
+import ResponseError from "@/utility/response-error";
 const GET = {
   cookiesNotFound: async (req: Request, _: Response, next: NextFunction) => {
     try {

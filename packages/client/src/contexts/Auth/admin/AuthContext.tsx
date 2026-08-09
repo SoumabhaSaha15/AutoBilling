@@ -1,5 +1,5 @@
-import { createContext, useContext, type Context } from "react";
 import z from "zod";
+import { createContext, useContext, type Context } from "react";
 export const UserDetailsSchema = z.object({
   name: z.string(),
   email: z.string().email(),

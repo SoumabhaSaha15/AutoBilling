@@ -1,10 +1,10 @@
-import Loading from "./Loading";
+import Loading from "@/Loading";
 import { FC, lazy, Suspense } from "react";
-import AdminLayout from "./layouts/AdminLayout";
-import EmployeeLayout from "./layouts/EmployeeLayout"
+import AdminLayout from "@/layouts/AdminLayout";
+import EmployeeLayout from "@/layouts/EmployeeLayout"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AdminAuthProvider from "./contexts/Auth/admin/AuthProvider";
-import EmployeeAuthProvider from "./contexts/Auth/employee/AuthProvider";
+import AdminAuthProvider from "@/contexts/Auth/admin/AuthProvider";
+import EmployeeAuthProvider from "@/contexts/Auth/employee/AuthProvider";
 
 const AdminPage = lazy(() => import("./pages/admin/AdminPage"));
 const EmployeeLogin = lazy(() => import("./pages/EmployeeLogin"));

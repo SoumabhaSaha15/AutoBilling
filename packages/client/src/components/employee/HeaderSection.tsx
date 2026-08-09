@@ -1,8 +1,9 @@
 import throttle from "lodash/throttle";
 import { FC, useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
-import EmployeeCard from './../employee/EmployeeCard';
-import { useAuth } from '../../contexts/Auth/employee/AuthContext';
+import EmployeeCard from '@/components/employee/EmployeeCard';
+import { useAuth } from '@/contexts/Auth/employee/AuthContext';
+
 import { Avatar, DarkThemeToggle, Dropdown, DropdownDivider, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 const HeaderSection: FC = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);

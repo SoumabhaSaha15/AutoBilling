@@ -2,21 +2,17 @@ import z from "zod";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
+const name = z.string({ error: 'name is required' }).min(4, 'name must have 4 or more chars').max(30, 'name must be under 30 chars').regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid user name');
+const email = z.email('invalid email');
+const password = z.string({ error: 'password is required' }).length(8, 'password should have 8 chars').regex(/^[\x21-\x7E]+$/, 'invalid password');
+const profilePublicId = z.string({ error: "cloudinary image Id Required" });
+const profilePicture = z.url({ message: "value is not propper url" }).startsWith("https://res.cloudinary.com/", { message: "not a propper profilePicture url" });
 const AdminValidator = z.strictObject({
-  name: z.string({ error: 'name is required' })
-    .min(4, 'name must have 4 or more chars')
-    .max(30, 'name must be under 30 chars')
-    .regex(/^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/, 'invalid user name'),
-  email: z.email('invalid email'),
-  password: z.string({ error: 'password is required' })
-    .length(8, 'password should have 8 chars')
-    .regex(/^[\x21-\x7E]+$/, 'invalid password'),
-  profilePublicId: z.string({ error: "cloudinary image Id Required" }),
-  profilePicture: z.url({ message: "value is not propper url" })
-    .startsWith(
-      "https://res.cloudinary.com/",
-      { message: "not a propper profilePicture url" }
-    )
+  name,
+  email,
+  password,
+  profilePublicId,
+  profilePicture
 });
 
 export type AdminType = z.infer<typeof AdminValidator>;
@@ -25,7 +21,7 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     type: String,
     required: [true, 'name is required.'],
     validator: {
-      validate: (value: string) => AdminValidator.pick({ 'name': true }).safeParse({ name: value }).success,
+      validate: (value: string) => name.safeParse(value).success,
       message: (props: { value: string; }) => `${props.value} is not a valid admin name.`
     }
   },
@@ -34,7 +30,7 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     required: [true, 'email is required.'],
     unique: true,
     validator: {
-      validate: (value: string) => AdminValidator.pick({ email: true }).safeParse({ email: value }).success,
+      validate: (value: string) => email.safeParse(value).success,
       message: (props: { value: string; }) => `${props.value} is not a valid email.`
     }
   },
@@ -43,7 +39,7 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     required: [true, 'password is required.'],
     unique: true,
     valodator: {
-      validate: (value: string) => AdminValidator.pick({ password: true }).safeParse({ password: value }).success,
+      validate: (value: string) => password.safeParse(value).success,
       message: (props: { value: string; }) => `${props.value} is not a valid password.`
     }
   },
@@ -51,7 +47,7 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     type: String,
     required: true,
     validator: {
-      validate: (value: string) => AdminValidator.pick({ profilePublicId: true }).safeParse({ profilePublicId: value }).success,
+      validate: (value: string) => profilePublicId.safeParse(value).success,
       message: (props: { value: string; }) => `${props.value} is not a valid cloudinary id.`
     }
   },
@@ -59,7 +55,7 @@ const AdminSchema = new mongoose.Schema<AdminType>({
     type: String,
     required: [true, 'profilePic is required'],
     validator: {
-      validate: (value: string) => AdminValidator.pick({ profilePicture: true }).safeParse({ profilePicture: value }).success,
+      validate: (value: string) => profilePicture.safeParse(value).success,
       message: (props: { value: string; }) => `${props.value} is not a valid profilePicture.`
     }
   }

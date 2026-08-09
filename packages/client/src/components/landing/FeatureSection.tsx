@@ -1,5 +1,5 @@
-import { HiDocumentText, HiUsers, HiShieldCheck, HiClock, HiStar, HiCreditCard, } from 'react-icons/hi';
 import { Card } from 'flowbite-react';
+import { HiDocumentText, HiUsers, HiShieldCheck, HiClock, HiStar, HiCreditCard, } from 'react-icons/hi';
 const FeaturesSection: React.FC = () => {
   const features = [
     {

@@ -1,6 +1,6 @@
 import z from "zod";
 import mongoose from "mongoose";
-import { ProductModel } from "./Product.js";
+import { ProductModel } from "@/databases/Product";
 
 const OrdersValidator = z.strictObject({
   productId: z.coerce.string({ error: "product id is missing!!!" })

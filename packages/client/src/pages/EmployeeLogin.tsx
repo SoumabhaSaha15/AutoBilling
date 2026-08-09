@@ -1,13 +1,13 @@
-import base from './../utility/axios-base';
-import OutletLoading from '../OutletLoading';
+import base from '@/utility/axios-base';
+import OutletLoading from '@/OutletLoading';
 import { useNavigate } from "react-router-dom";
 import { FC, useEffect, useState } from "react";
 import { HiMail, HiLockClosed } from "react-icons/hi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useToast } from "../contexts/Toast/ToastContext";
+import { useToast } from "@/contexts/Toast/ToastContext";
 import { Button, Label, TextInput, Spinner, Checkbox } from "flowbite-react";
-import { EmployeeSubmit, type EmployeeSubmitType } from "../validator/employee";
+import { EmployeeSubmit, type EmployeeSubmitType } from "@/validator/employee";
 const EmployeeLogin: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);

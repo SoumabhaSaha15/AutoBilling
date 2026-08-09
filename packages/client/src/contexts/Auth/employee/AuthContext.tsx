@@ -3,9 +3,8 @@ import { createContext, useContext, type Context } from "react";
 
 export const UserDetailsSchema = z.object({
   name: z.string(),
-  email: z.string().email(),
-  profilePicture: z.string({ error: 'profilePicture is required' })
-    .url({ message: "value is not propper url" })
+  email: z.email(),
+  profilePicture: z.url({ message: "value is not propper url" })
     .startsWith(
       "https://res.cloudinary.com/",
       { message: "not a propper profilePicture url" }

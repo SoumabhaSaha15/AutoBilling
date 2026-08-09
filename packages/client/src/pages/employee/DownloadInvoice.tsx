@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { StyleSheet } from "@react-pdf/renderer";
-import { type InvoiceResponseType } from '../../validator/order';
+import { type InvoiceResponseType } from '@/validator/order';
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({

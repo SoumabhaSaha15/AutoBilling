@@ -1,9 +1,9 @@
 import z from "zod";
 import chalk from "chalk";
 import { MongoServerError } from "mongodb";
-import ResponseError from "../utility/response-error.js";
+import ResponseError from "@/utility/response-error.js";
 import { Request, Response, NextFunction } from "express";
-import { de } from "zod/v4/locales";
+
 export default async (err: Error, _: Request, res: Response, __: NextFunction) => {
   if (err instanceof z.ZodError) {
     const err_msg = z.prettifyError(err);

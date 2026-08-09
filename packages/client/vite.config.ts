@@ -8,8 +8,14 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   const targetUrl = env.VITE_CORS_URL;
   return {
+    resolve: {
+      alias: {
+        "@": path.resolve("./src"),
+      },
+    },
     plugins: [react(), tailwindcss(), flowbiteReact()],
     server: {
+      port: 6100,
       proxy: {
         '/api': {
           target: targetUrl,

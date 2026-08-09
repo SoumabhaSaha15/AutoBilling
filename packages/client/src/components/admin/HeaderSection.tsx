@@ -1,9 +1,9 @@
-import AdminCard from './AdminCard';
 import { Link } from "react-router-dom";
 import throttle from "lodash/throttle";
 import { useNavigate } from "react-router-dom";
+import AdminCard from '@/components/admin/AdminCard';
 import { type FC, useState, useEffect } from "react";
-import { useAuth } from '../../contexts/Auth/admin/AuthContext';
+import { useAuth } from '@/contexts/Auth/admin/AuthContext';
 import { Avatar, DarkThemeToggle, Dropdown, DropdownDivider, DropdownItem, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle } from 'flowbite-react';
 
 const HeaderSection: FC = () => {

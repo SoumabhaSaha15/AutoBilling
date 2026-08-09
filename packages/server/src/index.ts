@@ -5,17 +5,18 @@ import dns from 'node:dns';
 import dotenv from "dotenv";
 import express from "express";
 import { connect } from "mongoose";
-import router from "./router/index.js";
+import router from "@/router/index";
 import cookieParser from "cookie-parser";
 import { ZodError, prettifyError } from "zod";
-import errorHadler from "./configurations/error.js";
-import sessionConfig from "./configurations/session.js";
-import listenCallback from "./utility/listen-callback.js";
-import cloudinaryConfig from "./configurations/cloudinary.js";
-import { csrfSynchronisedProtection, csrfTokenMiddleware } from "./configurations/csrf.js";
+import errorHadler from "@/configurations/error";
+import sessionConfig from "@/configurations/session";
+import listenCallback from "@/utility/listen-callback";
+import cloudinaryConfig from "@/configurations/cloudinary";
+import { csrfSynchronisedProtection, csrfTokenMiddleware } from "@/configurations/csrf";
 try {
   dns.setServers(['8.8.8.8', '8.8.4.4']);
   dotenv.config({ quiet: true });
+  console.log(process.env.ADMIN_KEY);
   cloudinaryConfig();
   const CONNECTOR = await connect(process.env.DB_URI);
   const APP = express()

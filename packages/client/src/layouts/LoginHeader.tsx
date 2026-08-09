@@ -1,5 +1,5 @@
 import { FC, Suspense } from "react";
-import OutletLoading from "../OutletLoading";
+import OutletLoading from "@/OutletLoading";
 import { Outlet, Link } from "react-router-dom";
 import { Navbar, NavbarBrand, DarkThemeToggle, } from "flowbite-react"
 const LoginHeader: FC = () => {

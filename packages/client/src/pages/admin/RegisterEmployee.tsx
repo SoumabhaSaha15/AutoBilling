@@ -1,14 +1,14 @@
 import { prettifyError } from "zod";
-import base from '../../utility/axios-base';
+import base from '@/utility/axios-base';
 import { GrUserWorker } from "react-icons/gr";
 import { TbLockPassword } from "react-icons/tb";
 import { FC, useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import { useToast } from "../../contexts/Toast/ToastContext";
+import { useToast } from "@/contexts/Toast/ToastContext";
 import { Button, Label, TextInput, FileInput, Spinner } from "flowbite-react";
-import { type EmployeeRegisterType, EmployeeRegister, EmployeeRegisterResopnse } from "../../validator/employee";
+import { type EmployeeRegisterType, EmployeeRegister, EmployeeRegisterResopnse } from "@/validator/employee";
 
 const AddProduct: FC = () => {
   const defaultUrl = '/employee-worker.svg';

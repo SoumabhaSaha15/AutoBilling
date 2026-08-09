@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import { v2 as cloudinary } from 'cloudinary';
-import multer from "../../configurations/multer.js"
+import multer from "@/configurations/multer"
 import { Request, Response, NextFunction } from "express";
-import { EmployeeModel, EmployeeValidator } from '../../databases/Employee.js';
+import { EmployeeModel, EmployeeValidator } from '@/databases/Employee';
 const POST = {
   uploadFile: multer.single('profilePicture'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
