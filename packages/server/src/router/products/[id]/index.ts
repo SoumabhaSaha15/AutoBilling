@@ -1,6 +1,7 @@
-import GET from './GET.js';
 import express from "express";
-import PATCH from './PATCH.js';
+import GET from '@/router/products/[id]/GET';
+import PATCH from '@/router/products/[id]/PATCH';
+
 const router = express.Router();
 router
   .route('/products/:id')

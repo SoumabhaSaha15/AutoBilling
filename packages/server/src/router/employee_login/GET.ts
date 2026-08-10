@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { EmployeeModel } from "../../databases/Employee.js";
+import { EmployeeModel } from "@/databases/Employee";
 import { Request, Response, NextFunction } from "express";
 const GET = {
   cookiesNotFound: async (req: Request, res: Response, next: NextFunction) => {

@@ -1,6 +1,7 @@
-import GET from "./GET.js";
-import ALL from "./ALL.js"
 import express from "express";
+import ALL from "@/router/invoice/[id]/ALL"
+import GET from "@/router/invoice/[id]/GET";
+
 const router = express.Router();
 router
   .route('/invoice/:id')

@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
+import ResponseError from "@/utility/response-error";
 import { Request, Response, NextFunction } from "express";
-import ResponseError from "../../utility/response-error.js";
 import validate, { type ValidatedRequest } from "express-zod-safe";
-import { EmployeeModel, EmployeeValidator } from "../../databases/Employee.js";
+import { EmployeeModel, EmployeeValidator } from "@/databases/Employee";
 
 const EmployeeLoginValidator = EmployeeValidator.pick({ email: true, password: true });
 type EmployeeLoginRequest = ValidatedRequest<{ body: typeof EmployeeLoginValidator }>;

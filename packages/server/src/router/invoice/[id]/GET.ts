@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
-import ResponseError from "../../../utility/response-error.js";
+import { InvoiceModel } from "@/databases/Invoice";
+import ResponseError from "@/utility/response-error";
 import { Request, Response, NextFunction } from "express";
-import { InvoiceModel } from "../../../databases/Invoice.js";
+
 const GET = {
   getInvoiceById: async (req: Request, res: Response, next: NextFunction) => {
     try {

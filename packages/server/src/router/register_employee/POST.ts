@@ -1,8 +1,9 @@
 import fs from 'node:fs/promises';
-import { v2 as cloudinary } from 'cloudinary';
 import multer from "@/configurations/multer"
+import { v2 as cloudinary } from 'cloudinary';
 import { Request, Response, NextFunction } from "express";
 import { EmployeeModel, EmployeeValidator } from '@/databases/Employee';
+
 const POST = {
   uploadFile: multer.single('profilePicture'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {
@@ -16,6 +17,7 @@ const POST = {
       next(err);
     }
   },
+
   invalidDetails: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const validator = EmployeeValidator.omit({ profilePicture: true, profilePublicId: true });

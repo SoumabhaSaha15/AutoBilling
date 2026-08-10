@@ -1,14 +1,15 @@
 import morgan from "morgan";
 import express from "express";
-import logout from "./logout/index.js"
-import invoices from "./invoice/index.js";
-import products from "./products/index.js";
-import adminLogin from "./admin_login/index.js";
-import invoiceId from "./invoice/[id]/index.js";
-import productId from "./products/[id]/index.js";
-import employeeLogin from "./employee_login/index.js";
-import registerEmployee from "./register_employee/index.js";
-import allowWithoutAuth from "../configurations/sessionAuthenticator.js";
+import logout from "@/router/logout/index"
+import invoices from "@/router/invoice/index";
+import products from "@/router/products/index";
+import adminLogin from "@/router/admin_login/index";
+import invoiceId from "@/router/invoice/[id]/index";
+import productId from "@/router/products/[id]/index";
+import employeeLogin from "@/router/employee_login/index";
+import registerEmployee from "@/router/register_employee/index";
+import allowWithoutAuth from "@/configurations/sessionAuthenticator";
+
 const router = express.Router();
 router
   .use(allowWithoutAuth(['/admin_login', '/employee_login']))

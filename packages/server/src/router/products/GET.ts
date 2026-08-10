@@ -1,6 +1,6 @@
-import { ProductModel } from '../../databases/Product.js';
+import { ProductModel } from '@/databases/Product';
 import { Request, Response, NextFunction } from "express";
-import { ProductQueryTransformer } from '../../validators/productFilter.js';
+import { ProductQueryTransformer } from '@/validators/productFilter';
 const GET = {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {
     try {

@@ -1,7 +1,8 @@
-import ALL from "./ALL.js";
-import GET from "./GET.js"
-import POST from "./POST.js";
 import express from "express";
+import ALL from "@/router/invoice/ALL";
+import GET from "@/router/invoice/GET"
+import POST from "@/router/invoice/POST";
+
 const router = express.Router();
 router
   .route('/invoice')

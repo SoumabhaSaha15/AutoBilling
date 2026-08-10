@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { ProductModel } from "@/databases/Product";
 import { Request, Response, NextFunction } from "express";
-import { ProductModel } from "../../../databases/Product.js";
+
 export default {
   notAnAdmin: async (req: Request, _res: Response, next: NextFunction) => {
     try {

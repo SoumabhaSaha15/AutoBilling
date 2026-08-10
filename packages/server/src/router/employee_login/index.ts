@@ -1,6 +1,7 @@
 import express from "express";
-import POST from "./POST.js";
-import GET from "./GET.js";
+import GET from "@/router/employee_login/GET";
+import POST from "@/router/employee_login/POST";
+
 const router = express.Router();
 router
   .route('/employee_login')

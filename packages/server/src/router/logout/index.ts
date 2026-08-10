@@ -1,4 +1,4 @@
-import GET from "./GET.js";
+import GET from "@/router/logout/GET";
 import express from "express";
 const router = express.Router();
 router

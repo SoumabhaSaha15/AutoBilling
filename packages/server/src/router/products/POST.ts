@@ -1,10 +1,10 @@
 import fs from 'node:fs/promises';
+import multer from "@/configurations/multer"
 import { v2 as cloudinary } from 'cloudinary';
-import multer from "../../configurations/multer.js"
-import express from 'express';
-import ResponseError from '../../utility/response-error.js';
+import ResponseError from '@/utility/response-error';
 import { Request, Response, NextFunction } from "express";
-import { ProductModel, ProductValidator } from '../../databases/Product.js';
+import { ProductModel, ProductValidator } from '@/databases/Product.js';
+
 const POST = {
   uploadFile: multer.single('productImage'),
   notAnAdmin: async (req: Request, res: Response, next: NextFunction) => {

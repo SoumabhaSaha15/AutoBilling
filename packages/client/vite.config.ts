@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [react(), tailwindcss(), flowbiteReact()],
     server: {
-      port: 6100,
+      port: 6500,
       proxy: {
         '/api': {
           target: targetUrl,

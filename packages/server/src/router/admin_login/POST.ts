@@ -1,9 +1,9 @@
 import z from "zod";
 import bcrypt from "bcrypt";
 import { Response, NextFunction } from "express";
-import ResponseError from "../../utility/response-error.js";
+import ResponseError from "@/utility/response-error";
+import { AdminModel, AdminValidator } from "@/databases/Admin";
 import validate, { type ValidatedRequest } from "express-zod-safe";
-import { AdminModel, AdminValidator } from "../../databases/Admin.js";
 
 const AdminLoginValidator = AdminValidator
   .pick({ email: true, password: true })

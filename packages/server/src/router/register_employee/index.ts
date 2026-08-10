@@ -1,5 +1,5 @@
 import express from "express";
-import POST from "./POST.js";
+import POST from "@/router/register_employee/POST";
 const router = express.Router();
 router
   .route('/register_employee')

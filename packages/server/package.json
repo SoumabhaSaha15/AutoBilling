@@ -10,8 +10,12 @@
   "scripts": {
     "dev": "cross-env MODE=dev nodemon",
     "start": "cross-env MODE=prod node dist/index.js",
-    "build": "tsc && tsc-alias",
-    "clean": "rm -rf dist"
+    "build": "tsc && tsc-alias --resolve-full-paths",
+    "clear": "rm -rf dist"
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": false
   },
   "keywords": [],
   "author": "",

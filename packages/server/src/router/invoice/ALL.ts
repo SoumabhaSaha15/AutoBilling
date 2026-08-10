@@ -1,4 +1,4 @@
-import ResponseError from "../../utility/response-error.js";
+import ResponseError from "@/utility/response-error";
 import { Request, Response, NextFunction } from "express";
 
 const ALL = {

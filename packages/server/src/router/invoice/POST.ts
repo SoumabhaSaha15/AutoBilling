@@ -1,6 +1,6 @@
-import { EmployeeModel } from '../../databases/Employee.js';
+import { EmployeeModel } from '@/databases/Employee';
 import { Request, Response, NextFunction } from "express";
-import { InvoiceValidator, InvoiceModel } from '../../databases/Invoice.js';
+import { InvoiceValidator, InvoiceModel } from '@/databases/Invoice';
 const POST = {
   invalidOrders: async (req: Request, res: Response, next: NextFunction) => {
     try {
