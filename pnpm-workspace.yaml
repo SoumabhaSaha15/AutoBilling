@@ -16,3 +16,4 @@ minimumReleaseAgeExclude:
   - '@react-pdf/stylesheet@6.2.2'
   - '@react-pdf/textkit@6.4.0'
   - '@react-pdf/types@2.11.2'
+  - globals@17.11.0
